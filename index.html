@@ -15,10 +15,25 @@
       text-align: center;
     }
 
-    h1 {
-      color: #b84dff;
+    /* 🔥 NEW TITLE STYLE */
+    #title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       margin-top: 20px;
+    }
+
+    #title h1 {
+      color: #b84dff;
       font-size: 70px;
+      margin: 0;
+    }
+
+    .title-logo {
+      width: 35px; /* change this if you want smaller/bigger */
+      height: auto;
+      filter: drop-shadow(0 0 6px #b84dff);
     }
 
     /* 🔴 LIVE BOX (like your drawing) */
@@ -103,7 +118,12 @@
 
 <body>
 
-  <h1>MARVALOUS BINGO</h1>
+  <!-- 🔥 UPDATED TITLE WITH LOGOS -->
+  <div id="title">
+    <img src="logo.png" class="title-logo">
+    <h1>MARVALOUS BINGO</h1>
+    <img src="logo.png" class="title-logo">
+  </div>
 
   <div id="video-container">
     <div id="offline-message">
@@ -183,7 +203,6 @@
 
     window.callNumber = callNumber;
 
-    // 🔴 SAFE AUTO LIVE CHECK
     function checkLiveStatus() {
       const iframe = document.getElementById("live-video");
       const message = document.getElementById("offline-message");
