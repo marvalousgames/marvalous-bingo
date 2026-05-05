@@ -48,6 +48,12 @@
       border: 1px solid #333;
       padding: 8px;
     }
+
+    .marked {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -55,7 +61,6 @@
 
 <h1>🎯 BINGO ADMIN</h1>
 
-<!-- 🔢 NUMBER CONTROL -->
 <div class="box">
   <h2 id="current">Current: 0</h2>
   <button onclick="callNumber()">CALL NEXT</button>
@@ -63,7 +68,6 @@
   <p id="calledList"></p>
 </div>
 
-<!-- 🎮 MODE -->
 <div class="box">
   <h3>Game Mode</h3>
   <button onclick="setMode('1line')">1 LINE</button>
@@ -71,19 +75,16 @@
   <button onclick="setMode('fullhouse')">FULL HOUSE</button>
 </div>
 
-<!-- 🏆 CLAIMS -->
 <div class="box">
   <h3>Bingo Claims</h3>
   <div id="claims"></div>
 </div>
 
-<!-- 👀 CARD VIEW -->
 <div class="box">
   <h3>Selected Card</h3>
   <div id="cardView"></div>
 </div>
 
-<!-- 👥 PLAYERS -->
 <div class="box">
   <h3>Players</h3>
   <div id="players"></div>
@@ -112,20 +113,6 @@ function callNumber() {
 
   db.ref("currentNumber").set(num);
   db.ref("calledNumbers").set(called);
-
-  speak(num);
-}
-
-/* 🔊 VOICE */
-function speak(num) {
-  let letter =
-    num <= 15 ? "B" :
-    num <= 30 ? "I" :
-    num <= 45 ? "N" :
-    num <= 60 ? "G" : "O";
-
-  let msg = new SpeechSynthesisUtterance(letter + " " + num);
-  speechSynthesis.speak(msg);
 }
 
 /* 🎮 MODE */
@@ -151,24 +138,36 @@ db.ref("bingoClaims").on("value", snap => {
   document.getElementById("claims").innerHTML = html;
 });
 
-/* 👀 VIEW CARD */
+/* 👀 VIEW CARD + HIGHLIGHT */
 function viewCard(name) {
   db.ref("players").once("value", snap => {
     let players = snap.val() || {};
-
     let player = Object.values(players).find(p => p.name === name);
 
     if (!player) return alert("No card found");
 
-    let html = "<div class='card'>";
+    db.ref("calledNumbers").once("value").then(snap2 => {
+      const calledObj = snap2.val() || {};
+      const calledNums = Object.values(calledObj);
 
-    player.card.forEach(n => {
-      html += `<div class="cell">${n}</div>`;
+      let html = "<div class='card'>";
+
+      player.card.forEach(n => {
+        let isMarked = false;
+
+        if (n === "FREE") {
+          isMarked = true;
+        } else if (calledNums.includes(Number(n))) {
+          isMarked = true;
+        }
+
+        html += `<div class="cell ${isMarked ? 'marked' : ''}">${n}</div>`;
+      });
+
+      html += "</div>";
+
+      document.getElementById("cardView").innerHTML = html;
     });
-
-    html += "</div>";
-
-    document.getElementById("cardView").innerHTML = html;
   });
 }
 
@@ -212,7 +211,9 @@ function resetGame() {
 
 /* 🔄 LISTENERS */
 db.ref("calledNumbers").on("value", snap => {
-  called = snap.val() || [];
+  const calledObj = snap.val() || {};
+  called = Object.values(calledObj);
+
   document.getElementById("calledList").innerText =
     "Called: " + called.join(", ");
 });
