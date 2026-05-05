@@ -145,16 +145,27 @@
       return nums;
     }
 
-    let card = generateCard();
+const board = document.getElementById("board");
 
-    const board = document.getElementById("board");
+function renderCard() {
+  board.innerHTML = ""; // reset
 
-    card.forEach(n => {
-      let div = document.createElement("div");
-      div.className = "cell";
-      div.innerText = n;
-      board.appendChild(div);
-    });
+  let nums = [];
+  while (nums.length < 25) {
+    let n = Math.floor(Math.random() * 75) + 1;
+    if (!nums.includes(n)) nums.push(n);
+  }
+
+  nums.forEach(n => {
+    let div = document.createElement("div");
+    div.className = "cell";
+    div.innerText = n;
+    board.appendChild(div);
+  });
+}
+
+// run it
+renderCard();
 
     // 🔢 Listen for numbers
     db.ref("currentNumber").on("value", (snap) => {
