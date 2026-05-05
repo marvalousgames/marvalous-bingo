@@ -198,6 +198,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+/* 👤 LOAD SAVED NAME */
+const nameInput = document.getElementById("name");
+let savedName = localStorage.getItem("playerName");
+if (savedName) {
+  nameInput.value = savedName;
+}
+
 /* 🎯 GENERATE CARD */
 function generateCard() {
   function getNumbers(min, max, count) {
@@ -287,8 +294,6 @@ db.ref("mode").on("value", snap => {
      "FULL HOUSE");
 });
 
-/* 🚫 REMOVED WINNER LISTENER COMPLETELY */
-
 /* 🎯 BINGO CLAIM ONLY */
 function checkBingo() {
   const cells = [...document.querySelectorAll(".cell")];
@@ -317,6 +322,8 @@ function checkBingo() {
     if (win) {
       let name = document.getElementById("name").value || "Player";
 
+      localStorage.setItem("playerName", name);
+
       db.ref("bingoClaims").push({
         name: name,
         time: Date.now()
@@ -335,6 +342,8 @@ function sendMsg() {
   let msg = document.getElementById("msg").value;
 
   if (!msg) return;
+
+  localStorage.setItem("playerName", name);
 
   db.ref("chat").push({
     name: name,
@@ -357,6 +366,6 @@ db.ref("chat").limitToLast(50).on("child_added", snap => {
   messages.scrollTop = messages.scrollHeight;
 });
 </script>
-  
-<body>
+
+</body>
 </html>
