@@ -307,6 +307,10 @@ db.ref("gameId").on("value", snap => {
       let saved = localStorage.getItem("card");
       card = saved ? JSON.parse(saved) : generateCard();
     }
+    db.ref("players/" + playerId).set({
+  name: playerName,
+  card: card
+});
   }
 });
   /* 💾 SAVE CARD TO FIREBASE */
@@ -316,12 +320,7 @@ let playerId = localStorage.getItem("playerId");
 if (!playerId) {
   playerId = Date.now().toString();
   localStorage.setItem("playerId", playerId);
-}
 
-db.ref("players/" + playerId).set({
-  name: playerName,
-  card: card
-});
 
 const board = document.getElementById("board");
 
