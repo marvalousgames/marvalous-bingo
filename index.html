@@ -102,14 +102,19 @@
 
 <h1>MARVALOUS BINGO</h1>
 
-<!-- 🎥 LIVE VIDEO -->
+<!-- 🎥 TWITCH LIVE VIDEO -->
 <div id="video-container">
-  <iframe src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"></iframe>
+  <iframe 
+    src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
+    allowfullscreen>
+  </iframe>
 </div>
 
-<!-- 💬 LIVE CHAT -->
+<!-- 💬 TWITCH CHAT -->
 <div id="chat-container">
-  <iframe src="https://www.youtube.com/live_chat?v=LIVE_VIDEO_ID&embed_domain=bingo.netlify.app"></iframe>
+  <iframe 
+    src="https://www.twitch.tv/embed/marvalouscomps/chat?parent=bingo.netlify.app">
+  </iframe>
 </div>
 
 <div id="currentNumber">Waiting...</div>
@@ -190,7 +195,7 @@ db.ref("winner").on("value", snap => {
   }
 });
 
-// 🎯 FIXED BINGO CHECK
+// 🎯 BINGO CHECK (FIXED)
 function checkBingo() {
   db.ref("gameActive").once("value").then(s => {
     if (!s.val()) {
@@ -217,15 +222,9 @@ function checkBingo() {
 
       let isWin = false;
 
-      if (mode === "1line" && lines.length >= 1) {
-        isWin = true;
-      }
-      else if (mode === "2lines" && lines.length >= 2) {
-        isWin = true;
-      }
-      else if (mode === "fullhouse" && marked.every(x => x)) {
-        isWin = true;
-      }
+      if (mode === "1line" && lines.length >= 1) isWin = true;
+      else if (mode === "2lines" && lines.length >= 2) isWin = true;
+      else if (mode === "fullhouse" && marked.every(x => x)) isWin = true;
 
       if (isWin) {
         db.ref("winner").set(true);
