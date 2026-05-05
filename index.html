@@ -174,7 +174,13 @@ db.ref("currentNumber").on("value", snap => {
 
 // 🎮 MODE LISTENER
 db.ref("mode").on("value", snap => {
-  document.getElementById("mode").innerText = "Mode: " + (snap.val() || "1 LINE").toUpperCase();
+  let mode = snap.val() || "1line";
+
+  document.getElementById("mode").innerText =
+    "Mode: " +
+    (mode === "1line" ? "1 LINE" :
+     mode === "2lines" ? "2 LINES" :
+     "FULL HOUSE");
 });
 
 // 🏆 WINNER LISTENER
@@ -184,10 +190,13 @@ db.ref("winner").on("value", snap => {
   }
 });
 
-// 🎯 CHECK WIN
+// 🎯 FIXED BINGO CHECK
 function checkBingo() {
   db.ref("gameActive").once("value").then(s => {
-    if (!s.val()) return alert("Game finished");
+    if (!s.val()) {
+      alert("Game finished");
+      return;
+    }
 
     const cells = [...document.querySelectorAll(".cell")];
     const marked = cells.map(c => c.classList.contains("marked"));
@@ -204,18 +213,26 @@ function checkBingo() {
     let lines = wins.filter(w => w.every(i => marked[i]));
 
     db.ref("mode").once("value").then(m => {
-      let mode = m.val();
+      let mode = m.val() || "1line";
 
-      let win =
-        (mode === "1line" && lines.length >= 1) ||
-        (mode === "2lines" && lines.length >= 2) ||
-        (mode === "fullhouse" && marked.every(x => x));
+      let isWin = false;
 
-      if (win) {
+      if (mode === "1line" && lines.length >= 1) {
+        isWin = true;
+      }
+      else if (mode === "2lines" && lines.length >= 2) {
+        isWin = true;
+      }
+      else if (mode === "fullhouse" && marked.every(x => x)) {
+        isWin = true;
+      }
+
+      if (isWin) {
         db.ref("winner").set(true);
         db.ref("gameActive").set(false);
+        alert("🎉 BINGO WINNER!");
       } else {
-        alert("Not a winning card");
+        alert("❌ Not a winning card");
       }
     });
   });
