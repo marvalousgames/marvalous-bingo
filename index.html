@@ -198,7 +198,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* 🎯 GENERATE REAL BINGO CARD */
+/* 🎯 GENERATE CARD */
 function generateCard() {
   function getNumbers(min, max, count) {
     let nums = [];
@@ -210,7 +210,6 @@ function generateCard() {
   }
 
   let card = [];
-
   let B = getNumbers(1, 15, 5);
   let I = getNumbers(16, 30, 5);
   let N = getNumbers(31, 45, 4);
@@ -259,7 +258,6 @@ card.forEach(n => {
   } else {
     div.className = "cell";
     div.innerText = n;
-
     div.onclick = () => div.classList.toggle("marked");
   }
 
@@ -289,14 +287,9 @@ db.ref("mode").on("value", snap => {
      "FULL HOUSE");
 });
 
-/* 🏆 WINNER */
-db.ref("winner").on("value", snap => {
-  if (snap.val()) {
-    document.getElementById("winner").style.display = "block";
-  }
-});
+/* 🚫 REMOVED WINNER LISTENER COMPLETELY */
 
-/* 🎯 BINGO CHECK */
+/* 🎯 BINGO CLAIM ONLY */
 function checkBingo() {
   const cells = [...document.querySelectorAll(".cell")];
   const marked = cells.map(c => c.classList.contains("marked"));
@@ -322,15 +315,21 @@ function checkBingo() {
     if (mode === "fullhouse" && marked.every(x => x)) win = true;
 
     if (win) {
-      db.ref("winner").set(true);
-      alert("🎉 BINGO!");
+      let name = document.getElementById("name").value || "Player";
+
+      db.ref("bingoClaims").push({
+        name: name,
+        time: Date.now()
+      });
+
+      alert("🎉 Bingo claimed! Waiting for host...");
     } else {
       alert("❌ Not yet");
     }
   });
 }
 
-/* 💬 CHAT SEND */
+/* 💬 CHAT */
 function sendMsg() {
   let name = document.getElementById("name").value || "Player";
   let msg = document.getElementById("msg").value;
@@ -345,7 +344,6 @@ function sendMsg() {
   document.getElementById("msg").value = "";
 }
 
-/* 💬 CHAT LISTENER */
 db.ref("chat").limitToLast(50).on("child_added", snap => {
   let data = snap.val();
 
@@ -359,6 +357,6 @@ db.ref("chat").limitToLast(50).on("child_added", snap => {
   messages.scrollTop = messages.scrollHeight;
 });
 </script>
-
-</body>
+  
+<body>
 </html>
