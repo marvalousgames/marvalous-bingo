@@ -16,16 +16,19 @@
     h1 {
       color: #b84dff;
       margin-top: 15px;
+      font-size: 28px;
     }
 
+    /* 🎥 BIGGER VIDEO */
     #video-container {
-      width: 90%;
-      max-width: 500px;
-      height: 250px;
+      width: 95%;
+      max-width: 700px;
+      height: 380px;
       margin: 15px auto;
-      border-radius: 15px;
+      border-radius: 20px;
       overflow: hidden;
       background: #1c1735;
+      box-shadow: 0 0 25px rgba(184,77,255,0.4);
     }
 
     iframe {
@@ -34,17 +37,48 @@
       border: none;
     }
 
-    #chat-container {
-      width: 90%;
-      max-width: 500px;
-      height: 300px;
-      margin: 10px auto;
+    /* 💬 CHAT */
+    #chat-box {
+      width: 95%;
+      max-width: 700px;
+      margin: 15px auto;
+      background: #1c1735;
       border-radius: 15px;
-      overflow: hidden;
+      padding: 10px;
     }
 
+    #messages {
+      height: 220px;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    #chat-input {
+      display: flex;
+      gap: 5px;
+    }
+
+    #chat-input input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #chat-input button {
+      background: #b84dff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* 🔢 CURRENT NUMBER */
     #currentNumber {
-      font-size: 40px;
+      font-size: 55px;
       margin: 15px 0;
       color: #ff4df2;
     }
@@ -54,20 +88,27 @@
       margin-bottom: 10px;
     }
 
+    /* 🎯 BIGGER BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      max-width: 500px;
-      margin: auto;
+      gap: 14px;
+      max-width: 600px;
+      margin: 20px auto;
     }
 
+    /* 🔲 BIGGER CELLS */
     .cell {
       background: #1c1735;
-      padding: 25px;
-      border-radius: 12px;
-      font-size: 22px;
+      padding: 32px;
+      border-radius: 14px;
+      font-size: 26px;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .cell:hover {
+      transform: scale(1.05);
     }
 
     .marked {
@@ -80,12 +121,13 @@
     }
 
     button {
-      margin-top: 15px;
-      padding: 12px 20px;
-      border-radius: 10px;
+      margin-top: 12px;
+      padding: 14px 24px;
+      border-radius: 12px;
       border: none;
       background: #00ffcc;
       font-weight: bold;
+      font-size: 16px;
     }
 
     #winner {
@@ -94,6 +136,7 @@
       color: black;
       padding: 10px;
       margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -102,7 +145,7 @@
 
 <h1>MARVALOUS BINGO</h1>
 
-<!-- 🎥 TWITCH LIVE VIDEO -->
+<!-- 🎥 TWITCH VIDEO -->
 <div id="video-container">
   <iframe 
     src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
@@ -110,11 +153,15 @@
   </iframe>
 </div>
 
-<!-- 💬 TWITCH CHAT -->
-<div id="chat-container">
-  <iframe 
-    src="https://www.twitch.tv/embed/marvalouscomps/chat?parent=marvalous-bingo.netlify.app">
-  </iframe>
+<!-- 💬 CUSTOM CHAT -->
+<div id="chat-box">
+  <div id="messages"></div>
+
+  <div id="chat-input">
+    <input id="name" placeholder="Your name">
+    <input id="msg" placeholder="Type message...">
+    <button onclick="sendMsg()">Send</button>
+  </div>
 </div>
 
 <div id="currentNumber">Waiting...</div>
@@ -138,7 +185,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 🎯 GENERATE CARD
+// 🎯 CARD
 function generateCard() {
   let nums = [];
   while (nums.length < 25) {
@@ -148,7 +195,6 @@ function generateCard() {
   return nums;
 }
 
-// 💾 SAVE CARD
 let saved = localStorage.getItem("card");
 let card = saved ? JSON.parse(saved) : generateCard();
 localStorage.setItem("card", JSON.stringify(card));
@@ -165,7 +211,7 @@ card.forEach(n => {
   board.appendChild(div);
 });
 
-// 🔢 NUMBER LISTENER
+// 🔢 NUMBER
 db.ref("currentNumber").on("value", snap => {
   let num = snap.val();
   if (!num) return;
@@ -177,7 +223,7 @@ db.ref("currentNumber").on("value", snap => {
   });
 });
 
-// 🎮 MODE LISTENER
+// 🎮 MODE
 db.ref("mode").on("value", snap => {
   let mode = snap.val() || "1line";
 
@@ -188,54 +234,74 @@ db.ref("mode").on("value", snap => {
      "FULL HOUSE");
 });
 
-// 🏆 WINNER LISTENER
+// 🏆 WINNER
 db.ref("winner").on("value", snap => {
   if (snap.val()) {
     document.getElementById("winner").style.display = "block";
   }
 });
 
-// 🎯 BINGO CHECK (WORKING)
+// 🎯 BINGO CHECK
 function checkBingo() {
-  db.ref("gameActive").once("value").then(s => {
-    if (!s.val()) {
-      alert("Game finished");
-      return;
+  const cells = [...document.querySelectorAll(".cell")];
+  const marked = cells.map(c => c.classList.contains("marked"));
+
+  const wins = [
+    [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],
+    [15,16,17,18,19],[20,21,22,23,24],
+    [0,5,10,15,20],[1,6,11,16,21],
+    [2,7,12,17,22],[3,8,13,18,23],
+    [4,9,14,19,24],
+    [0,6,12,18,24],[4,8,12,16,20]
+  ];
+
+  let lines = wins.filter(w => w.every(i => marked[i]));
+
+  db.ref("mode").once("value").then(m => {
+    let mode = m.val() || "1line";
+
+    let isWin = false;
+
+    if (mode === "1line" && lines.length >= 1) isWin = true;
+    else if (mode === "2lines" && lines.length >= 2) isWin = true;
+    else if (mode === "fullhouse" && marked.every(x => x)) isWin = true;
+
+    if (isWin) {
+      db.ref("winner").set(true);
+      alert("🎉 BINGO!");
+    } else {
+      alert("❌ Not a win yet");
     }
-
-    const cells = [...document.querySelectorAll(".cell")];
-    const marked = cells.map(c => c.classList.contains("marked"));
-
-    const wins = [
-      [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],
-      [15,16,17,18,19],[20,21,22,23,24],
-      [0,5,10,15,20],[1,6,11,16,21],
-      [2,7,12,17,22],[3,8,13,18,23],
-      [4,9,14,19,24],
-      [0,6,12,18,24],[4,8,12,16,20]
-    ];
-
-    let lines = wins.filter(w => w.every(i => marked[i]));
-
-    db.ref("mode").once("value").then(m => {
-      let mode = m.val() || "1line";
-
-      let isWin = false;
-
-      if (mode === "1line" && lines.length >= 1) isWin = true;
-      else if (mode === "2lines" && lines.length >= 2) isWin = true;
-      else if (mode === "fullhouse" && marked.every(x => x)) isWin = true;
-
-      if (isWin) {
-        db.ref("winner").set(true);
-        db.ref("gameActive").set(false);
-        alert("🎉 BINGO WINNER!");
-      } else {
-        alert("❌ Not a winning card");
-      }
-    });
   });
 }
+
+// 💬 CHAT
+function sendMsg() {
+  let name = document.getElementById("name").value || "Player";
+  let msg = document.getElementById("msg").value;
+
+  if (!msg) return;
+
+  db.ref("chat").push({
+    name: name,
+    message: msg
+  });
+
+  document.getElementById("msg").value = "";
+}
+
+// 💬 CHAT LISTENER
+db.ref("chat").limitToLast(50).on("child_added", snap => {
+  let data = snap.val();
+
+  let div = document.createElement("div");
+  div.innerHTML = "<b>" + data.name + ":</b> " + data.message;
+
+  document.getElementById("messages").appendChild(div);
+
+  let box = document.getElementById("messages");
+  box.scrollTop = box.scrollHeight;
+});
 </script>
 
 </body>
