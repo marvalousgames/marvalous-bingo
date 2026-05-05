@@ -337,7 +337,8 @@ db.ref("currentNumber").on("value", snap => {
   let num = snap.val();
   if (!num) return;
 
-  document.getElementById("currentNumber").innerText = num;
+  document.getElementById("currentNumber").innerText =
+  getLetter(num) + num;
 
   document.querySelectorAll(".cell").forEach(c => {
     if (c.innerText == num) c.classList.add("marked");
