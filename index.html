@@ -407,6 +407,47 @@ db.ref("chat").limitToLast(50).on("child_added", snap => {
 
   messages.scrollTop = messages.scrollHeight;
 });
+ db.ref("chat").limitToLast(50).on("child_added", snap => {
+  let data = snap.val();
+
+  let div = document.createElement("div");
+  div.className = "msg";
+  div.innerHTML = "<b>" + data.name + ":</b> " + data.message;
+
+  let messages = document.getElementById("messages");
+  messages.appendChild(div);
+
+  messages.scrollTop = messages.scrollHeight;
+});
+
+
+/* 👤 NAME POPUP FIX */
+window.addEventListener("load", () => {
+  const modal = document.getElementById("nameModal");
+  const nameInput = document.getElementById("name");
+
+  let savedName = localStorage.getItem("playerName");
+
+  if (savedName) {
+    nameInput.value = savedName;
+    modal.style.display = "none";
+  }
+
+  window.saveName = function () {
+    let name = document.getElementById("modalName").value.trim();
+
+    if (!name) {
+      alert("Enter your name");
+      return;
+    }
+
+    localStorage.setItem("playerName", name);
+    nameInput.value = name;
+
+    modal.style.display = "none";
+  };
+});
+</script> 
 </script>
 
 </body>
