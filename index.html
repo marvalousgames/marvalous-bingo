@@ -19,7 +19,6 @@
       margin-top: 10px;
     }
 
-    /* 🎥 VIDEO */
     #video-container {
       width: 95%;
       max-width: 700px;
@@ -37,7 +36,6 @@
       border: none;
     }
 
-    /* 💬 CHAT */
     #chat-box {
       width: 95%;
       max-width: 700px;
@@ -55,13 +53,8 @@
       font-size: 14px;
     }
 
-    .msg {
-      margin-bottom: 6px;
-    }
-
-    .msg b {
-      color: #00ffcc;
-    }
+    .msg { margin-bottom: 6px; }
+    .msg b { color: #00ffcc; }
 
     #chat-input {
       display: flex;
@@ -84,7 +77,6 @@
       border-radius: 8px;
     }
 
-    /* 🔢 NUMBER */
     #currentNumber {
       font-size: 46px;
       margin: 15px 0;
@@ -96,7 +88,6 @@
       margin-bottom: 10px;
     }
 
-    /* 🎯 BINGO BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -149,68 +140,30 @@
       padding: 10px;
       margin-top: 10px;
     }
-
   </style>
 </head>
 
 <body>
-<div id="nameModal" style="
-  position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-">
 
-  <div style="
-    background:#1c1735;
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-    width:80%;
-    max-width:300px;
-  ">
+<!-- NAME POPUP -->
+<div id="nameModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#1c1735;padding:20px;border-radius:12px;text-align:center;width:80%;max-width:300px;">
     <h2 style="color:#b84dff;">Enter your name</h2>
-
-    <input id="modalName" placeholder="Your name" style="
-      width:100%;
-      padding:10px;
-      border-radius:8px;
-      border:none;
-      margin-top:10px;
-    ">
-
-    <button onclick="saveName()" style="
-      margin-top:10px;
-      width:100%;
-      padding:10px;
-      background:#00ffcc;
-      border:none;
-      border-radius:8px;
-      font-weight:bold;
-    ">
+    <input id="modalName" placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-top:10px;">
+    <button onclick="saveName()" style="margin-top:10px;width:100%;padding:10px;background:#00ffcc;border:none;border-radius:8px;font-weight:bold;">
       Join Game
     </button>
   </div>
-
 </div>
+
 <h1>MARVALOUS BINGO</h1>
 
-<!-- 🎥 TWITCH -->
 <div id="video-container">
-  <iframe 
-    src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
-    allowfullscreen>
-  </iframe>
+  <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
 </div>
 
-<!-- 💬 CHAT -->
 <div id="chat-box">
   <div id="messages"></div>
-
   <div id="chat-input">
     <input id="name" placeholder="Name">
     <input id="msg" placeholder="Type message...">
@@ -220,14 +173,10 @@
 
 <div id="currentNumber">Waiting...</div>
 <div id="mode">Mode: 1 LINE</div>
-
 <div id="winner">🎉 WE HAVE A WINNER 🎉</div>
-
 <div id="board"></div>
-
 <button onclick="checkBingo()">BINGO</button>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -240,41 +189,39 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* 👤 LOAD SAVED NAME */
-const nameInput = document.getElementById("name");
-let savedName = localStorage.getItem("playerName");
-if (savedName) {
-  nameInput.value = savedName;
+/* NAME */
+let playerName = localStorage.getItem("playerName") || "Player";
+let playerId = localStorage.getItem("playerId");
+if (!playerId) {
+  playerId = Date.now().toString();
+  localStorage.setItem("playerId", playerId);
 }
 
-/* 🎯 GENERATE CARD */
+/* CARD */
+let card;
+let currentGameId;
+
 function generateCard() {
-  function getNumbers(min, max, count) {
-    let nums = [];
-    while (nums.length < count) {
-      let n = Math.floor(Math.random() * (max - min + 1)) + min;
-      if (!nums.includes(n)) nums.push(n);
+  function getNumbers(min,max,count){
+    let nums=[];
+    while(nums.length<count){
+      let n=Math.floor(Math.random()*(max-min+1))+min;
+      if(!nums.includes(n)) nums.push(n);
     }
     return nums;
   }
 
-  let card = [];
-  let B = getNumbers(1, 15, 5);
-  let I = getNumbers(16, 30, 5);
-  let N = getNumbers(31, 45, 4);
-  let G = getNumbers(46, 60, 5);
-  let O = getNumbers(61, 75, 5);
+  let card=[];
+  let B=getNumbers(1,15,5);
+  let I=getNumbers(16,30,5);
+  let N=getNumbers(31,45,4);
+  let G=getNumbers(46,60,5);
+  let O=getNumbers(61,75,5);
 
-  for (let i = 0; i < 5; i++) {
+  for(let i=0;i<5;i++){
     card.push(B[i]);
     card.push(I[i]);
-
-    if (i === 2) {
-      card.push("FREE");
-    } else {
-      card.push(N[i > 2 ? i - 1 : i]);
-    }
-
+    card.push(i===2?"FREE":N[i>2?i-1:i]);
     card.push(G[i]);
     card.push(O[i]);
   }
@@ -282,214 +229,168 @@ function generateCard() {
   return card;
 }
 
-/* 💾 SAVE CARD */
-let card;
-let currentGameId;
+/* GAME SYNC */
+db.ref("gameId").on("value", snap=>{
+  let gameId=snap.val();
+  if(!gameId) return;
 
-db.ref("gameId").on("value", snap => {
-  let gameId = snap.val();
+  if(currentGameId!==gameId){
+    currentGameId=gameId;
 
-  if (!gameId) return;
+    let savedGame=localStorage.getItem("gameId");
 
-  if (currentGameId !== gameId) {
-    currentGameId = gameId;
-
-    let savedGame = localStorage.getItem("gameId");
-
-    if (savedGame !== String(gameId)) {
-      card = generateCard();
-
-      localStorage.setItem("card", JSON.stringify(card));
-      localStorage.setItem("gameId", gameId);
-
+    if(savedGame!==String(gameId)){
+      card=generateCard();
+      localStorage.setItem("card",JSON.stringify(card));
+      localStorage.setItem("gameId",gameId);
       location.reload();
     } else {
-      let saved = localStorage.getItem("card");
-      card = saved ? JSON.parse(saved) : generateCard();
+      let saved=localStorage.getItem("card");
+      card=saved?JSON.parse(saved):generateCard();
     }
-    db.ref("players/" + playerId).set({
-  name: playerName,
-  card: card
-});
+
+    db.ref("players/"+playerId).set({
+      name: playerName,
+      card: card
+    });
+
+    renderBoard();
   }
 });
-  /* 💾 SAVE CARD TO FIREBASE */
-let playerName = localStorage.getItem("playerName") || "Player";
 
-let playerId = localStorage.getItem("playerId");
-if (!playerId) {
-  playerId = Date.now().toString();
-  localStorage.setItem("playerId", playerId);
+/* BOARD */
+function renderBoard(){
+  const board=document.getElementById("board");
+  board.innerHTML="";
 
+  ["B","I","N","G","O"].forEach(l=>{
+    let h=document.createElement("div");
+    h.className="header";
+    h.innerText=l;
+    board.appendChild(h);
+  });
 
-const board = document.getElementById("board");
+  card.forEach(n=>{
+    let div=document.createElement("div");
 
-/* 🔤 HEADER */
-["B","I","N","G","O"].forEach(letter => {
-  let h = document.createElement("div");
-  h.className = "header";
-  h.innerText = letter;
-  board.appendChild(h);
-});
+    if(n==="FREE"){
+      div.className="cell free marked";
+      div.innerText="FREE";
+    } else {
+      div.className="cell";
+      div.innerText=n;
+      div.onclick=()=>div.classList.toggle("marked");
+    }
 
-/* 🔲 GRID */
-card.forEach(n => {
-  let div = document.createElement("div");
-
-  if (n === "FREE") {
-    div.className = "cell free marked";
-    div.innerText = "FREE";
-  } else {
-    div.className = "cell";
-    div.innerText = n;
-    div.onclick = () => div.classList.toggle("marked");
-  }
-
-  board.appendChild(div);
-});
-function getLetter(num) {
-  if (num <= 15) return "B";
-  if (num <= 30) return "I";
-  if (num <= 45) return "N";
-  if (num <= 60) return "G";
-  return "O";
+    board.appendChild(div);
+  });
 }
-/* 🔢 NUMBER */
-db.ref("currentNumber").on("value", snap => {
-  let num = snap.val();
-  if (!num) return;
 
-  document.getElementById("currentNumber").innerText =
-  getLetter(num) + num;
+/* LETTER FIX */
+function getLetter(num){
+  if(num<=15)return"B";
+  if(num<=30)return"I";
+  if(num<=45)return"N";
+  if(num<=60)return"G";
+  return"O";
+}
 
-  document.querySelectorAll(".cell").forEach(c => {
-    if (c.innerText == num) c.classList.add("marked");
+/* NUMBER */
+db.ref("currentNumber").on("value",snap=>{
+  let num=snap.val();
+  if(!num) return;
+
+  document.getElementById("currentNumber").innerText=getLetter(num)+num;
+
+  document.querySelectorAll(".cell").forEach(c=>{
+    if(c.innerText==num)c.classList.add("marked");
   });
 });
 
-/* 🎮 MODE */
-db.ref("mode").on("value", snap => {
-  let mode = snap.val() || "1line";
+/* MODE */
+db.ref("mode").on("value",snap=>{
+  let mode=snap.val()||"1line";
 
-  document.getElementById("mode").innerText =
-    "Mode: " +
-    (mode === "1line" ? "1 LINE" :
-     mode === "2lines" ? "2 LINES" :
-     "FULL HOUSE");
+  document.getElementById("mode").innerText=
+  "Mode: "+(mode==="1line"?"1 LINE":mode==="2lines"?"2 LINES":"FULL HOUSE");
 });
 
-/* 🎯 BINGO CLAIM ONLY */
-function checkBingo() {
-  const cells = [...document.querySelectorAll(".cell")];
-  const marked = cells.map(c => c.classList.contains("marked"));
+/* BINGO */
+function checkBingo(){
+  const cells=[...document.querySelectorAll(".cell")];
+  const marked=cells.map(c=>c.classList.contains("marked"));
 
-  const wins = [
+  const wins=[
     [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],
     [15,16,17,18,19],[20,21,22,23,24],
     [0,5,10,15,20],[1,6,11,16,21],
     [2,7,12,17,22],[3,8,13,18,23],
-    [4,9,14,19,24],
-    [0,6,12,18,24],[4,8,12,16,20]
+    [4,9,14,19,24],[0,6,12,18,24],[4,8,12,16,20]
   ];
 
-  let lines = wins.filter(w => w.every(i => marked[i]));
+  let lines=wins.filter(w=>w.every(i=>marked[i]));
 
-  db.ref("mode").once("value").then(m => {
-    let mode = m.val() || "1line";
+  db.ref("mode").once("value").then(m=>{
+    let mode=m.val()||"1line";
+    let win=false;
 
-    let win = false;
+    if(mode==="1line"&&lines.length>=1)win=true;
+    if(mode==="2lines"&&lines.length>=2)win=true;
+    if(mode==="fullhouse"&&marked.every(x=>x))win=true;
 
-    if (mode === "1line" && lines.length >= 1) win = true;
-    if (mode === "2lines" && lines.length >= 2) win = true;
-    if (mode === "fullhouse" && marked.every(x => x)) win = true;
-
-    if (win) {
-      let name = document.getElementById("name").value || "Player";
-
-      localStorage.setItem("playerName", name);
-
+    if(win){
       db.ref("bingoClaims").push({
-        name: name,
+        name: playerName,
         time: Date.now()
       });
-
-      alert("🎉 Bingo claimed! Waiting for host...");
+      alert("🎉 Bingo claimed!");
     } else {
       alert("❌ Not yet");
     }
   });
 }
 
-/* 💬 CHAT */
-function sendMsg() {
-  let name = document.getElementById("name").value || "Player";
-  let msg = document.getElementById("msg").value;
+/* CHAT */
+function sendMsg(){
+  let name=document.getElementById("name").value||"Player";
+  let msg=document.getElementById("msg").value;
+  if(!msg)return;
 
-  if (!msg) return;
+  localStorage.setItem("playerName",name);
 
-  localStorage.setItem("playerName", name);
-
-  db.ref("chat").push({
-    name: name,
-    message: msg
-  });
-
-  document.getElementById("msg").value = "";
+  db.ref("chat").push({name,message:msg});
+  document.getElementById("msg").value="";
 }
 
-db.ref("chat").limitToLast(50).on("child_added", snap => {
-  let data = snap.val();
-
-  let div = document.createElement("div");
-  div.className = "msg";
-  div.innerHTML = "<b>" + data.name + ":</b> " + data.message;
-
-  let messages = document.getElementById("messages");
-  messages.appendChild(div);
-
-  messages.scrollTop = messages.scrollHeight;
-});
- db.ref("chat").limitToLast(50).on("child_added", snap => {
-  let data = snap.val();
-
-  let div = document.createElement("div");
-  div.className = "msg";
-  div.innerHTML = "<b>" + data.name + ":</b> " + data.message;
-
-  let messages = document.getElementById("messages");
-  messages.appendChild(div);
-
-  messages.scrollTop = messages.scrollHeight;
+db.ref("chat").limitToLast(50).on("child_added",snap=>{
+  let d=snap.val();
+  let div=document.createElement("div");
+  div.className="msg";
+  div.innerHTML="<b>"+d.name+":</b> "+d.message;
+  let box=document.getElementById("messages");
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;
 });
 
+/* NAME MODAL */
+window.onload=()=>{
+  let modal=document.getElementById("nameModal");
+  let saved=localStorage.getItem("playerName");
 
-/* 👤 NAME POPUP FIX */
-window.addEventListener("load", () => {
-  const modal = document.getElementById("nameModal");
-  const nameInput = document.getElementById("name");
-
-  let savedName = localStorage.getItem("playerName");
-
-  if (savedName) {
-    nameInput.value = savedName;
-    modal.style.display = "none";
+  if(saved){
+    document.getElementById("name").value=saved;
+    modal.style.display="none";
   }
 
-  window.saveName = function () {
-    let name = document.getElementById("modalName").value.trim();
+  window.saveName=function(){
+    let name=document.getElementById("modalName").value.trim();
+    if(!name)return alert("Enter name");
 
-    if (!name) {
-      alert("Enter your name");
-      return;
-    }
-
-    localStorage.setItem("playerName", name);
-    nameInput.value = name;
-
-    modal.style.display = "none";
-  };
-});
-</script> 
+    localStorage.setItem("playerName",name);
+    document.getElementById("name").value=name;
+    modal.style.display="none";
+  }
+};
 </script>
 
 </body>
