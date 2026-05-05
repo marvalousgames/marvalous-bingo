@@ -26,36 +26,26 @@
     .panel {
       background:#1c1735;
       padding:15px;
-      margin:10px;
+      margin:15px auto;
       border-radius:10px;
+      max-width:500px;
     }
 
     .card {
       display:grid;
       grid-template-columns:repeat(5,1fr);
-      max-width:250px;
-      margin:10px auto;
       gap:3px;
+      margin-top:10px;
     }
 
     .cell {
       background:#222;
-      padding:8px;
+      padding:10px;
       font-size:14px;
     }
 
-    #selectedPlayer {
-      display:none;
-      background:#2a214f;
-      padding:20px;
-      margin:15px;
-      border-radius:10px;
-    }
-
-    #calledNumbers {
-      font-size:14px;
-      margin-top:10px;
-      opacity:0.8;
+    .claim {
+      margin:8px 0;
     }
   </style>
 </head>
@@ -64,7 +54,7 @@
 
 <h1>🎯 BINGO ADMIN</h1>
 
-<!-- CURRENT NUMBER -->
+<!-- NUMBER -->
 <div class="panel">
   <h2 id="current">Current: -</h2>
   <button onclick="callNumber()">CALL NEXT</button>
@@ -86,16 +76,10 @@
 </div>
 
 <!-- SELECTED PLAYER -->
-<div id="selectedPlayer">
-  <h2 id="selectedName"></h2>
-  <div id="selectedCard" class="card"></div>
+<div class="panel" id="selectedBox" style="display:none;">
+  <h2 id="playerName"></h2>
+  <div id="playerCard" class="card"></div>
   <button onclick="approveWin()">APPROVE WINNER</button>
-</div>
-
-<!-- PLAYERS -->
-<div class="panel">
-  <h2>All Players</h2>
-  <div id="players"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -110,11 +94,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* 🔊 SPEAK NUMBER */
+let selectedPlayerId = null;
+
+/* 🔊 VOICE */
 function speak(text) {
   let msg = new SpeechSynthesisUtterance(text);
   msg.rate = 0.9;
-  msg.pitch = 1;
   speechSynthesis.speak(msg);
 }
 
@@ -133,7 +118,6 @@ function callNumber() {
     db.ref("calledNumbers").set(called);
     db.ref("currentNumber").set(num);
 
-    // 🔊 SPEAK IT
     speak("Number " + num);
   });
 }
@@ -143,13 +127,13 @@ function setMode(mode) {
   db.ref("mode").set(mode);
 }
 
-/* CURRENT NUMBER */
+/* CURRENT */
 db.ref("currentNumber").on("value", snap => {
   document.getElementById("current").innerText =
     "Current: " + snap.val();
 });
 
-/* CALLED NUMBERS LIST */
+/* CALLED LIST */
 db.ref("calledNumbers").on("value", snap => {
   let nums = snap.val() || [];
   document.getElementById("calledNumbers").innerText =
@@ -163,9 +147,9 @@ db.ref("bingoClaims").on("value", snap => {
 
   Object.entries(data).forEach(([id, claim]) => {
     html += `
-      <div>
+      <div class="claim">
         ${claim.name}
-        <button onclick="checkCard('${claim.playerId}')">CHECK</button>
+        <button onclick="loadPlayer('${claim.playerId}', '${id}')">CHECK</button>
       </div>
     `;
   });
@@ -173,45 +157,44 @@ db.ref("bingoClaims").on("value", snap => {
   document.getElementById("claims").innerHTML = html;
 });
 
-/* SHOW PLAYER CARD */
-function checkCard(playerId) {
+/* LOAD PLAYER */
+function loadPlayer(playerId, claimId) {
+  selectedPlayerId = playerId;
+
   db.ref("players/" + playerId).once("value").then(snap => {
     let player = snap.val();
 
-    document.getElementById("selectedPlayer").style.display = "block";
-    document.getElementById("selectedName").innerText = player.name;
+    document.getElementById("selectedBox").style.display = "block";
+    document.getElementById("playerName").innerText = player.name;
 
     let html = player.card.map(n =>
       `<div class="cell">${n}</div>`
     ).join("");
 
-    document.getElementById("selectedCard").innerHTML = html;
+    document.getElementById("playerCard").innerHTML = html;
+
+    // store claim ID so we can remove it later
+    selectedClaimId = claimId;
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
 
-/* APPROVE WIN */
+let selectedClaimId = null;
+
+/* APPROVE */
 function approveWin() {
+  if (!selectedClaimId) return;
+
   db.ref("winner").set(true);
+
+  // remove claim after approval
+  db.ref("bingoClaims/" + selectedClaimId).remove();
+
   alert("Winner approved!");
+
+  document.getElementById("selectedBox").style.display = "none";
 }
-
-/* PLAYERS LIST */
-db.ref("players").on("value", snap => {
-  let data = snap.val() || {};
-  let html = "";
-
-  Object.values(data).forEach(player => {
-    html += `
-      <div>
-        <b>${player.name}</b>
-      </div>
-    `;
-  });
-
-  document.getElementById("players").innerHTML = html;
-});
 </script>
 
 </body>
