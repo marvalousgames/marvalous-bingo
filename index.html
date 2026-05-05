@@ -24,7 +24,7 @@
 
     #title h1 {
       color: #b84dff;
-      font-size: 60px;
+      font-size: 50px;
       margin: 0;
     }
 
@@ -43,7 +43,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 20px rgba(184,77,255,0.3);
       position: relative;
       overflow: hidden;
     }
@@ -52,7 +51,6 @@
       color: #ff4df2;
       font-size: 22px;
       font-weight: bold;
-      z-index: 2;
     }
 
     #live-video {
@@ -63,22 +61,6 @@
       display: none;
     }
 
-    #chat-container {
-      width: 90%;
-      max-width: 500px;
-      height: 300px;
-      margin: 15px auto;
-      border-radius: 15px;
-      overflow: hidden;
-      display: none;
-    }
-
-    #live-chat {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
     #currentNumber {
       font-size: 48px;
       margin: 20px 0;
@@ -86,26 +68,28 @@
     }
 
     #gameModeDisplay {
-      font-size: 18px;
-      margin-top: 5px;
       color: #00ffcc;
+    }
+
+    #winnerDisplay {
+      margin-top: 10px;
+      color: gold;
+      font-weight: bold;
     }
 
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      padding: 15px;
-      max-width: 520px;
-      margin: 20px auto;
+      gap: 10px;
+      max-width: 500px;
+      margin: auto;
     }
 
     .cell {
       background: #1c1735;
-      padding: 28px;
-      border-radius: 14px;
-      font-weight: bold;
-      font-size: 24px;
+      padding: 25px;
+      border-radius: 10px;
+      font-size: 22px;
       cursor: pointer;
     }
 
@@ -113,24 +97,19 @@
       background: #b84dff;
     }
 
-    .winning {
-      background: #00ffcc !important;
-      color: black;
-    }
-
     button {
-      background: linear-gradient(45deg, #b84dff, #ff4df2);
+      margin: 5px;
+      padding: 10px 20px;
+      border-radius: 10px;
       border: none;
-      padding: 12px 20px;
-      border-radius: 12px;
+      background: #b84dff;
       color: white;
       font-weight: bold;
-      margin: 5px;
     }
 
-    #bingoBtn {
-      background: linear-gradient(45deg, #00ffcc, #00ccff);
-      color: black;
+    #adminPanel {
+      display: none;
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -146,40 +125,48 @@
   <div id="video-container">
     <div id="offline-message">🔴 LIVE STARTING SOON...</div>
 
-    <iframe 
-      id="live-video"
-      src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"
-      allowfullscreen>
+    <iframe id="live-video"
+      src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww">
     </iframe>
-  </div>
-
-  <div id="chat-container">
-    <iframe id="live-chat"></iframe>
   </div>
 
   <div id="currentNumber">Waiting...</div>
   <div id="gameModeDisplay">Mode: 1 LINE</div>
+  <div id="winnerDisplay"></div>
 
   <div id="board"></div>
 
-  <!-- ADMIN CONTROLS -->
-  <button onclick="setMode('line')">1 LINE</button>
-  <button onclick="setMode('twoLines')">2 LINES</button>
-  <button onclick="setMode('fullHouse')">FULL HOUSE</button>
+  <button onclick="checkBingo()">BINGO!</button>
 
-  <br>
-  <button onclick="callNumber()">CALL NUMBER</button>
-  <button id="bingoBtn" onclick="checkBingo()">BINGO!</button>
+  <!-- ADMIN LOGIN -->
+  <button onclick="adminLogin()">Admin Login</button>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel">
+    <button onclick="callNumber()">CALL NUMBER</button>
+    <button onclick="setMode('line')">1 LINE</button>
+    <button onclick="setMode('twoLines')">2 LINES</button>
+    <button onclick="setMode('fullHouse')">FULL HOUSE</button>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <script>
+    const ADMIN_PASSWORD = "marvalous123";
+
+    function adminLogin() {
+      let pass = prompt("Enter admin password:");
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById("adminPanel").style.display = "block";
+      } else {
+        alert("Wrong password");
+      }
+    }
+
     const firebaseConfig = {
-      apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
-      authDomain: "marvalous-bingo.firebaseapp.com",
-      databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com",
-      projectId: "marvalous-bingo"
+      apiKey: "AIza...",
+      databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -194,20 +181,18 @@
       return nums;
     }
 
-    let savedCard = localStorage.getItem("bingoCard");
-    let card = savedCard ? JSON.parse(savedCard) : generateCard();
+    let saved = localStorage.getItem("bingoCard");
+    let card = saved ? JSON.parse(saved) : generateCard();
     localStorage.setItem("bingoCard", JSON.stringify(card));
 
     const board = document.getElementById("board");
 
     card.forEach(n => {
-      let div = document.createElement("div");
-      div.className = "cell";
-      div.innerText = n;
-
-      div.onclick = () => div.classList.toggle("marked");
-
-      board.appendChild(div);
+      let d = document.createElement("div");
+      d.className = "cell";
+      d.innerText = n;
+      d.onclick = () => d.classList.toggle("marked");
+      board.appendChild(d);
     });
 
     db.ref("currentNumber").on("value", snap => {
@@ -230,9 +215,7 @@
     db.ref("gameMode").on("value", snap => {
       if (snap.val()) {
         currentMode = snap.val();
-        document.getElementById("gameModeDisplay").innerText =
-          "Mode: " + (currentMode === "line" ? "1 LINE" :
-                     currentMode === "twoLines" ? "2 LINES" : "FULL HOUSE");
+        document.getElementById("gameModeDisplay").innerText = "Mode: " + currentMode;
       }
     });
 
@@ -253,38 +236,29 @@
 
       let completed = lines.filter(line => line.every(i => marked[i])).length;
 
-      if (
+      let win = (
         (currentMode === "line" && completed >= 1) ||
         (currentMode === "twoLines" && completed >= 2) ||
         (currentMode === "fullHouse" && marked.every(v => v))
-      ) {
-        alert("🎉 BINGO!!! 🎉");
+      );
+
+      if (win) {
+        let name = prompt("Enter your name:");
+        if (name) {
+          db.ref("lastWinner").set(name);
+          alert("🎉 WIN CONFIRMED 🎉");
+        }
       } else {
-        alert("❌ Not a winning card yet!");
+        alert("❌ Not a winning card");
       }
     }
 
-    function checkLiveStatus() {
-      const iframe = document.getElementById("live-video");
-      const message = document.getElementById("offline-message");
-      const chatBox = document.getElementById("chat-container");
-
-      fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
-        .then(res => {
-          if (res.ok) {
-            iframe.style.display = "block";
-            message.style.display = "none";
-            chatBox.style.display = "block";
-          } else {
-            iframe.style.display = "none";
-            message.style.display = "block";
-            chatBox.style.display = "none";
-          }
-        });
-    }
-
-    setInterval(checkLiveStatus, 10000);
-    checkLiveStatus();
+    db.ref("lastWinner").on("value", snap => {
+      if (snap.val()) {
+        document.getElementById("winnerDisplay").innerText =
+          "🏆 Last Winner: " + snap.val();
+      }
+    });
   </script>
 
 </body>
