@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Bingo Admin</title>
+
   <style>
     body {
       background:#0e0b1f;
@@ -32,32 +33,45 @@
     .card {
       display:grid;
       grid-template-columns:repeat(5,1fr);
-      max-width:200px;
+      max-width:250px;
       margin:10px auto;
-      gap:2px;
+      gap:3px;
     }
 
     .cell {
       background:#222;
-      padding:5px;
-      font-size:12px;
+      padding:8px;
+      font-size:14px;
     }
 
-    .marked {
-      background:#b84dff;
+    #selectedPlayer {
+      display:none;
+      background:#2a214f;
+      padding:20px;
+      margin:15px;
+      border-radius:10px;
+    }
+
+    #calledNumbers {
+      font-size:14px;
+      margin-top:10px;
+      opacity:0.8;
     }
   </style>
 </head>
+
 <body>
 
-<h1>🎯 ADMIN PANEL</h1>
+<h1>🎯 BINGO ADMIN</h1>
 
+<!-- CURRENT NUMBER -->
 <div class="panel">
-  <h2>Call Numbers</h2>
+  <h2 id="current">Current: -</h2>
   <button onclick="callNumber()">CALL NEXT</button>
-  <h3 id="current">Current: -</h3>
+  <div id="calledNumbers"></div>
 </div>
 
+<!-- MODE -->
 <div class="panel">
   <h2>Game Mode</h2>
   <button onclick="setMode('1line')">1 Line</button>
@@ -65,13 +79,22 @@
   <button onclick="setMode('fullhouse')">Full House</button>
 </div>
 
+<!-- CLAIMS -->
 <div class="panel">
   <h2>Bingo Claims</h2>
   <div id="claims"></div>
 </div>
 
+<!-- SELECTED PLAYER -->
+<div id="selectedPlayer">
+  <h2 id="selectedName"></h2>
+  <div id="selectedCard" class="card"></div>
+  <button onclick="approveWin()">APPROVE WINNER</button>
+</div>
+
+<!-- PLAYERS -->
 <div class="panel">
-  <h2>Players</h2>
+  <h2>All Players</h2>
   <div id="players"></div>
 </div>
 
@@ -87,6 +110,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+/* 🔊 SPEAK NUMBER */
+function speak(text) {
+  let msg = new SpeechSynthesisUtterance(text);
+  msg.rate = 0.9;
+  msg.pitch = 1;
+  speechSynthesis.speak(msg);
+}
+
 /* 🎯 CALL NUMBER */
 function callNumber() {
   db.ref("calledNumbers").once("value").then(snap => {
@@ -101,6 +132,9 @@ function callNumber() {
 
     db.ref("calledNumbers").set(called);
     db.ref("currentNumber").set(num);
+
+    // 🔊 SPEAK IT
+    speak("Number " + num);
   });
 }
 
@@ -109,13 +143,20 @@ function setMode(mode) {
   db.ref("mode").set(mode);
 }
 
-/* 📢 SHOW CURRENT */
+/* CURRENT NUMBER */
 db.ref("currentNumber").on("value", snap => {
   document.getElementById("current").innerText =
     "Current: " + snap.val();
 });
 
-/* 🧾 SHOW CLAIMS */
+/* CALLED NUMBERS LIST */
+db.ref("calledNumbers").on("value", snap => {
+  let nums = snap.val() || [];
+  document.getElementById("calledNumbers").innerText =
+    "Called: " + nums.join(", ");
+});
+
+/* CLAIMS */
 db.ref("bingoClaims").on("value", snap => {
   let data = snap.val() || {};
   let html = "";
@@ -124,8 +165,7 @@ db.ref("bingoClaims").on("value", snap => {
     html += `
       <div>
         ${claim.name}
-        <button onclick="checkCard('${id}')">CHECK</button>
-        <button onclick="approveWin()">APPROVE</button>
+        <button onclick="checkCard('${claim.playerId}')">CHECK</button>
       </div>
     `;
   });
@@ -133,33 +173,45 @@ db.ref("bingoClaims").on("value", snap => {
   document.getElementById("claims").innerHTML = html;
 });
 
-/* 👥 SHOW PLAYERS */
-db.ref("players").on("value", snap => {
-  let data = snap.val() || {};
-  let html = "";
+/* SHOW PLAYER CARD */
+function checkCard(playerId) {
+  db.ref("players/" + playerId).once("value").then(snap => {
+    let player = snap.val();
 
-  Object.values(data).forEach(player => {
-    html += `<div>
-      <b>${player.name}</b>
-      <div class="card">
-        ${player.card.map(n => `<div class="cell">${n}</div>`).join("")}
-      </div>
-    </div>`;
+    document.getElementById("selectedPlayer").style.display = "block";
+    document.getElementById("selectedName").innerText = player.name;
+
+    let html = player.card.map(n =>
+      `<div class="cell">${n}</div>`
+    ).join("");
+
+    document.getElementById("selectedCard").innerHTML = html;
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
+}
 
-  document.getElementById("players").innerHTML = html;
-});
-
-/* 🏆 APPROVE WIN */
+/* APPROVE WIN */
 function approveWin() {
   db.ref("winner").set(true);
   alert("Winner approved!");
 }
 
-/* 🔍 CHECK CARD (basic for now) */
-function checkCard(id) {
-  alert("Check visually below for now 👇");
-}
+/* PLAYERS LIST */
+db.ref("players").on("value", snap => {
+  let data = snap.val() || {};
+  let html = "";
+
+  Object.values(data).forEach(player => {
+    html += `
+      <div>
+        <b>${player.name}</b>
+      </div>
+    `;
+  });
+
+  document.getElementById("players").innerHTML = html;
+});
 </script>
 
 </body>
