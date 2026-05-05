@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bingo Admin</title>
+  <style>
+    body {
+      background:#0e0b1f;
+      color:white;
+      font-family:sans-serif;
+      text-align:center;
+    }
+
+    h1 { color:#b84dff; }
+
+    button {
+      padding:10px 15px;
+      margin:5px;
+      border:none;
+      border-radius:8px;
+      background:#00ffcc;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .panel {
+      background:#1c1735;
+      padding:15px;
+      margin:10px;
+      border-radius:10px;
+    }
+
+    .card {
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      max-width:200px;
+      margin:10px auto;
+      gap:2px;
+    }
+
+    .cell {
+      background:#222;
+      padding:5px;
+      font-size:12px;
+    }
+
+    .marked {
+      background:#b84dff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎯 ADMIN PANEL</h1>
+
+<div class="panel">
+  <h2>Call Numbers</h2>
+  <button onclick="callNumber()">CALL NEXT</button>
+  <h3 id="current">Current: -</h3>
+</div>
+
+<div class="panel">
+  <h2>Game Mode</h2>
+  <button onclick="setMode('1line')">1 Line</button>
+  <button onclick="setMode('2lines')">2 Lines</button>
+  <button onclick="setMode('fullhouse')">Full House</button>
+</div>
+
+<div class="panel">
+  <h2>Bingo Claims</h2>
+  <div id="claims"></div>
+</div>
+
+<div class="panel">
+  <h2>Players</h2>
+  <div id="players"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+  databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* 🎯 CALL NUMBER */
+function callNumber() {
+  db.ref("calledNumbers").once("value").then(snap => {
+    let called = snap.val() || [];
+
+    let num;
+    do {
+      num = Math.floor(Math.random()*75)+1;
+    } while (called.includes(num));
+
+    called.push(num);
+
+    db.ref("calledNumbers").set(called);
+    db.ref("currentNumber").set(num);
+  });
+}
+
+/* 🎮 MODE */
+function setMode(mode) {
+  db.ref("mode").set(mode);
+}
+
+/* 📢 SHOW CURRENT */
+db.ref("currentNumber").on("value", snap => {
+  document.getElementById("current").innerText =
+    "Current: " + snap.val();
+});
+
+/* 🧾 SHOW CLAIMS */
+db.ref("bingoClaims").on("value", snap => {
+  let data = snap.val() || {};
+  let html = "";
+
+  Object.entries(data).forEach(([id, claim]) => {
+    html += `
+      <div>
+        ${claim.name}
+        <button onclick="checkCard('${id}')">CHECK</button>
+        <button onclick="approveWin()">APPROVE</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("claims").innerHTML = html;
+});
+
+/* 👥 SHOW PLAYERS */
+db.ref("players").on("value", snap => {
+  let data = snap.val() || {};
+  let html = "";
+
+  Object.values(data).forEach(player => {
+    html += `<div>
+      <b>${player.name}</b>
+      <div class="card">
+        ${player.card.map(n => `<div class="cell">${n}</div>`).join("")}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById("players").innerHTML = html;
+});
+
+/* 🏆 APPROVE WIN */
+function approveWin() {
+  db.ref("winner").set(true);
+  alert("Winner approved!");
+}
+
+/* 🔍 CHECK CARD (basic for now) */
+function checkCard(id) {
+  alert("Check visually below for now 👇");
+}
+</script>
+
+</body>
+</html>
