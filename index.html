@@ -177,6 +177,33 @@
     }
 
     window.callNumber = callNumber;
+    // 🔴 SAFE AUTO LIVE CHECK
+function checkLiveStatus() {
+  const iframe = document.getElementById("live-video");
+  const message = document.getElementById("offline-message");
+
+  if (!iframe || !message) return; // stops crashes
+
+  fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
+    .then(res => {
+      if (res.ok) {
+        iframe.style.display = "block";
+        message.style.display = "none";
+      } else {
+        iframe.style.display = "none";
+        message.style.display = "block";
+      }
+    })
+    .catch(() => {
+      // if anything fails, DO NOTHING (keeps bingo working)
+    });
+}
+
+// run it every 10 seconds
+setInterval(checkLiveStatus, 10000);
+
+// also run once on load
+checkLiveStatus();
   </script>
 
 </body>
