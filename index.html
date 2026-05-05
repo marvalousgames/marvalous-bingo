@@ -173,7 +173,16 @@
       return nums;
     }
 
-    let card = generateCard();
+    let savedCard = localStorage.getItem("bingoCard");
+
+let card;
+
+if (savedCard) {
+  card = JSON.parse(savedCard);
+} else {
+  card = generateCard();
+  localStorage.setItem("bingoCard", JSON.stringify(card));
+}
     const board = document.getElementById("board");
 
     card.forEach(n => {
