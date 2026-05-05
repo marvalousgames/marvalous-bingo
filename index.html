@@ -13,14 +13,45 @@
       text-align: center;
     }
 
-    h1 { color: #b84dff; }
+    h1 {
+      color: #b84dff;
+      margin-top: 15px;
+    }
 
-    #winnerBanner {
-      background: #00ffcc;
-      color: black;
-      padding: 10px;
-      display: none;
-      font-weight: bold;
+    #video-container {
+      width: 90%;
+      max-width: 500px;
+      height: 250px;
+      margin: 15px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #1c1735;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #chat-container {
+      width: 90%;
+      max-width: 500px;
+      height: 300px;
+      margin: 10px auto;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    #currentNumber {
+      font-size: 40px;
+      margin: 15px 0;
+      color: #ff4df2;
+    }
+
+    #mode {
+      color: #00ffcc;
+      margin-bottom: 10px;
     }
 
     #board {
@@ -28,24 +59,41 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 10px;
       max-width: 500px;
-      margin: 20px auto;
+      margin: auto;
     }
 
     .cell {
       background: #1c1735;
       padding: 25px;
-      border-radius: 10px;
+      border-radius: 12px;
+      font-size: 22px;
       cursor: pointer;
     }
 
-    .marked { background: #b84dff; }
+    .marked {
+      background: #b84dff;
+    }
+
+    .win {
+      background: #00ffcc !important;
+      color: black;
+    }
 
     button {
+      margin-top: 15px;
       padding: 12px 20px;
       border-radius: 10px;
-      background: #00ffcc;
       border: none;
+      background: #00ffcc;
       font-weight: bold;
+    }
+
+    #winner {
+      display: none;
+      background: #00ffcc;
+      color: black;
+      padding: 10px;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -54,10 +102,20 @@
 
 <h1>MARVALOUS BINGO</h1>
 
-<div id="winnerBanner"></div>
+<!-- 🎥 LIVE VIDEO -->
+<div id="video-container">
+  <iframe src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"></iframe>
+</div>
+
+<!-- 💬 LIVE CHAT -->
+<div id="chat-container">
+  <iframe src="https://www.youtube.com/live_chat?v=LIVE_VIDEO_ID&embed_domain=bingo.netlify.app"></iframe>
+</div>
 
 <div id="currentNumber">Waiting...</div>
-<div id="gameMode">Mode: 1 LINE</div>
+<div id="mode">Mode: 1 LINE</div>
+
+<div id="winner">🎉 WE HAVE A WINNER 🎉</div>
 
 <div id="board"></div>
 
@@ -69,14 +127,13 @@
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
-  authDomain: "marvalous-bingo.firebaseapp.com",
   databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 🎯 CARD
+// 🎯 GENERATE CARD
 function generateCard() {
   let nums = [];
   while (nums.length < 25) {
@@ -86,6 +143,7 @@ function generateCard() {
   return nums;
 }
 
+// 💾 SAVE CARD
 let saved = localStorage.getItem("card");
 let card = saved ? JSON.parse(saved) : generateCard();
 localStorage.setItem("card", JSON.stringify(card));
@@ -96,39 +154,40 @@ card.forEach(n => {
   let div = document.createElement("div");
   div.className = "cell";
   div.innerText = n;
+
   div.onclick = () => div.classList.toggle("marked");
+
   board.appendChild(div);
 });
 
-// 🔢 LISTEN
+// 🔢 NUMBER LISTENER
 db.ref("currentNumber").on("value", snap => {
   let num = snap.val();
-  if (num) {
-    document.getElementById("currentNumber").innerText = num;
+  if (!num) return;
 
-    document.querySelectorAll(".cell").forEach(c => {
-      if (c.innerText == num) c.classList.add("marked");
-    });
-  }
+  document.getElementById("currentNumber").innerText = num;
+
+  document.querySelectorAll(".cell").forEach(c => {
+    if (c.innerText == num) c.classList.add("marked");
+  });
 });
 
-db.ref("gameMode").on("value", snap => {
-  document.getElementById("gameMode").innerText = "Mode: " + snap.val().toUpperCase();
+// 🎮 MODE LISTENER
+db.ref("mode").on("value", snap => {
+  document.getElementById("mode").innerText = "Mode: " + (snap.val() || "1 LINE").toUpperCase();
 });
 
-// 🏆 WINNER LISTEN
+// 🏆 WINNER LISTENER
 db.ref("winner").on("value", snap => {
-  let winner = snap.val();
-  if (winner) {
-    document.getElementById("winnerBanner").style.display = "block";
-    document.getElementById("winnerBanner").innerText = "🎉 WE HAVE A WINNER!";
+  if (snap.val()) {
+    document.getElementById("winner").style.display = "block";
   }
 });
 
-// 🏆 CHECK
+// 🎯 CHECK WIN
 function checkBingo() {
   db.ref("gameActive").once("value").then(s => {
-    if (!s.val()) return alert("Game already finished!");
+    if (!s.val()) return alert("Game finished");
 
     const cells = [...document.querySelectorAll(".cell")];
     const marked = cells.map(c => c.classList.contains("marked"));
@@ -144,8 +203,8 @@ function checkBingo() {
 
     let lines = wins.filter(w => w.every(i => marked[i]));
 
-    db.ref("gameMode").once("value").then(snap => {
-      let mode = snap.val();
+    db.ref("mode").once("value").then(m => {
+      let mode = m.val();
 
       let win =
         (mode === "1line" && lines.length >= 1) ||
@@ -156,7 +215,7 @@ function checkBingo() {
         db.ref("winner").set(true);
         db.ref("gameActive").set(false);
       } else {
-        alert("❌ Not yet");
+        alert("Not a winning card");
       }
     });
   });
