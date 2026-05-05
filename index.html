@@ -145,27 +145,16 @@
       return nums;
     }
 
-const board = document.getElementById("board");
+    let card = generateCard();
 
-function renderCard() {
-  board.innerHTML = ""; // reset
+    const board = document.getElementById("board");
 
-  let nums = [];
-  while (nums.length < 25) {
-    let n = Math.floor(Math.random() * 75) + 1;
-    if (!nums.includes(n)) nums.push(n);
-  }
-
-  nums.forEach(n => {
-    let div = document.createElement("div");
-    div.className = "cell";
-    div.innerText = n;
-    board.appendChild(div);
-  });
-}
-
-// run it
-renderCard();
+    card.forEach(n => {
+      let div = document.createElement("div");
+      div.className = "cell";
+      div.innerText = n;
+      board.appendChild(div);
+    });
 
     // 🔢 Listen for numbers
     db.ref("currentNumber").on("value", (snap) => {
@@ -188,39 +177,6 @@ renderCard();
     }
 
     window.callNumber = callNumber;
-    <script>
-
-  // 🎮 Call number
-  function callNumber() {
-    let num = Math.floor(Math.random() * 75) + 1;
-    db.ref("currentNumber").set(num);
-  }
-
-  window.callNumber = callNumber;
-
-
-  // 🔴 AUTO LIVE SWITCH (PASTE HERE)
-  setInterval(() => {
-    const iframe = document.getElementById("live-video");
-    const message = document.getElementById("offline-message");
-
-    fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
-      .then(res => {
-        if (res.ok) {
-          iframe.style.display = "block";
-          message.style.display = "none";
-        } else {
-          iframe.style.display = "none";
-          message.style.display = "block";
-        }
-      })
-      .catch(() => {
-        iframe.style.display = "none";
-        message.style.display = "block";
-      });
-  }, 10000);
-
-</script>
   </script>
 
 </body>
