@@ -5,21 +5,7 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-#video-container {
-  width: 100%;
-  height: 250px;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-#offline-message {
-  color: #bb86fc;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-}
   <style>
     body {
       margin: 0;
@@ -78,21 +64,24 @@
       font-weight: bold;
       margin-top: 10px;
     }
-    #video-container {
-  width: 100%;
-  height: 250px;
-  background: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-#offline-message {
-  color: #bb86fc;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-}
+    /* ✅ FIXED (moved inside style properly) */
+    #video-container {
+      width: 100%;
+      height: 250px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #offline-message {
+      color: #bb86fc;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+
   </style>
 </head>
 
@@ -101,19 +90,19 @@
   <h1>MARVALOUS BINGO</h1>
 
   <div id="video-container">
-  <div id="offline-message">
-    🔴 LIVE STARTING SOON...
-  </div>
+    <div id="offline-message">
+      🔴 LIVE STARTING SOON...
+    </div>
 
-  <iframe 
-    id="live-video"
-    width="100%" 
-    height="250"
-    src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"
-    frameborder="0"
-    allowfullscreen
-    style="display:none;">
-  </iframe>
+    <iframe 
+      id="live-video"
+      width="100%" 
+      height="250"
+      src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"
+      frameborder="0"
+      allowfullscreen
+      style="display:none;">
+    </iframe>
   </div>
     
 
