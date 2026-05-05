@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marvalous Bingo</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0e0b1f;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      color: #b84dff;
+      margin-top: 20px;
+    }
+
+    #live {
+      width: 100%;
+      height: 220px;
+      border: none;
+      margin-bottom: 15px;
+    }
+
+    #currentNumber {
+      font-size: 40px;
+      margin: 10px 0;
+      color: #ff4df2;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      padding: 10px;
+      max-width: 350px;
+      margin: auto;
+    }
+
+    .cell {
+      background: #1c1735;
+      padding: 18px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .marked {
+      background: #b84dff;
+      color: white;
+    }
+
+    button {
+      background: #b84dff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>MARVALOUS BINGO</h1>
+
+  <!-- 🎥 LIVE (we’ll swap link later) -->
+  <iframe id="live"
+    src="https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID">
+  </iframe>
+
+  <!-- 🔢 CURRENT NUMBER -->
+  <div id="currentNumber">Waiting...</div>
+
+  <!-- 🎯 BINGO BOARD -->
+  <div id="board"></div>
+
+  <!-- 🎮 HOST BUTTON -->
+  <button onclick="callNumber()">CALL NUMBER</button>
+
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    // 🔥 Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+      authDomain: "marvalous-bingo.firebaseapp.com",
+      databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com",
+      projectId: "marvalous-bingo",
+      storageBucket: "marvalous-bingo.firebasestorage.app",
+      messagingSenderId: "785335567662",
+      appId: "1:785335567662:web:f06398c58a11e8b7c826bf"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 🎯 Generate card
+    function generateCard() {
+      let nums = [];
+      while (nums.length < 25) {
+        let n = Math.floor(Math.random() * 75) + 1;
+        if (!nums.includes(n)) nums.push(n);
+      }
+      return nums;
+    }
+
+    let card = generateCard();
+
+    const board = document.getElementById("board");
+
+    card.forEach(n => {
+      let div = document.createElement("div");
+      div.className = "cell";
+      div.innerText = n;
+      board.appendChild(div);
+    });
+
+    // 🔢 Listen for numbers
+    db.ref("currentNumber").on("value", (snap) => {
+      let num = snap.val();
+      if (num) {
+        document.getElementById("currentNumber").innerText = num;
+
+        document.querySelectorAll(".cell").forEach(c => {
+          if (c.innerText == num) {
+            c.classList.add("marked");
+          }
+        });
+      }
+    });
+
+    // 🎮 Call number
+    function callNumber() {
+      let num = Math.floor(Math.random() * 75) + 1;
+      db.ref("currentNumber").set(num);
+    }
+
+    window.callNumber = callNumber;
+  </script>
+
+</body>
+</html>
