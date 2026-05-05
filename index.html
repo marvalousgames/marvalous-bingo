@@ -19,7 +19,6 @@
       margin-top: 10px;
     }
 
-    /* 🎥 VIDEO */
     #video-container {
       width: 95%;
       max-width: 700px;
@@ -37,7 +36,6 @@
       border: none;
     }
 
-    /* 💬 CHAT */
     #chat-box {
       width: 95%;
       max-width: 700px;
@@ -84,7 +82,6 @@
       border-radius: 8px;
     }
 
-    /* 🔢 NUMBER */
     #currentNumber {
       font-size: 46px;
       margin: 15px 0;
@@ -96,7 +93,6 @@
       margin-bottom: 10px;
     }
 
-    /* 🎯 BINGO BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -112,7 +108,6 @@
       font-weight: bold;
       font-size: 22px;
       padding: 12px;
-      border-right: 2px solid #0e0b1f;
     }
 
     .cell {
@@ -150,7 +145,6 @@
       margin-top: 10px;
     }
 
-    /* 👤 NAME POPUP */
     #nameModal {
       position: fixed;
       top:0;
@@ -163,46 +157,27 @@
       align-items:center;
       z-index:9999;
     }
-
-    #nameModal input {
-      padding:10px;
-      border-radius:8px;
-      border:none;
-      width:200px;
-    }
-
-    #nameModal button {
-      margin-top:10px;
-      background:#b84dff;
-      color:white;
-    }
-
   </style>
 </head>
 
 <body>
 
-<!-- 👤 NAME POPUP -->
+<!-- NAME POPUP -->
 <div id="nameModal">
   <div style="background:#1c1735;padding:25px;border-radius:12px;">
     <h2>Enter Your Name</h2>
     <input id="playerNameInput" placeholder="Your name">
-    <br>
+    <br><br>
     <button onclick="saveName()">Join Game</button>
   </div>
 </div>
 
 <h1>MARVALOUS BINGO</h1>
 
-<!-- 🎥 TWITCH -->
 <div id="video-container">
-  <iframe 
-    src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
-    allowfullscreen>
-  </iframe>
+  <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
 </div>
 
-<!-- 💬 CHAT -->
 <div id="chat-box">
   <div id="messages"></div>
 
@@ -226,14 +201,14 @@
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+  apiKey: "AIza...",
   databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* 👤 PLAYER NAME */
+/* NAME SYSTEM */
 let playerName = localStorage.getItem("bingoName");
 
 if (playerName) {
@@ -249,7 +224,7 @@ function saveName() {
   document.getElementById("nameModal").style.display = "none";
 }
 
-/* 🎯 CARD */
+/* BINGO CARD */
 function generateCard() {
   function getNumbers(min, max, count) {
     let nums = [];
@@ -302,7 +277,7 @@ card.forEach(n=>{
   board.appendChild(d);
 });
 
-/* 🔢 LISTENERS */
+/* FIREBASE LISTENERS */
 db.ref("currentNumber").on("value",snap=>{
   let num=snap.val();
   if(!num)return;
@@ -322,19 +297,20 @@ db.ref("winner").on("value",snap=>{
   if(snap.val())document.getElementById("winner").style.display="block";
 });
 
-/* 🎯 BINGO */
+/* ✅ FIXED BINGO BUTTON */
 function checkBingo(){
   if(!playerName) return alert("Enter name first");
 
   db.ref("bingoClaims").push({
     name: playerName,
+    card: card,
     time: Date.now()
   });
 
-  alert("Bingo submitted!");
+  alert("Bingo submitted! Waiting for approval.");
 }
 
-/* 💬 CHAT */
+/* CHAT */
 function sendMsg(){
   if(!playerName) return;
 
