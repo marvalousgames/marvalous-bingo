@@ -18,36 +18,67 @@
     h1 {
       color: #b84dff;
       margin-top: 20px;
+      font-size: 28px;
     }
 
-    #live {
+    /* 🔴 LIVE BOX (like your drawing) */
+    #video-container {
+      width: 90%;
+      max-width: 500px;
+      height: 120px;
+      background: #1c1735;
+      margin: 20px auto;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(184,77,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #offline-message {
+      color: #ff4df2;
+      font-size: 22px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    #live-video {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 220px;
+      height: 100%;
       border: none;
-      margin-bottom: 15px;
+      display: none;
     }
 
+    /* 🔢 CURRENT NUMBER */
     #currentNumber {
-      font-size: 40px;
-      margin: 10px 0;
+      font-size: 48px;
+      margin: 20px 0;
       color: #ff4df2;
     }
 
+    /* 🎯 BIGGER BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
+      gap: 12px;
       padding: 15px;
-      max-width: 500px;
-      margin: auto;
+      max-width: 520px;
+      margin: 20px auto;
     }
 
+    /* 🔲 BIG CELLS */
     .cell {
       background: #1c1735;
-      padding: 18px;
-      border-radius: 10px;
+      padding: 28px;
+      border-radius: 14px;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 24px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
     .marked {
@@ -55,30 +86,16 @@
       color: white;
     }
 
+    /* 🎮 BETTER BUTTON */
     button {
-      background: #b84dff;
+      background: linear-gradient(45deg, #b84dff, #ff4df2);
       border: none;
-      padding: 12px 20px;
-      b5 10px;
-      color: whi500     font-weight: bold;
-      margin-top: 10px;
-    }
-
-    /* ✅ FIXED (moved inside style properly) */
-    #video-container {
-      width: 100%;
-      height: 250px;
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #offline-message {
-      color: #bb86fc;
-      font-size: 20px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      color: white;
       font-weight: bold;
-      text-align: center;
+      margin-top: 15px;
+      font-size: 16px;
     }
 
   </style>
@@ -95,15 +112,10 @@
 
     <iframe 
       id="live-video"
-      width="100%" 
-      height="250"
       src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"
-      frameborder="0"
-      allowfullscreen
-      style="display:none;">
+      allowfullscreen>
     </iframe>
   </div>
-    
 
   <!-- 🔢 CURRENT NUMBER -->
   <div id="currentNumber">Waiting...</div>
@@ -114,13 +126,11 @@
   <!-- 🎮 HOST BUTTON -->
   <button onclick="callNumber()">CALL NUMBER</button>
 
-
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <script>
-    // 🔥 Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
       authDomain: "marvalous-bingo.firebaseapp.com",
@@ -134,7 +144,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 🎯 Generate card
     function generateCard() {
       let nums = [];
       while (nums.length < 25) {
@@ -145,7 +154,6 @@
     }
 
     let card = generateCard();
-
     const board = document.getElementById("board");
 
     card.forEach(n => {
@@ -155,7 +163,6 @@
       board.appendChild(div);
     });
 
-    // 🔢 Listen for numbers
     db.ref("currentNumber").on("value", (snap) => {
       let num = snap.val();
       if (num) {
@@ -169,40 +176,35 @@
       }
     });
 
-    // 🎮 Call number
     function callNumber() {
       let num = Math.floor(Math.random() * 75) + 1;
       db.ref("currentNumber").set(num);
     }
 
     window.callNumber = callNumber;
+
     // 🔴 SAFE AUTO LIVE CHECK
-function checkLiveStatus() {
-  const iframe = document.getElementById("live-video");
-  const message = document.getElementById("offline-message");
+    function checkLiveStatus() {
+      const iframe = document.getElementById("live-video");
+      const message = document.getElementById("offline-message");
 
-  if (!iframe || !message) return; // stops crashes
+      if (!iframe || !message) return;
 
-  fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
-    .then(res => {
-      if (res.ok) {
-        iframe.style.display = "block";
-        message.style.display = "none";
-      } else {
-        iframe.style.display = "none";
-        message.style.display = "block";
-      }
-    })
-    .catch(() => {
-      // if anything fails, DO NOTHING (keeps bingo working)
-    });
-}
+      fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
+        .then(res => {
+          if (res.ok) {
+            iframe.style.display = "block";
+            message.style.display = "none";
+          } else {
+            iframe.style.display = "none";
+            message.style.display = "block";
+          }
+        })
+        .catch(() => {});
+    }
 
-// run it every 10 seconds
-setInterval(checkLiveStatus, 10000);
-
-// also run once on load
-checkLiveStatus();
+    setInterval(checkLiveStatus, 10000);
+    checkLiveStatus();
   </script>
 
 </body>
