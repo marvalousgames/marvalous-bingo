@@ -24,7 +24,7 @@
 
     #title h1 {
       color: #b84dff;
-      font-size: 50px;
+      font-size: 60px;
       margin: 0;
     }
 
@@ -43,6 +43,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 20px rgba(184,77,255,0.3);
       position: relative;
       overflow: hidden;
     }
@@ -51,6 +52,7 @@
       color: #ff4df2;
       font-size: 22px;
       font-weight: bold;
+      z-index: 2;
     }
 
     #live-video {
@@ -61,56 +63,82 @@
       display: none;
     }
 
+    #chat-container {
+      width: 90%;
+      max-width: 500px;
+      height: 300px;
+      margin: 15px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      display: none;
+    }
+
+    #live-chat {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     #currentNumber {
       font-size: 48px;
       margin: 20px 0;
       color: #ff4df2;
     }
 
-    #gameModeDisplay {
+    #gameMode {
       color: #00ffcc;
-    }
-
-    #winnerDisplay {
-      margin-top: 10px;
-      color: gold;
-      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 10px;
     }
 
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      max-width: 500px;
-      margin: auto;
+      gap: 12px;
+      padding: 15px;
+      max-width: 520px;
+      margin: 20px auto;
     }
 
     .cell {
       background: #1c1735;
-      padding: 25px;
-      border-radius: 10px;
-      font-size: 22px;
+      padding: 28px;
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 24px;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .cell:hover {
+      transform: scale(1.05);
     }
 
     .marked {
       background: #b84dff;
     }
 
-    button {
-      margin: 5px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: none;
-      background: #b84dff;
-      color: white;
-      font-weight: bold;
+    .winning {
+      background: #00ffcc !important;
+      color: black;
     }
 
-    #adminPanel {
-      display: none;
-      margin-top: 15px;
+    button {
+      background: linear-gradient(45deg, #b84dff, #ff4df2);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      margin: 5px;
+      font-size: 14px;
     }
+
+    #bingoBtn {
+      background: linear-gradient(45deg, #00ffcc, #00ccff);
+      color: black;
+    }
+
   </style>
 </head>
 
@@ -125,48 +153,47 @@
   <div id="video-container">
     <div id="offline-message">🔴 LIVE STARTING SOON...</div>
 
-    <iframe id="live-video"
-      src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww">
+    <iframe 
+      id="live-video"
+      src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div id="chat-container">
+    <iframe 
+      id="live-chat"
+      src="https://www.youtube.com/live_chat?v=VIDEO_ID&embed_domain=bingo.netlify.app">
     </iframe>
   </div>
 
   <div id="currentNumber">Waiting...</div>
-  <div id="gameModeDisplay">Mode: 1 LINE</div>
-  <div id="winnerDisplay"></div>
+  <div id="gameMode">Mode: 1 LINE</div>
 
   <div id="board"></div>
 
-  <button onclick="checkBingo()">BINGO!</button>
+  <button id="bingoBtn" onclick="checkBingo()">BINGO!</button>
+  <br>
 
-  <!-- ADMIN LOGIN -->
-  <button onclick="adminLogin()">Admin Login</button>
+  <!-- ADMIN BUTTONS -->
+  <button onclick="callNumber()">CALL NUMBER</button>
+  <button onclick="setMode('1line')">1 LINE</button>
+  <button onclick="setMode('2lines')">2 LINES</button>
+  <button onclick="setMode('fullhouse')">FULL HOUSE</button>
 
-  <!-- ADMIN PANEL -->
-  <div id="adminPanel">
-    <button onclick="callNumber()">CALL NUMBER</button>
-    <button onclick="setMode('line')">1 LINE</button>
-    <button onclick="setMode('twoLines')">2 LINES</button>
-    <button onclick="setMode('fullHouse')">FULL HOUSE</button>
-  </div>
-
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <script>
-    const ADMIN_PASSWORD = "marvalous123";
-
-    function adminLogin() {
-      let pass = prompt("Enter admin password:");
-      if (pass === ADMIN_PASSWORD) {
-        document.getElementById("adminPanel").style.display = "block";
-      } else {
-        alert("Wrong password");
-      }
-    }
-
     const firebaseConfig = {
-      apiKey: "AIza...",
-      databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+      apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+      authDomain: "marvalous-bingo.firebaseapp.com",
+      databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com",
+      projectId: "marvalous-bingo",
+      storageBucket: "marvalous-bingo.firebasestorage.app",
+      messagingSenderId: "785335567662",
+      appId: "1:785335567662:web:f06398c58a11e8b7c826bf"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -181,26 +208,33 @@
       return nums;
     }
 
-    let saved = localStorage.getItem("bingoCard");
-    let card = saved ? JSON.parse(saved) : generateCard();
+    let savedCard = localStorage.getItem("bingoCard");
+    let card = savedCard ? JSON.parse(savedCard) : generateCard();
     localStorage.setItem("bingoCard", JSON.stringify(card));
 
     const board = document.getElementById("board");
 
     card.forEach(n => {
-      let d = document.createElement("div");
-      d.className = "cell";
-      d.innerText = n;
-      d.onclick = () => d.classList.toggle("marked");
-      board.appendChild(d);
+      let div = document.createElement("div");
+      div.className = "cell";
+      div.innerText = n;
+
+      div.addEventListener("click", () => {
+        div.classList.toggle("marked");
+      });
+
+      board.appendChild(div);
     });
 
     db.ref("currentNumber").on("value", snap => {
       let num = snap.val();
       if (num) {
         document.getElementById("currentNumber").innerText = num;
+
         document.querySelectorAll(".cell").forEach(c => {
-          if (c.innerText == num) c.classList.add("marked");
+          if (c.innerText == num) {
+            c.classList.add("marked");
+          }
         });
       }
     });
@@ -210,55 +244,70 @@
       db.ref("currentNumber").set(num);
     }
 
-    let currentMode = "line";
-
-    db.ref("gameMode").on("value", snap => {
-      if (snap.val()) {
-        currentMode = snap.val();
-        document.getElementById("gameModeDisplay").innerText = "Mode: " + currentMode;
-      }
-    });
-
     function setMode(mode) {
       db.ref("gameMode").set(mode);
     }
+
+    db.ref("gameMode").on("value", snap => {
+      let mode = snap.val() || "1line";
+      document.getElementById("gameMode").innerText =
+        "Mode: " + (mode === "1line" ? "1 LINE" :
+                   mode === "2lines" ? "2 LINES" :
+                   "FULL HOUSE");
+    });
 
     function checkBingo() {
       const cells = [...document.querySelectorAll(".cell")];
       const marked = cells.map(c => c.classList.contains("marked"));
 
-      const lines = [
+      const wins = [
         [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],
         [15,16,17,18,19],[20,21,22,23,24],
-        [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],
-        [3,8,13,18,23],[4,9,14,19,24]
+        [0,5,10,15,20],[1,6,11,16,21],
+        [2,7,12,17,22],[3,8,13,18,23],
+        [4,9,14,19,24],
+        [0,6,12,18,24],[4,8,12,16,20]
       ];
 
-      let completed = lines.filter(line => line.every(i => marked[i])).length;
+      let lines = wins.filter(w => w.every(i => marked[i]));
 
-      let win = (
-        (currentMode === "line" && completed >= 1) ||
-        (currentMode === "twoLines" && completed >= 2) ||
-        (currentMode === "fullHouse" && marked.every(v => v))
-      );
+      db.ref("gameMode").once("value").then(snap => {
+        let mode = snap.val() || "1line";
 
-      if (win) {
-        let name = prompt("Enter your name:");
-        if (name) {
-          db.ref("lastWinner").set(name);
-          alert("🎉 WIN CONFIRMED 🎉");
+        if (
+          (mode === "1line" && lines.length >= 1) ||
+          (mode === "2lines" && lines.length >= 2) ||
+          (mode === "fullhouse" && marked.every(x => x))
+        ) {
+          alert("🎉 BINGO WINNER!");
+        } else {
+          alert("❌ Not a winning card");
         }
-      } else {
-        alert("❌ Not a winning card");
-      }
+      });
     }
 
-    db.ref("lastWinner").on("value", snap => {
-      if (snap.val()) {
-        document.getElementById("winnerDisplay").innerText =
-          "🏆 Last Winner: " + snap.val();
-      }
-    });
+    function checkLiveStatus() {
+      const iframe = document.getElementById("live-video");
+      const message = document.getElementById("offline-message");
+      const chat = document.getElementById("chat-container");
+
+      fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
+        .then(res => {
+          if (res.ok) {
+            iframe.style.display = "block";
+            message.style.display = "none";
+            chat.style.display = "block";
+          } else {
+            iframe.style.display = "none";
+            message.style.display = "block";
+            chat.style.display = "none";
+          }
+        })
+        .catch(() => {});
+    }
+
+    setInterval(checkLiveStatus, 10000);
+    checkLiveStatus();
   </script>
 
 </body>
