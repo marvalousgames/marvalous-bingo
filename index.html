@@ -325,7 +325,13 @@ card.forEach(n => {
 
   board.appendChild(div);
 });
-
+function getLetter(num) {
+  if (num <= 15) return "B";
+  if (num <= 30) return "I";
+  if (num <= 45) return "N";
+  if (num <= 60) return "G";
+  return "O";
+}
 /* 🔢 NUMBER */
 db.ref("currentNumber").on("value", snap => {
   let num = snap.val();
