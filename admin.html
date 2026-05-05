@@ -226,7 +226,7 @@ function resetGame() {
 
   db.ref("currentNumber").set(0);
   db.ref("winner").set(false);
-
+  db.ref("gameId").set(Date.now());
   document.getElementById("cardView").innerHTML = "";
 }
 
