@@ -283,9 +283,32 @@ function generateCard() {
 }
 
 /* 💾 SAVE CARD */
-let saved = localStorage.getItem("card");
-let card = saved ? JSON.parse(saved) : generateCard();
-localStorage.setItem("card", JSON.stringify(card));
+let card;
+let currentGameId;
+
+db.ref("gameId").on("value", snap => {
+  let gameId = snap.val();
+
+  if (!gameId) return;
+
+  if (currentGameId !== gameId) {
+    currentGameId = gameId;
+
+    let savedGame = localStorage.getItem("gameId");
+
+    if (savedGame !== String(gameId)) {
+      card = generateCard();
+
+      localStorage.setItem("card", JSON.stringify(card));
+      localStorage.setItem("gameId", gameId);
+
+      location.reload();
+    } else {
+      let saved = localStorage.getItem("card");
+      card = saved ? JSON.parse(saved) : generateCard();
+    }
+  }
+});
   /* 💾 SAVE CARD TO FIREBASE */
 let playerName = localStorage.getItem("playerName") || "Player";
 
