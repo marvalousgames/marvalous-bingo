@@ -286,6 +286,19 @@ function generateCard() {
 let saved = localStorage.getItem("card");
 let card = saved ? JSON.parse(saved) : generateCard();
 localStorage.setItem("card", JSON.stringify(card));
+  /* 💾 SAVE CARD TO FIREBASE */
+let playerName = localStorage.getItem("playerName") || "Player";
+
+let playerId = localStorage.getItem("playerId");
+if (!playerId) {
+  playerId = Date.now().toString();
+  localStorage.setItem("playerId", playerId);
+}
+
+db.ref("players/" + playerId).set({
+  name: playerName,
+  card: card
+});
 
 const board = document.getElementById("board");
 
