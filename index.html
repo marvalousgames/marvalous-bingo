@@ -15,7 +15,6 @@
       text-align: center;
     }
 
-    /* 🔥 NEW TITLE STYLE */
     #title {
       display: flex;
       align-items: center;
@@ -31,12 +30,11 @@
     }
 
     .title-logo {
-      width: 85px; /* ⬅️ slightly bigger like you wanted */
+      width: 50px;
       height: auto;
       filter: drop-shadow(0 0 6px #b84dff);
     }
 
-    /* 🔴 LIVE BOX */
     #video-container {
       width: 90%;
       max-width: 500px;
@@ -69,14 +67,12 @@
       display: none;
     }
 
-    /* 🔢 CURRENT NUMBER */
     #currentNumber {
       font-size: 48px;
       margin: 20px 0;
       color: #ff4df2;
     }
 
-    /* 🎯 BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -86,7 +82,6 @@
       margin: 20px auto;
     }
 
-    /* 🔲 CELLS */
     .cell {
       background: #1c1735;
       padding: 28px;
@@ -101,7 +96,6 @@
       color: white;
     }
 
-    /* 🎮 BUTTON */
     button {
       background: linear-gradient(45deg, #b84dff, #ff4df2);
       border: none;
@@ -112,13 +106,11 @@
       margin-top: 15px;
       font-size: 16px;
     }
-
   </style>
 </head>
 
 <body>
 
-  <!-- 🔥 TITLE WITH LOGOS -->
   <div id="title">
     <img src="logo.png" class="title-logo">
     <h1>MARVALOUS BINGO</h1>
@@ -170,7 +162,7 @@
       return nums;
     }
 
-    /* ✅ FIXED: KEEP SAME CARD ON REFRESH */
+    // ✅ KEEP SAME CARD
     let savedCard = localStorage.getItem("bingoCard");
 
     let card;
@@ -186,4 +178,53 @@
 
     card.forEach(n => {
       let div = document.createElement("div");
-      div.className = "cell
+      div.className = "cell";
+      div.innerText = n;
+      board.appendChild(div);
+    });
+
+    db.ref("currentNumber").on("value", (snap) => {
+      let num = snap.val();
+      if (num) {
+        document.getElementById("currentNumber").innerText = num;
+
+        document.querySelectorAll(".cell").forEach(c => {
+          if (c.innerText == num) {
+            c.classList.add("marked");
+          }
+        });
+      }
+    });
+
+    function callNumber() {
+      let num = Math.floor(Math.random() * 75) + 1;
+      db.ref("currentNumber").set(num);
+    }
+
+    window.callNumber = callNumber;
+
+    function checkLiveStatus() {
+      const iframe = document.getElementById("live-video");
+      const message = document.getElementById("offline-message");
+
+      if (!iframe || !message) return;
+
+      fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
+        .then(res => {
+          if (res.ok) {
+            iframe.style.display = "block";
+            message.style.display = "none";
+          } else {
+            iframe.style.display = "none";
+            message.style.display = "block";
+          }
+        })
+        .catch(() => {});
+    }
+
+    setInterval(checkLiveStatus, 10000);
+    checkLiveStatus();
+  </script>
+
+</body>
+</html>
