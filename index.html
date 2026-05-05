@@ -19,6 +19,7 @@
       margin-top: 10px;
     }
 
+    /* 🎥 VIDEO */
     #video-container {
       width: 95%;
       max-width: 700px;
@@ -36,6 +37,7 @@
       border: none;
     }
 
+    /* 💬 CHAT */
     #chat-box {
       width: 95%;
       max-width: 700px;
@@ -82,6 +84,7 @@
       border-radius: 8px;
     }
 
+    /* 🔢 NUMBER */
     #currentNumber {
       font-size: 46px;
       margin: 15px 0;
@@ -93,6 +96,7 @@
       margin-bottom: 10px;
     }
 
+    /* 🎯 BINGO BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -145,6 +149,7 @@
       padding: 10px;
       margin-top: 10px;
     }
+
   </style>
 </head>
 
@@ -152,13 +157,15 @@
 
 <h1>MARVALOUS BINGO</h1>
 
+<!-- 🎥 TWITCH -->
 <div id="video-container">
   <iframe 
-    src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
+    src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
     allowfullscreen>
   </iframe>
 </div>
 
+<!-- 💬 CHAT -->
 <div id="chat-box">
   <div id="messages"></div>
 
@@ -178,6 +185,7 @@
 
 <button onclick="checkBingo()">BINGO</button>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -190,7 +198,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* 🎯 GENERATE CARD */
+/* 🎯 GENERATE REAL BINGO CARD */
 function generateCard() {
   function getNumbers(min, max, count) {
     let nums = [];
@@ -202,6 +210,7 @@ function generateCard() {
   }
 
   let card = [];
+
   let B = getNumbers(1, 15, 5);
   let I = getNumbers(16, 30, 5);
   let N = getNumbers(31, 45, 4);
@@ -232,6 +241,7 @@ localStorage.setItem("card", JSON.stringify(card));
 
 const board = document.getElementById("board");
 
+/* 🔤 HEADER */
 ["B","I","N","G","O"].forEach(letter => {
   let h = document.createElement("div");
   h.className = "header";
@@ -239,6 +249,7 @@ const board = document.getElementById("board");
   board.appendChild(h);
 });
 
+/* 🔲 GRID */
 card.forEach(n => {
   let div = document.createElement("div");
 
@@ -248,6 +259,7 @@ card.forEach(n => {
   } else {
     div.className = "cell";
     div.innerText = n;
+
     div.onclick = () => div.classList.toggle("marked");
   }
 
@@ -279,14 +291,12 @@ db.ref("mode").on("value", snap => {
 
 /* 🏆 WINNER */
 db.ref("winner").on("value", snap => {
-  if (snap.val() === true) {
+  if (snap.val()) {
     document.getElementById("winner").style.display = "block";
-  } else {
-    document.getElementById("winner").style.display = "none";
   }
 });
 
-/* 🎯 BINGO CLAIM (FIXED) */
+/* 🎯 BINGO CHECK */
 function checkBingo() {
   const cells = [...document.querySelectorAll(".cell")];
   const marked = cells.map(c => c.classList.contains("marked"));
@@ -312,30 +322,20 @@ function checkBingo() {
     if (mode === "fullhouse" && marked.every(x => x)) win = true;
 
     if (win) {
-      let name = document.getElementById("name").value || "Player";
-
-      localStorage.setItem("playerName", name);
-
-      db.ref("bingoClaims").push({
-        name: name,
-        time: Date.now()
-      });
-
-      alert("🎉 Bingo claimed! Waiting for host...");
+      db.ref("winner").set(true);
+      alert("🎉 BINGO!");
     } else {
       alert("❌ Not yet");
     }
   });
 }
 
-/* 💬 CHAT */
+/* 💬 CHAT SEND */
 function sendMsg() {
   let name = document.getElementById("name").value || "Player";
   let msg = document.getElementById("msg").value;
 
   if (!msg) return;
-
-  localStorage.setItem("playerName", name);
 
   db.ref("chat").push({
     name: name,
@@ -345,6 +345,7 @@ function sendMsg() {
   document.getElementById("msg").value = "";
 }
 
+/* 💬 CHAT LISTENER */
 db.ref("chat").limitToLast(50).on("child_added", snap => {
   let data = snap.val();
 
