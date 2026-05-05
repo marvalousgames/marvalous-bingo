@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Marvalous Bingo</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
   <style>
@@ -15,8 +16,56 @@
 
     h1 {
       color: #b84dff;
+      font-size: 50px;
     }
 
+    /* 🎥 VIDEO */
+    #video-container {
+      width: 90%;
+      max-width: 500px;
+      height: 40vh;
+      background: #1c1735;
+      margin: 20px auto;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(184,77,255,0.3);
+    }
+
+    #offline-message {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ff4df2;
+      font-weight: bold;
+    }
+
+    #live-video {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+
+    /* 💬 CHAT */
+    #chat-container {
+      width: 90%;
+      max-width: 500px;
+      height: 300px;
+      margin: 10px auto;
+      display: none;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    #chat {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* 🎯 BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -44,12 +93,32 @@
       color: black;
       font-weight: bold;
     }
+
   </style>
 </head>
 
 <body>
 
 <h1>MARVALOUS BINGO</h1>
+
+<!-- 🎥 VIDEO -->
+<div id="video-container">
+  <div id="offline-message">🔴 LIVE STARTING SOON...</div>
+
+  <iframe 
+    id="live-video"
+    src="https://www.youtube.com/embed/live_stream?channel=UC3z0lJrQ7nF4UQ8c3S1n5Ww"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<!-- 💬 CHAT -->
+<div id="chat-container">
+  <iframe 
+    id="chat"
+    src="https://www.youtube.com/live_chat?v=VIDEO_ID&embed_domain=bingo.netlify.app">
+  </iframe>
+</div>
 
 <div id="currentNumber">Waiting...</div>
 <div id="gameMode">Mode: 1 LINE</div>
@@ -76,7 +145,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 🎯 CARD (saved)
+// 🎯 CARD
 function generateCard() {
   let nums = [];
   while (nums.length < 25) {
@@ -149,6 +218,30 @@ function checkBingo() {
     }
   });
 }
+
+// 🔴 LIVE CHECK
+function checkLiveStatus() {
+  const iframe = document.getElementById("live-video");
+  const message = document.getElementById("offline-message");
+  const chat = document.getElementById("chat-container");
+
+  fetch("https://www.youtube.com/oembed?url=https://www.youtube.com/channel/UC3z0lJrQ7nF4UQ8c3S1n5Ww/live&format=json")
+    .then(res => {
+      if (res.ok) {
+        iframe.style.display = "block";
+        message.style.display = "none";
+        chat.style.display = "block";
+      } else {
+        iframe.style.display = "none";
+        message.style.display = "block";
+        chat.style.display = "none";
+      }
+    })
+    .catch(() => {});
+}
+
+setInterval(checkLiveStatus, 10000);
+checkLiveStatus();
 </script>
 
 </body>
