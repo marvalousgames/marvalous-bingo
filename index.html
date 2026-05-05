@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Marvalous Bingo</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
   <style>
@@ -15,17 +16,16 @@
 
     h1 {
       color: #b84dff;
-      margin-top: 15px;
-      font-size: 28px;
+      margin-top: 10px;
     }
 
-    /* 🎥 BIGGER VIDEO */
+    /* 🎥 VIDEO */
     #video-container {
       width: 95%;
       max-width: 700px;
-      height: 380px;
+      height: 320px;
       margin: 15px auto;
-      border-radius: 20px;
+      border-radius: 15px;
       overflow: hidden;
       background: #1c1735;
       box-shadow: 0 0 25px rgba(184,77,255,0.4);
@@ -41,28 +41,37 @@
     #chat-box {
       width: 95%;
       max-width: 700px;
-      margin: 15px auto;
+      margin: 10px auto;
       background: #1c1735;
       border-radius: 15px;
       padding: 10px;
     }
 
     #messages {
-      height: 220px;
+      height: 180px;
       overflow-y: auto;
       text-align: left;
+      padding: 10px;
       font-size: 14px;
-      margin-bottom: 10px;
+    }
+
+    .msg {
+      margin-bottom: 6px;
+    }
+
+    .msg b {
+      color: #00ffcc;
     }
 
     #chat-input {
       display: flex;
-      gap: 5px;
+      gap: 6px;
+      margin-top: 8px;
     }
 
     #chat-input input {
       flex: 1;
-      padding: 10px;
+      padding: 8px;
       border-radius: 8px;
       border: none;
     }
@@ -70,15 +79,14 @@
     #chat-input button {
       background: #b84dff;
       border: none;
-      padding: 10px;
-      border-radius: 8px;
       color: white;
-      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 8px;
     }
 
-    /* 🔢 CURRENT NUMBER */
+    /* 🔢 NUMBER */
     #currentNumber {
-      font-size: 55px;
+      font-size: 46px;
       margin: 15px 0;
       color: #ff4df2;
     }
@@ -88,46 +96,50 @@
       margin-bottom: 10px;
     }
 
-    /* 🎯 BIGGER BOARD */
+    /* 🎯 BINGO BOARD */
     #board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 14px;
       max-width: 600px;
-      margin: 20px auto;
+      margin: auto;
+      border: 4px solid #b84dff;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    /* 🔲 BIGGER CELLS */
+    .header {
+      background: linear-gradient(45deg, #b84dff, #7a2cff);
+      font-weight: bold;
+      font-size: 22px;
+      padding: 12px;
+      border-right: 2px solid #0e0b1f;
+    }
+
     .cell {
       background: #1c1735;
-      padding: 32px;
-      border-radius: 14px;
-      font-size: 26px;
+      padding: 28px;
+      font-size: 22px;
+      border: 1px solid #0e0b1f;
       cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .cell:hover {
-      transform: scale(1.05);
     }
 
     .marked {
-      background: #b84dff;
+      background: linear-gradient(45deg, #b84dff, #ff4df2);
     }
 
-    .win {
-      background: #00ffcc !important;
+    .free {
+      background: #00ffcc;
       color: black;
+      font-weight: bold;
     }
 
     button {
-      margin-top: 12px;
-      padding: 14px 24px;
-      border-radius: 12px;
+      margin-top: 15px;
+      padding: 12px 20px;
+      border-radius: 10px;
       border: none;
       background: #00ffcc;
       font-weight: bold;
-      font-size: 16px;
     }
 
     #winner {
@@ -136,8 +148,8 @@
       color: black;
       padding: 10px;
       margin-top: 10px;
-      font-weight: bold;
     }
+
   </style>
 </head>
 
@@ -145,7 +157,7 @@
 
 <h1>MARVALOUS BINGO</h1>
 
-<!-- 🎥 TWITCH VIDEO -->
+<!-- 🎥 TWITCH -->
 <div id="video-container">
   <iframe 
     src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
@@ -153,12 +165,12 @@
   </iframe>
 </div>
 
-<!-- 💬 CUSTOM CHAT -->
+<!-- 💬 CHAT -->
 <div id="chat-box">
   <div id="messages"></div>
 
   <div id="chat-input">
-    <input id="name" placeholder="Your name">
+    <input id="name" placeholder="Name">
     <input id="msg" placeholder="Type message...">
     <button onclick="sendMsg()">Send</button>
   </div>
@@ -173,6 +185,7 @@
 
 <button onclick="checkBingo()">BINGO</button>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -185,33 +198,75 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 🎯 CARD
+/* 🎯 GENERATE REAL BINGO CARD */
 function generateCard() {
-  let nums = [];
-  while (nums.length < 25) {
-    let n = Math.floor(Math.random() * 75) + 1;
-    if (!nums.includes(n)) nums.push(n);
+  function getNumbers(min, max, count) {
+    let nums = [];
+    while (nums.length < count) {
+      let n = Math.floor(Math.random() * (max - min + 1)) + min;
+      if (!nums.includes(n)) nums.push(n);
+    }
+    return nums;
   }
-  return nums;
+
+  let card = [];
+
+  let B = getNumbers(1, 15, 5);
+  let I = getNumbers(16, 30, 5);
+  let N = getNumbers(31, 45, 4);
+  let G = getNumbers(46, 60, 5);
+  let O = getNumbers(61, 75, 5);
+
+  for (let i = 0; i < 5; i++) {
+    card.push(B[i]);
+    card.push(I[i]);
+
+    if (i === 2) {
+      card.push("FREE");
+    } else {
+      card.push(N[i > 2 ? i - 1 : i]);
+    }
+
+    card.push(G[i]);
+    card.push(O[i]);
+  }
+
+  return card;
 }
 
+/* 💾 SAVE CARD */
 let saved = localStorage.getItem("card");
 let card = saved ? JSON.parse(saved) : generateCard();
 localStorage.setItem("card", JSON.stringify(card));
 
 const board = document.getElementById("board");
 
+/* 🔤 HEADER */
+["B","I","N","G","O"].forEach(letter => {
+  let h = document.createElement("div");
+  h.className = "header";
+  h.innerText = letter;
+  board.appendChild(h);
+});
+
+/* 🔲 GRID */
 card.forEach(n => {
   let div = document.createElement("div");
-  div.className = "cell";
-  div.innerText = n;
 
-  div.onclick = () => div.classList.toggle("marked");
+  if (n === "FREE") {
+    div.className = "cell free marked";
+    div.innerText = "FREE";
+  } else {
+    div.className = "cell";
+    div.innerText = n;
+
+    div.onclick = () => div.classList.toggle("marked");
+  }
 
   board.appendChild(div);
 });
 
-// 🔢 NUMBER
+/* 🔢 NUMBER */
 db.ref("currentNumber").on("value", snap => {
   let num = snap.val();
   if (!num) return;
@@ -223,7 +278,7 @@ db.ref("currentNumber").on("value", snap => {
   });
 });
 
-// 🎮 MODE
+/* 🎮 MODE */
 db.ref("mode").on("value", snap => {
   let mode = snap.val() || "1line";
 
@@ -234,14 +289,14 @@ db.ref("mode").on("value", snap => {
      "FULL HOUSE");
 });
 
-// 🏆 WINNER
+/* 🏆 WINNER */
 db.ref("winner").on("value", snap => {
   if (snap.val()) {
     document.getElementById("winner").style.display = "block";
   }
 });
 
-// 🎯 BINGO CHECK
+/* 🎯 BINGO CHECK */
 function checkBingo() {
   const cells = [...document.querySelectorAll(".cell")];
   const marked = cells.map(c => c.classList.contains("marked"));
@@ -260,22 +315,22 @@ function checkBingo() {
   db.ref("mode").once("value").then(m => {
     let mode = m.val() || "1line";
 
-    let isWin = false;
+    let win = false;
 
-    if (mode === "1line" && lines.length >= 1) isWin = true;
-    else if (mode === "2lines" && lines.length >= 2) isWin = true;
-    else if (mode === "fullhouse" && marked.every(x => x)) isWin = true;
+    if (mode === "1line" && lines.length >= 1) win = true;
+    if (mode === "2lines" && lines.length >= 2) win = true;
+    if (mode === "fullhouse" && marked.every(x => x)) win = true;
 
-    if (isWin) {
+    if (win) {
       db.ref("winner").set(true);
       alert("🎉 BINGO!");
     } else {
-      alert("❌ Not a win yet");
+      alert("❌ Not yet");
     }
   });
 }
 
-// 💬 CHAT
+/* 💬 CHAT SEND */
 function sendMsg() {
   let name = document.getElementById("name").value || "Player";
   let msg = document.getElementById("msg").value;
@@ -290,17 +345,18 @@ function sendMsg() {
   document.getElementById("msg").value = "";
 }
 
-// 💬 CHAT LISTENER
+/* 💬 CHAT LISTENER */
 db.ref("chat").limitToLast(50).on("child_added", snap => {
   let data = snap.val();
 
   let div = document.createElement("div");
+  div.className = "msg";
   div.innerHTML = "<b>" + data.name + ":</b> " + data.message;
 
-  document.getElementById("messages").appendChild(div);
+  let messages = document.getElementById("messages");
+  messages.appendChild(div);
 
-  let box = document.getElementById("messages");
-  box.scrollTop = box.scrollHeight;
+  messages.scrollTop = messages.scrollHeight;
 });
 </script>
 
