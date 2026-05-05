@@ -105,7 +105,7 @@
 <!-- 🎥 TWITCH LIVE VIDEO -->
 <div id="video-container">
   <iframe 
-    src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
+    src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
     allowfullscreen>
   </iframe>
 </div>
@@ -113,7 +113,7 @@
 <!-- 💬 TWITCH CHAT -->
 <div id="chat-container">
   <iframe 
-    src="https://www.twitch.tv/embed/marvalouscomps/chat?parent=bingo.netlify.app">
+    src="https://www.twitch.tv/embed/marvalouscomps/chat?parent=marvalous-bingo.netlify.app">
   </iframe>
 </div>
 
@@ -195,7 +195,7 @@ db.ref("winner").on("value", snap => {
   }
 });
 
-// 🎯 BINGO CHECK (FIXED)
+// 🎯 BINGO CHECK (WORKING)
 function checkBingo() {
   db.ref("gameActive").once("value").then(s => {
     if (!s.val()) {
