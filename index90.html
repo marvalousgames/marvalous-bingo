@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <title>Marvalous Bingo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <style>
 
@@ -14,14 +17,15 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
 body{
 background:#090512;
 font-family:'Poppins',sans-serif;
 color:white;
-overflow-y:auto;
-overflow-x:hidden;
+height:100vh;
+overflow:hidden;
 }
 
 body::before{
@@ -35,82 +39,67 @@ z-index:-1;
 }
 
 .app{
-max-width:420px;
+width:100%;
+max-width:430px;
+height:100vh;
 margin:auto;
-padding:6px;
-padding-bottom:20px;
+padding:8px;
+display:flex;
+flex-direction:column;
+gap:8px;
+overflow:hidden;
 }
 
 /* TOP */
 
 .top{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-margin-bottom:4px;
+display:grid;
+grid-template-columns:50px 1fr 70px;
+align-items:center;
 }
 
 .menu{
-font-size:42px;
+font-size:38px;
 font-weight:700;
-padding:5px 10px;
+text-align:center;
 }
 
 .logo{
 text-align:center;
-flex:1;
-margin-top:6px;
+line-height:0.9;
 }
 
 .logo h1{
-font-size:24px;
-line-height:0.9;
+font-size:20px;
 font-weight:800;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 25px #ff4df2;
+0 0 20px #ff4df2;
 }
 
 .sideInfo{
-font-size:12px;
+font-size:11px;
 font-weight:700;
 text-align:right;
-padding:8px 6px 0 0;
 }
 
-/* MAIN BALL */
+/* BALL AREA */
 
-.ballArea{
+.ballWrap{
+display:flex;
+align-items:center;
+justify-content:center;
 position:relative;
-display:flex;
-justify-content:center;
-align-items:center;
-margin-top:-10px;
-}
-
-.ball{
-width:190px;
 height:190px;
-border-radius:50%;
-border:5px solid #ff4df2;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:88px;
-font-weight:800;
-background:radial-gradient(circle,#240b39,#090512);
-box-shadow:
-0 0 20px #ff4df2,
-0 0 45px #ff4df2;
 }
 
-.streamBox{
+.stream{
 position:absolute;
 left:0;
 top:50%;
 transform:translateY(-50%);
-width:70px;
-height:70px;
+width:78px;
+height:78px;
 border-radius:18px;
 overflow:hidden;
 border:3px solid #d94dff;
@@ -118,11 +107,26 @@ box-shadow:0 0 15px #d94dff;
 background:#120d28;
 }
 
-.streamBox iframe{
+.stream iframe{
 width:100%;
 height:100%;
 border:none;
-pointer-events:none;
+}
+
+.ball{
+width:165px;
+height:165px;
+border-radius:50%;
+border:5px solid #ff4df2;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:74px;
+font-weight:800;
+background:radial-gradient(circle,#220833,#090512);
+box-shadow:
+0 0 20px #ff4df2,
+0 0 50px #ff4df2;
 }
 
 /* LAST NUMBERS */
@@ -130,18 +134,18 @@ pointer-events:none;
 .called{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-margin-top:8px;
 border:2px solid #b84dff;
-border-radius:16px;
+border-radius:18px;
 overflow:hidden;
+flex-shrink:0;
 }
 
 .called div{
+background:#120d28;
 padding:10px 0;
 text-align:center;
 font-size:18px;
 font-weight:700;
-background:#120d28;
 border-right:2px solid #b84dff;
 }
 
@@ -151,49 +155,57 @@ border-right:none;
 
 /* TICKETS */
 
-.ticketWrap{
-margin-top:10px;
+.ticketPanel{
 background:#1b1034;
 border:3px solid #b84dff;
 border-radius:24px;
-padding:10px;
+padding:8px;
+flex:1;
+display:flex;
+flex-direction:column;
+min-height:0;
 }
 
 .ticketTitle{
 text-align:center;
 font-size:20px;
 font-weight:700;
-margin-bottom:10px;
+margin-bottom:6px;
 }
 
 .ticketGrid{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:8px;
+flex:1;
 }
 
 .ticket{
 background:#120d28;
-padding:5px;
-border-radius:16px;
-border:2px solid #7d3cff;
+border:2px solid #7d4dff;
+border-radius:18px;
+padding:6px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-.ticketBoard{
+.board{
+width:100%;
 display:grid;
 grid-template-columns:repeat(9,1fr);
 gap:2px;
 }
 
 .cell{
-height:24px;
+height:26px;
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:12px;
 font-weight:700;
 background:#090512;
-border-radius:5px;
+border-radius:6px;
 }
 
 .blank{
@@ -203,35 +215,38 @@ background:transparent;
 .marked{
 background:#48e7ff;
 color:white;
-box-shadow:0 0 10px #48e7ff;
+box-shadow:0 0 12px #48e7ff;
 }
 
 /* BOTTOM */
 
 .bottom{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:1.2fr .8fr;
 gap:8px;
-margin-top:10px;
+height:210px;
+flex-shrink:0;
 }
 
 .chat{
 background:#1b1034;
 border:3px solid #7d4dff;
-border-radius:22px;
-padding:10px;
+border-radius:24px;
+padding:12px;
+display:flex;
+flex-direction:column;
 }
 
 .chat h2{
 font-size:18px;
-margin-bottom:8px;
+margin-bottom:6px;
 }
 
 .messages{
-height:85px;
+flex:1;
 overflow-y:auto;
-font-size:13px;
-margin-bottom:8px;
+font-size:14px;
+padding-right:4px;
 }
 
 .messages div{
@@ -244,63 +259,37 @@ color:#48e7ff;
 
 .chat input{
 width:100%;
-margin-bottom:6px;
-padding:8px;
+padding:9px;
+margin-top:6px;
 background:#120d28;
-border:2px solid #38255e;
-border-radius:10px;
+border:2px solid #3a2761;
+border-radius:12px;
 color:white;
-font-size:13px;
+font-size:14px;
 outline:none;
 }
 
 .chat button{
 width:100%;
 padding:10px;
+margin-top:6px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
 color:white;
+font-size:18px;
 font-weight:700;
-font-size:16px;
 }
 
-.bingo{
-display:flex;
-align-items:center;
-justify-content:center;
-background:linear-gradient(45deg,#48f3ff,#29d9ff);
-border-radius:24px;
-font-size:38px;
+.bingoBtn{
+background:linear-gradient(45deg,#4af1ff,#27d8ff);
+border:none;
+border-radius:26px;
+font-size:34px;
 font-weight:800;
-box-shadow:0 0 18px #48f3ff;
-min-height:210px;
-}
-
-/* MOBILE */
-
-@media(max-width:400px){
-
-.ball{
-width:170px;
-height:170px;
-font-size:78px;
-}
-
-.logo h1{
-font-size:22px;
-}
-
-.cell{
-height:22px;
-font-size:11px;
-}
-
-.bingo{
-font-size:32px;
-min-height:190px;
-}
-
+color:white;
+box-shadow:0 0 20px #48e7ff;
+height:100%;
 }
 
 </style>
@@ -325,13 +314,13 @@ GAME 90
 
 </div>
 
-<div class="ballArea">
+<div class="ballWrap">
 
-<div class="streamBox">
-<iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"></iframe>
+<div class="stream">
+<iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app&muted=true"></iframe>
 </div>
 
-<div class="ball">66</div>
+<div class="ball" id="currentNumber">66</div>
 
 </div>
 
@@ -343,91 +332,13 @@ GAME 90
 <div>45</div>
 </div>
 
-<div class="ticketWrap">
+<div class="ticketPanel">
 
 <div class="ticketTitle">
 Your Tickets: 4
 </div>
 
-<div class="ticketGrid">
-
-<!-- TICKET 1 -->
-
-<div class="ticket">
-<div class="ticketBoard">
-
-<div class="cell marked">2</div>
-<div class="cell blank"></div>
-<div class="cell">22</div>
-<div class="cell">34</div>
-<div class="cell">43</div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell">73</div>
-<div class="cell">83</div>
-
-<div class="cell">4</div>
-<div class="cell">13</div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell">62</div>
-<div class="cell marked">78</div>
-<div class="cell">85</div>
-
-<div class="cell">8</div>
-<div class="cell blank"></div>
-<div class="cell">27</div>
-<div class="cell blank"></div>
-<div class="cell">44</div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell marked">79</div>
-<div class="cell">89</div>
-
-</div>
-</div>
-
-<!-- TICKET 2 -->
-
-<div class="ticket">
-<div class="ticketBoard">
-
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell">28</div>
-<div class="cell">36</div>
-<div class="cell">40</div>
-<div class="cell">54</div>
-<div class="cell blank"></div>
-<div class="cell">70</div>
-<div class="cell blank"></div>
-
-<div class="cell blank"></div>
-<div class="cell">13</div>
-<div class="cell">29</div>
-<div class="cell blank"></div>
-<div class="cell">42</div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell marked">72</div>
-<div class="cell">90</div>
-
-<div class="cell">4</div>
-<div class="cell">19</div>
-<div class="cell blank"></div>
-<div class="cell">39</div>
-<div class="cell">44</div>
-<div class="cell blank"></div>
-<div class="cell blank"></div>
-<div class="cell">79</div>
-<div class="cell blank"></div>
-
-</div>
-</div>
-
-</div>
+<div class="ticketGrid" id="tickets"></div>
 
 </div>
 
@@ -437,26 +348,292 @@ Your Tickets: 4
 
 <h2>Live Chat</h2>
 
-<div class="messages">
-<div><b>Kee:</b> hi</div>
-<div><b>Kee:</b> hi again</div>
-<div><b>Player2:</b> GG</div>
-</div>
+<div class="messages" id="messages"></div>
 
-<input placeholder="Name">
-<input placeholder="Message...">
+<input id="name" placeholder="Name">
+<input id="msg" placeholder="Message...">
 
-<button>Send</button>
+<button onclick="sendMsg()">Send</button>
 
 </div>
 
-<div class="bingo">
+<button class="bingoBtn" onclick="checkBingo()">
 BINGO!
-</div>
+</button>
 
 </div>
 
 </div>
+
+<script>
+
+const firebaseConfig={
+apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.database();
+
+let playerName=localStorage.getItem('playerName')||'Player';
+let playerId=localStorage.getItem('playerId');
+
+if(!playerId){
+playerId=Date.now().toString();
+localStorage.setItem('playerId',playerId);
+}
+
+if(localStorage.getItem('fixedCardsV6')!=="yes"){
+localStorage.removeItem('cards');
+localStorage.setItem('fixedCardsV6',"yes");
+}
+
+function generateTicket(){
+
+const ranges=[
+[1,9],[10,19],[20,29],[30,39],[40,49],
+[50,59],[60,69],[70,79],[80,90]
+];
+
+let ticket=[
+["","","","","","","","",""],
+["","","","","","","","",""],
+["","","","","","","","",""]
+];
+
+let used=new Set();
+
+for(let row=0;row<3;row++){
+
+let cols=[];
+
+while(cols.length<5){
+
+let col=Math.floor(Math.random()*9);
+
+if(!cols.includes(col)) cols.push(col);
+
+}
+
+cols.sort((a,b)=>a-b);
+
+cols.forEach(col=>{
+
+let min=ranges[col][0];
+let max=ranges[col][1];
+
+let num;
+
+do{
+num=Math.floor(Math.random()*(max-min+1))+min;
+}while(used.has(num));
+
+used.add(num);
+
+ticket[row][col]=num;
+
+});
+
+}
+
+for(let col=0;col<9;col++){
+
+let nums=[];
+
+for(let row=0;row<3;row++){
+if(ticket[row][col]!=="") nums.push(ticket[row][col]);
+}
+
+nums.sort((a,b)=>a-b);
+
+let i=0;
+
+for(let row=0;row<3;row++){
+
+if(ticket[row][col]!==""){
+
+ticket[row][col]=nums[i];
+i++;
+
+}
+
+}
+
+}
+
+return ticket;
+
+}
+
+let savedCards=localStorage.getItem('cards');
+
+let cards=savedCards
+?JSON.parse(savedCards)
+:[
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem('cards',JSON.stringify(cards));
+
+function renderBoards(){
+
+const wrap=document.getElementById('tickets');
+
+wrap.innerHTML='';
+
+cards.forEach(ticket=>{
+
+let board=document.createElement('div');
+
+board.className='ticket';
+
+let inner=document.createElement('div');
+
+inner.className='board';
+
+ticket.flat().forEach(n=>{
+
+let div=document.createElement('div');
+
+if(n===''){
+div.className='cell blank';
+}else{
+div.className='cell';
+div.innerText=n;
+div.dataset.num=n;
+}
+
+inner.appendChild(div);
+
+});
+
+board.appendChild(inner);
+
+wrap.appendChild(board);
+
+});
+
+}
+
+renderBoards();
+
+let currentGameId;
+
+db.ref('gameId').on('value',snap=>{
+
+let gameId=snap.val();
+
+if(!gameId) return;
+
+if(currentGameId!==gameId){
+
+currentGameId=gameId;
+
+let savedGame=localStorage.getItem('gameId');
+
+if(savedGame!==String(gameId)){
+
+cards=[
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem('cards',JSON.stringify(cards));
+localStorage.setItem('gameId',gameId);
+
+location.reload();
+
+}
+
+}
+
+});
+
+db.ref('calledNumbers').on('value',snap=>{
+
+const called=Object.values(snap.val()||{});
+
+document.querySelectorAll('.cell').forEach(c=>{
+c.classList.remove('marked');
+});
+
+called.forEach(num=>{
+
+document.querySelectorAll('.cell').forEach(c=>{
+
+if(c.dataset.num==num){
+c.classList.add('marked');
+}
+
+});
+
+});
+
+});
+
+db.ref('currentNumber').on('value',snap=>{
+
+let num=snap.val();
+
+if(!num) return;
+
+document.getElementById('currentNumber').innerText=num;
+
+});
+
+function checkBingo(){
+
+db.ref('bingoClaims').push({
+name:playerName,
+time:Date.now()
+});
+
+alert('Bingo Claimed!');
+
+}
+
+function sendMsg(){
+
+let name=document.getElementById('name').value||'Player';
+
+let msg=document.getElementById('msg').value;
+
+if(!msg) return;
+
+localStorage.setItem('playerName',name);
+
+db.ref('chat').push({
+name:name,
+message:msg
+});
+
+document.getElementById('msg').value='';
+
+}
+
+db.ref('chat').limitToLast(30).on('child_added',snap=>{
+
+let d=snap.val();
+
+let div=document.createElement('div');
+
+div.innerHTML='<b>'+d.name+':</b> '+d.message;
+
+let box=document.getElementById('messages');
+
+box.appendChild(div);
+
+box.scrollTop=box.scrollHeight;
+
+});
+
+</script>
 
 </body>
 </html>
