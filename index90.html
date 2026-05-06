@@ -15,7 +15,6 @@
 
 *{
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
 }
 
 body{
@@ -31,70 +30,70 @@ content:'';
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at top,#8c2dff33,transparent 45%),
+radial-gradient(circle at top,#8c2dff44,transparent 40%),
 radial-gradient(circle at bottom,#ff4df222,transparent 35%);
 z-index:-1;
-pointer-events:none;
 }
 
 .container{
-width:100%;
-max-width:760px;
+width:95%;
+max-width:900px;
 margin:auto;
-padding:10px;
+padding:10px 0 30px;
 }
 
-/* HEADER */
+/* TITLE */
 
-.logo{
+h1{
 text-align:center;
-margin-bottom:12px;
-}
-
-.logo h1{
-margin:0;
-font-size:38px;
-font-weight:900;
-line-height:1.05;
+font-size:34px;
+margin:5px 0;
+font-weight:800;
 color:white;
+line-height:1.1;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 25px #ff4df2,
-0 0 45px #8c2dff;
+0 0 30px #ff4df2,
+0 0 50px #8c2dff;
 }
 
-.logo p{
-margin-top:6px;
+.subTitle{
+text-align:center;
+color:#00ffcc;
 font-size:11px;
 letter-spacing:4px;
-color:#00ffcc;
+margin-bottom:12px;
 }
 
 /* PANELS */
 
 .panel{
-background:#1b1435;
+background:#1c1735;
 border:2px solid #b84dff;
-border-radius:24px;
-padding:12px;
+border-radius:22px;
+padding:14px;
 margin-bottom:14px;
 box-shadow:
-0 0 25px rgba(184,77,255,.2),
+0 0 25px rgba(184,77,255,.25),
 inset 0 0 15px rgba(255,255,255,.03);
+}
+
+.panelTitle{
+text-align:center;
+font-size:18px;
+font-weight:700;
+margin-bottom:10px;
 }
 
 /* STREAM */
 
 #video-container{
 width:100%;
-height:170px;
-border-radius:18px;
+height:190px;
+border-radius:16px;
 overflow:hidden;
 border:2px solid #d94dff;
 background:#120d28;
-position:sticky;
-top:8px;
-z-index:20;
 }
 
 iframe{
@@ -103,7 +102,7 @@ height:100%;
 border:none;
 }
 
-/* NUMBER AREA */
+/* NUMBER */
 
 .numberWrap{
 margin-top:12px;
@@ -119,8 +118,8 @@ overflow:hidden;
 .numberWrap::before{
 content:'';
 position:absolute;
-width:250px;
-height:250px;
+width:300px;
+height:300px;
 background:radial-gradient(circle,#ff4df233,transparent 70%);
 top:50%;
 left:50%;
@@ -130,7 +129,7 @@ transform:translate(-50%,-50%);
 #currentNumber{
 position:relative;
 z-index:2;
-font-size:70px;
+font-size:78px;
 font-weight:900;
 line-height:1;
 color:white;
@@ -143,44 +142,58 @@ text-shadow:
 #mode{
 position:relative;
 z-index:2;
-margin-top:6px;
+color:#00ffcc;
 font-size:16px;
 font-weight:700;
-color:#00ffcc;
+margin-top:6px;
 }
 
-/* BINGO BUTTON */
+/* BUTTON */
 
 .mainButton{
 width:100%;
 margin-top:12px;
-padding:14px;
+padding:16px;
 border:none;
 border-radius:16px;
 background:linear-gradient(45deg,#00ffcc,#00d9ff);
-font-size:22px;
-font-weight:900;
+font-size:20px;
+font-weight:800;
 color:black;
 cursor:pointer;
-box-shadow:0 0 18px rgba(0,255,204,.45);
+box-shadow:0 0 20px rgba(0,255,204,.5);
 }
 
-/* CHAT */
+/* COLLAPSIBLE CHAT */
 
-.chatTitle{
+.chatBox{
+margin-top:14px;
+}
+
+.chatBox summary{
+list-style:none;
+cursor:pointer;
 text-align:center;
 font-size:20px;
 font-weight:800;
-margin:16px 0 10px;
+padding:14px;
+background:#120d28;
+border:2px solid #b84dff;
+border-radius:14px;
+}
+
+.chatBox summary::-webkit-details-marker{
+display:none;
 }
 
 #messages{
-height:90px;
+height:140px;
 overflow-y:auto;
 background:#120d28;
-border:1px solid #44336f;
-border-radius:14px;
-padding:10px;
+border:1px solid #31245f;
+border-radius:12px;
+padding:12px;
+margin-top:10px;
 margin-bottom:10px;
 }
 
@@ -195,39 +208,29 @@ color:#00ffcc;
 
 #chat-input{
 display:flex;
-gap:8px;
+gap:6px;
 }
 
 #chat-input input{
 flex:1;
-min-width:0;
 padding:12px;
 background:#120d28;
 border:1px solid #44336f;
-border-radius:12px;
+border-radius:10px;
 color:white;
 outline:none;
-font-size:14px;
 }
 
 #chat-input button{
-width:85px;
+padding:0 18px;
 border:none;
-border-radius:12px;
+border-radius:10px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
 color:white;
-font-weight:800;
-font-size:14px;
+font-weight:700;
 }
 
 /* TICKETS */
-
-.panelTitle{
-text-align:center;
-font-size:22px;
-font-weight:900;
-margin-bottom:14px;
-}
 
 #tickets{
 display:flex;
@@ -238,21 +241,21 @@ gap:12px;
 .ticket{
 display:grid;
 grid-template-columns:repeat(9,1fr);
-gap:1px;
+gap:2px;
 background:#d94dff;
-padding:2px;
-border-radius:16px;
+padding:3px;
+border-radius:14px;
 overflow:hidden;
 }
 
 .cell{
-aspect-ratio:1/1;
+min-height:36px;
 display:flex;
 align-items:center;
 justify-content:center;
 background:#120d28;
-font-size:14px;
-font-weight:700;
+font-size:15px;
+font-weight:600;
 }
 
 .blank{
@@ -261,70 +264,66 @@ background:#0b0818;
 
 .marked{
 background:linear-gradient(45deg,#b84dff,#ff4df2);
-box-shadow:0 0 12px rgba(255,77,242,.8);
+font-weight:800;
+box-shadow:0 0 12px rgba(255,77,242,.7);
 }
 
-/* INFO STRIP */
+/* INFO */
 
-.bottomBar{
-margin-top:14px;
+.infoGrid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:8px;
 }
 
-.bottomCard{
-background:#1b1435;
+.infoCard{
+background:#1c1735;
 border:2px solid #b84dff;
-border-radius:14px;
+border-radius:16px;
 padding:10px 6px;
 text-align:center;
 }
 
-.bottomCard h3{
+.infoCard h3{
 margin:0;
 font-size:10px;
-letter-spacing:1px;
 color:#00ffcc;
+letter-spacing:1px;
 }
 
-.bottomCard p{
+.infoCard p{
 margin:6px 0 0;
 font-size:18px;
-font-weight:900;
+font-weight:800;
 }
 
 /* MOBILE */
 
 @media(max-width:700px){
 
-.logo h1{
-font-size:30px;
+.container{
+width:96%;
+}
+
+h1{
+font-size:28px;
+}
+
+#video-container{
+height:170px;
 }
 
 #currentNumber{
-font-size:60px;
+font-size:64px;
 }
 
 .cell{
-font-size:12px;
+min-height:34px;
+font-size:14px;
 }
 
-.bottomCard p{
-font-size:16px;
-}
-
-#chat-input{
-flex-wrap:wrap;
-}
-
-#chat-input input{
-width:100%;
-}
-
-#chat-input button{
-width:100%;
-height:48px;
+.infoGrid{
+grid-template-columns:1fr 1fr;
 }
 
 }
@@ -336,24 +335,18 @@ height:48px;
 
 <div class="container">
 
-<!-- HEADER -->
-
-<div class="logo">
-
 <h1>MARVALOUS BINGO</h1>
 
-<p>REAL PEOPLE • REAL WINNERS</p>
-
+<div class="subTitle">
+REAL PEOPLE • REAL WINNERS
 </div>
 
-<!-- STREAM PANEL -->
+<!-- STREAM SECTION -->
 
 <div class="panel">
 
 <div id="video-container">
-
 <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
-
 </div>
 
 <div class="numberWrap">
@@ -368,9 +361,11 @@ height:48px;
 🎉 BINGO 🎉
 </button>
 
-<div class="chatTitle">
-LIVE CHAT
-</div>
+<!-- COLLAPSIBLE CHAT -->
+
+<details class="chatBox">
+
+<summary>💬 LIVE CHAT</summary>
 
 <div id="messages"></div>
 
@@ -383,6 +378,8 @@ LIVE CHAT
 <button onclick="sendMsg()">Send</button>
 
 </div>
+
+</details>
 
 </div>
 
@@ -398,26 +395,26 @@ YOUR TICKETS
 
 </div>
 
-<!-- SMALL INFO BAR -->
+<!-- INFO -->
 
-<div class="bottomBar">
+<div class="infoGrid">
 
-<div class="bottomCard">
+<div class="infoCard">
 <h3>MODE</h3>
 <p id="topMode">1 LINE</p>
 </div>
 
-<div class="bottomCard">
+<div class="infoCard">
 <h3>TICKETS</h3>
 <p>4</p>
 </div>
 
-<div class="bottomCard">
+<div class="infoCard">
 <h3>GAME</h3>
 <p>90</p>
 </div>
 
-<div class="bottomCard">
+<div class="infoCard">
 <h3>LIVE</h3>
 <p>ON</p>
 </div>
@@ -456,8 +453,6 @@ localStorage.removeItem('cards');
 localStorage.setItem('fixedCardsV3',"yes");
 
 }
-
-/* TICKET GENERATOR */
 
 function generateTicket(){
 
@@ -541,8 +536,6 @@ return ticket;
 
 }
 
-/* LOAD TICKETS */
-
 let savedCards=localStorage.getItem('cards');
 
 let cards=savedCards
@@ -555,8 +548,6 @@ generateTicket()
 ];
 
 localStorage.setItem('cards',JSON.stringify(cards));
-
-/* RENDER */
 
 function renderBoards(){
 
@@ -600,8 +591,6 @@ wrap.appendChild(board);
 
 renderBoards();
 
-/* SAVE PLAYER */
-
 let currentGameId;
 
 db.ref('gameId').on('value',snap=>{
@@ -644,8 +633,6 @@ cards:cards
 
 });
 
-/* AUTO MARK */
-
 let lastCalled=0;
 
 db.ref('calledNumbers').on('value',snap=>{
@@ -674,8 +661,6 @@ c.classList.add('marked');
 
 });
 
-/* CURRENT NUMBER */
-
 db.ref('currentNumber').on('value',snap=>{
 
 let num=snap.val();
@@ -700,8 +685,6 @@ speechSynthesis.speak(speech);
 
 });
 
-/* MODE */
-
 db.ref('mode').on('value',snap=>{
 
 let mode=snap.val()||'1line';
@@ -715,8 +698,6 @@ document.getElementById('mode').innerText='Mode: '+text;
 document.getElementById('topMode').innerText=text;
 
 });
-
-/* BINGO */
 
 function checkBingo(){
 
@@ -732,8 +713,6 @@ db.ref('bingoSound').set(Date.now());
 alert('🎉 Bingo claimed!');
 
 }
-
-/* CHAT */
 
 function sendMsg(){
 
@@ -773,8 +752,6 @@ box.appendChild(div);
 box.scrollTop=box.scrollHeight;
 
 });
-
-/* SOUND */
 
 const bingoAudio=new Audio(
 'https://www.soundjay.com/human/cheering-01.mp3'
