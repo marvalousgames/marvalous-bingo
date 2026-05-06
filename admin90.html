@@ -576,7 +576,19 @@ function resetGame(){
   document.getElementById("cardView").innerHTML="";
 
 }
+const bingoAudio = new Audio(
+  "https://www.soundjay.com/human/cheering-01.mp3"
+);
 
+db.ref("bingoSound").on("value",snap=>{
+
+  if(!snap.val()) return;
+
+  bingoAudio.currentTime = 0;
+
+  bingoAudio.play();
+
+});
 </script>
 
 </body>
