@@ -580,13 +580,29 @@ const bingoAudio = new Audio(
   "https://www.soundjay.com/human/cheering-01.mp3"
 );
 
+bingoAudio.volume = 1;
+
+document.body.addEventListener("click", () => {
+
+  bingoAudio.play().then(() => {
+
+    bingoAudio.pause();
+
+    bingoAudio.currentTime = 0;
+
+  }).catch(()=>{});
+
+}, { once:true });
+
 db.ref("bingoSound").on("value",snap=>{
 
   if(!snap.val()) return;
 
   bingoAudio.currentTime = 0;
 
-  bingoAudio.play();
+  bingoAudio.play().catch(()=>{});
+
+});
 
 });
 </script>
