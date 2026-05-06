@@ -443,7 +443,7 @@ function validateClaim(name){
 
     if(!player)return;
 
-    let tickets=player.card;
+    let tickets=player.cards;
 
     let totalMarked=0;
 
@@ -479,7 +479,7 @@ function viewPlayer(name){
 
     let html="";
 
-    player.card.forEach(ticket=>{
+    player.cards.forEach(ticket=>{
 
       html += `<div class="ticket">`;
 
