@@ -1,122 +1,127 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Marvalous Bingo Admin 90</title>
+  <title>Marvalous Bingo 90</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <style>
     body{
-      font-family:Arial;
+      margin:0;
+      font-family:'Poppins',sans-serif;
       background:#0e0b1f;
       color:white;
       text-align:center;
-      margin:0;
-      padding-bottom:50px;
     }
 
     h1{
       color:#b84dff;
-      margin:20px 0;
-    }
-
-    .box{
-      background:#1c1735;
-      margin:15px;
-      padding:20px;
-      border-radius:14px;
-      box-shadow:0 0 15px rgba(184,77,255,0.2);
-    }
-
-    button{
-      background:#00ffcc;
-      border:none;
-      padding:10px 15px;
-      margin:5px;
-      border-radius:8px;
-      font-weight:bold;
-      cursor:pointer;
-    }
-
-    .danger{
-      background:#ff4d6d;
-      color:white;
-    }
-
-    .active{
-      background:#ff4df2 !important;
-      color:white;
-    }
-
-    #current{
-      font-size:42px;
-      color:#ff4df2;
-      margin-bottom:10px;
-    }
-
-    #lastCalled{
-      font-size:20px;
       margin-top:10px;
+    }
+
+    #video-container{
+      width:95%;
+      max-width:700px;
+      height:320px;
+      margin:15px auto;
+      border-radius:15px;
+      overflow:hidden;
+      background:#1c1735;
+      box-shadow:0 0 25px rgba(184,77,255,0.4);
+    }
+
+    iframe{
+      width:100%;
+      height:100%;
+      border:none;
+    }
+
+    #chat-box{
+      width:95%;
+      max-width:700px;
+      margin:10px auto;
+      background:#1c1735;
+      border-radius:15px;
+      padding:10px;
+    }
+
+    #messages{
+      height:180px;
+      overflow-y:auto;
+      text-align:left;
+      padding:10px;
+      font-size:14px;
+    }
+
+    .msg{
+      margin-bottom:6px;
+    }
+
+    .msg b{
       color:#00ffcc;
     }
 
-    .numberGrid{
-      display:grid;
-      grid-template-columns:repeat(10,1fr);
+    #chat-input{
+      display:flex;
       gap:6px;
-      margin-top:20px;
+      margin-top:8px;
     }
 
-    .ball{
-      background:#120d28;
-      padding:10px 0;
+    #chat-input input{
+      flex:1;
+      padding:8px;
       border-radius:8px;
-      border:1px solid #2f2557;
-      font-weight:bold;
+      border:none;
     }
 
-    .called{
-      background:linear-gradient(45deg,#b84dff,#ff4df2);
+    #chat-input button{
+      background:#b84dff;
+      border:none;
       color:white;
-      box-shadow:0 0 10px rgba(255,77,242,0.6);
+      padding:8px 12px;
+      border-radius:8px;
     }
 
-    .latest{
-      background:#00ffcc !important;
-      color:black !important;
-      animation:pulse 1s infinite;
+    #currentNumber{
+      font-size:56px;
+      margin:15px 0;
+      color:#ff4df2;
     }
 
-    @keyframes pulse{
-      0%{transform:scale(1);}
-      50%{transform:scale(1.08);}
-      100%{transform:scale(1);}
+    #mode{
+      color:#00ffcc;
+      margin-bottom:15px;
+      font-size:18px;
     }
 
     .ticket{
       display:grid;
       grid-template-columns:repeat(9,1fr);
       gap:2px;
+      max-width:700px;
       margin:15px auto;
-      max-width:800px;
       background:#b84dff;
       padding:3px;
-      border-radius:10px;
+      border-radius:12px;
+      overflow:hidden;
     }
 
     .cell{
-      background:#120d28;
-      min-height:55px;
+      background:#1c1735;
+      min-height:58px;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:22px;
-      border-radius:4px;
+      font-size:24px;
+      cursor:pointer;
     }
 
     .blank{
-      background:#0b0818;
+      background:#120d28;
+      cursor:default;
     }
 
     .marked{
@@ -125,33 +130,34 @@
       font-weight:bold;
     }
 
-    .winner{
-      background:#00ffcc !important;
-      color:black !important;
-      font-weight:bold;
-    }
-
-    .claim{
-      background:#120d28;
-      padding:12px;
-      margin:10px 0;
-      border-radius:10px;
-    }
-
-    #players p{
-      background:#120d28;
-      padding:10px;
-      border-radius:8px;
-      margin:8px auto;
-      max-width:300px;
-      cursor:pointer;
-    }
-
-    .recent{
-      font-size:26px;
-      color:#00ffcc;
+    button{
       margin-top:15px;
+      padding:12px 20px;
+      border-radius:10px;
+      border:none;
+      background:#00ffcc;
       font-weight:bold;
+    }
+
+    #nameModal{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.9);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+    }
+
+    #modalBox{
+      background:#1c1735;
+      padding:20px;
+      border-radius:12px;
+      width:80%;
+      max-width:300px;
     }
 
   </style>
@@ -159,411 +165,431 @@
 
 <body>
 
-<h1>🎯 MARVALOUS BINGO ADMIN</h1>
+<div id="nameModal">
 
-<!-- CURRENT -->
-<div class="box">
+  <div id="modalBox">
 
-  <div id="current">-</div>
+    <h2 style="color:#b84dff;">
+      Enter your name
+    </h2>
 
-  <button onclick="callNumber()">CALL NEXT</button>
+    <input id="modalName" placeholder="Your name"
+    style="
+      width:100%;
+      padding:10px;
+      border:none;
+      border-radius:8px;
+      margin-top:10px;
+    ">
 
-  <button onclick="undoLast()">UNDO LAST</button>
+    <button onclick="saveName()"
+    style="
+      width:100%;
+    ">
+      Join Game
+    </button>
 
-  <button class="danger" onclick="resetGame()">RESET GAME</button>
-
-  <div class="recent" id="lastCalled"></div>
-
-  <div class="numberGrid" id="numberGrid"></div>
-
-</div>
-
-<!-- MODE -->
-<div class="box">
-
-  <h2>Game Mode</h2>
-
-  <button id="mode-1line" onclick="setMode('1line')">
-    1 LINE
-  </button>
-
-  <button id="mode-2lines" onclick="setMode('2lines')">
-    2 LINES
-  </button>
-
-  <button id="mode-fullhouse" onclick="setMode('fullhouse')">
-    FULL HOUSE
-  </button>
+  </div>
 
 </div>
 
-<!-- CLAIMS -->
-<div class="box">
+<h1>MARVALOUS BINGO</h1>
 
-  <h2>🏆 Bingo Claims</h2>
+<div id="video-container">
 
-  <div id="claims"></div>
-
-</div>
-
-<!-- CARD VIEW -->
-<div class="box">
-
-  <h2>🎫 Selected Tickets</h2>
-
-  <div id="cardView"></div>
+  <iframe
+    src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app">
+  </iframe>
 
 </div>
 
-<!-- PLAYERS -->
-<div class="box">
+<div id="chat-box">
 
-  <h2>👥 Players</h2>
+  <div id="messages"></div>
 
-  <div id="players"></div>
+  <div id="chat-input">
+
+    <input id="name" placeholder="Name">
+
+    <input id="msg" placeholder="Type message...">
+
+    <button onclick="sendMsg()">
+      Send
+    </button>
+
+  </div>
 
 </div>
+
+<div id="currentNumber">
+  Waiting...
+</div>
+
+<div id="mode">
+  Mode: 1 LINE
+</div>
+
+<div id="tickets"></div>
+
+<button onclick="checkBingo()">
+  BINGO
+</button>
 
 <script>
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
-  databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+  apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+  databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
 
-let called = [];
+/* PLAYER */
 
-/* CREATE NUMBER BOARD */
+let playerName = localStorage.getItem("playerName") || "Player";
 
-const numberGrid = document.getElementById("numberGrid");
+let playerId = localStorage.getItem("playerId");
 
-for(let i=1;i<=90;i++){
+if(!playerId){
 
-  let div=document.createElement("div");
+  playerId = Date.now().toString();
 
-  div.className="ball";
-
-  div.id="ball-"+i;
-
-  div.innerText=i;
-
-  numberGrid.appendChild(div);
+  localStorage.setItem("playerId",playerId);
 
 }
 
-/* CALL NUMBER */
+/* GENERATE 90 BALL TICKETS */
 
-function callNumber(){
+function generateTicket(){
 
-  if(called.length >= 90){
-    alert("All numbers called");
-    return;
+  let ticket = Array(27).fill("");
+
+  let used = [];
+
+  for(let row=0;row<3;row++){
+
+    let cols=[];
+
+    while(cols.length<5){
+
+      let c=Math.floor(Math.random()*9);
+
+      if(!cols.includes(c)) cols.push(c);
+
+    }
+
+    cols.sort((a,b)=>a-b);
+
+    cols.forEach(col=>{
+
+      let min = col*10+1;
+      let max = col===8 ? 90 : col*10+10;
+
+      let num;
+
+      do{
+        num=Math.floor(Math.random()*(max-min+1))+min;
+      }while(used.includes(num));
+
+      used.push(num);
+
+      ticket[row*9+col]=num;
+
+    });
+
   }
 
-  let num;
-
-  do{
-    num=Math.floor(Math.random()*90)+1;
-  }while(called.includes(num));
-
-  called.push(num);
-
-  db.ref("currentNumber").set(num);
-
-  db.ref("calledNumbers").set(called);
-
-  speakNumber(num);
+  return ticket;
 
 }
 
-/* SPEAK */
+function generateTickets(){
 
-function speakNumber(num){
-
-  let speech=new SpeechSynthesisUtterance(num);
-
-  speech.rate=0.9;
-
-  speech.pitch=1;
-
-  speech.volume=1;
-
-  speechSynthesis.cancel();
-
-  speechSynthesis.speak(speech);
+  return [
+    generateTicket(),
+    generateTicket(),
+    generateTicket()
+  ];
 
 }
 
-/* UNDO */
+/* LOAD */
 
-function undoLast(){
+let saved = localStorage.getItem("tickets");
 
-  if(called.length===0)return;
+let tickets = saved
+? JSON.parse(saved)
+: generateTickets();
 
-  called.pop();
+renderTickets();
 
-  db.ref("calledNumbers").set(called);
+/* GAME SYNC */
 
-  let current=called[called.length-1] || 0;
+let currentGameId;
 
-  db.ref("currentNumber").set(current);
+db.ref("gameId").on("value",snap=>{
 
-}
+  let gameId=snap.val();
 
-/* MODE */
+  if(!gameId)return;
 
-function setMode(mode){
+  if(currentGameId!==gameId){
 
-  db.ref("mode").set(mode);
+    currentGameId=gameId;
 
-}
+    let savedGame=localStorage.getItem("gameId");
 
-db.ref("mode").on("value",snap=>{
+    if(savedGame!==String(gameId)){
 
-  let mode=snap.val() || "1line";
+      tickets=generateTickets();
 
-  document.querySelectorAll("button[id^='mode-']")
-  .forEach(btn=>btn.classList.remove("active"));
+      localStorage.setItem(
+        "tickets",
+        JSON.stringify(tickets)
+      );
 
-  document.getElementById("mode-"+mode)
-  ?.classList.add("active");
+      localStorage.setItem(
+        "gameId",
+        gameId
+      );
+
+      location.reload();
+
+    }
+
+    db.ref("players/"+playerId).set({
+
+      name:playerName,
+
+      card:tickets
+
+    });
+
+  }
 
 });
 
-/* CALLED NUMBERS */
+/* RENDER */
+
+function renderTickets(){
+
+  const wrap=document.getElementById("tickets");
+
+  wrap.innerHTML="";
+
+  tickets.forEach((ticket,t)=>{
+
+    let html=`<div class="ticket">`;
+
+    ticket.forEach(n=>{
+
+      html += `
+        <div class="cell ${n==="" ? "blank" : ""}">
+          ${n}
+        </div>
+      `;
+
+    });
+
+    html += `</div>`;
+
+    wrap.innerHTML += html;
+
+  });
+
+}
+
+/* AUTO MARK */
 
 db.ref("calledNumbers").on("value",snap=>{
 
-  const data=snap.val() || {};
+  let called=Object.values(snap.val() || {});
 
-  called=Object.values(data);
+  document.querySelectorAll(".cell").forEach(c=>{
 
-  document.querySelectorAll(".ball")
-  .forEach(b=>{
-    b.classList.remove("called");
-    b.classList.remove("latest");
-  });
+    let n=Number(c.innerText);
 
-  called.forEach(n=>{
+    if(called.includes(n)){
 
-    let ball=document.getElementById("ball-"+n);
+      c.classList.add("marked");
 
-    if(ball){
-      ball.classList.add("called");
     }
 
   });
 
-  let latest=called[called.length-1];
-
-  if(latest){
-
-    document.getElementById("ball-"+latest)
-    ?.classList.add("latest");
-
-  }
-
-  let last10=called.slice(-10).reverse();
-
-  document.getElementById("lastCalled").innerText=
-  "Last Calls: " + last10.join(" • ");
-
 });
 
-/* CURRENT */
+/* SPEAK */
+
+let lastCalled=null;
 
 db.ref("currentNumber").on("value",snap=>{
 
   let num=snap.val();
 
-  if(!num){
+  if(!num)return;
 
-    document.getElementById("current").innerText="-";
+  document.getElementById("currentNumber")
+  .innerText=num;
+
+  if(lastCalled!==num){
+
+    lastCalled=num;
+
+    let speech=
+    new SpeechSynthesisUtterance(num);
+
+    speech.rate=0.9;
+
+    speechSynthesis.cancel();
+
+    speechSynthesis.speak(speech);
+
+  }
+
+});
+
+/* MODE */
+
+db.ref("mode").on("value",snap=>{
+
+  let mode=snap.val() || "1line";
+
+  document.getElementById("mode")
+  .innerText=
+  "Mode: "+
+  (
+    mode==="1line"
+    ? "1 LINE"
+    : mode==="2lines"
+    ? "2 LINES"
+    : "FULL HOUSE"
+  );
+
+});
+
+/* CHAT */
+
+function sendMsg(){
+
+  let name=
+  document.getElementById("name").value
+  || "Player";
+
+  let msg=
+  document.getElementById("msg").value;
+
+  if(!msg)return;
+
+  localStorage.setItem(
+    "playerName",
+    name
+  );
+
+  db.ref("chat").push({
+
+    name:name,
+
+    message:msg
+
+  });
+
+  document.getElementById("msg").value="";
+
+}
+
+db.ref("chat")
+.limitToLast(50)
+.on("child_added",snap=>{
+
+  let d=snap.val();
+
+  let div=document.createElement("div");
+
+  div.className="msg";
+
+  div.innerHTML=
+  "<b>"+d.name+":</b> "+d.message;
+
+  let box=document.getElementById("messages");
+
+  box.appendChild(div);
+
+  box.scrollTop=box.scrollHeight;
+
+});
+
+/* CLAIM */
+
+function checkBingo(){
+
+  db.ref("bingoClaims").push({
+
+    name:playerName,
+
+    time:Date.now()
+
+  });
+
+  alert("🎉 Bingo claimed!");
+
+}
+
+/* NAME MODAL */
+
+window.onload=()=>{
+
+  let modal=document.getElementById("nameModal");
+
+  let saved=
+  localStorage.getItem("playerName");
+
+  if(saved){
+
+    document.getElementById("name").value=saved;
+
+    modal.style.display="none";
+
+  }
+
+};
+
+function saveName(){
+
+  let name=
+  document.getElementById("modalName")
+  .value
+  .trim();
+
+  if(!name){
+
+    alert("Enter name");
 
     return;
 
   }
 
-  document.getElementById("current").innerText=num;
+  localStorage.setItem(
+    "playerName",
+    name
+  );
 
-});
+  playerName=name;
 
-/* CLAIMS */
+  document.getElementById("name").value=name;
 
-db.ref("bingoClaims").on("value",snap=>{
+  document.getElementById("nameModal")
+  .style.display="none";
 
-  let data=snap.val() || {};
+  db.ref("players/"+playerId).set({
 
-  let html="";
+    name:playerName,
 
-  Object.entries(data).reverse().forEach(([id,claim])=>{
-
-    html += `
-      <div class="claim">
-
-        <strong>${claim.name}</strong>
-
-        <br><br>
-
-        <button onclick="viewPlayer('${claim.name}')">
-          VIEW TICKETS
-        </button>
-
-        <button onclick="validateClaim('${claim.name}')">
-          VALIDATE
-        </button>
-
-        <button onclick="approve('${id}')">
-          APPROVE
-        </button>
-
-      </div>
-    `;
+    card:tickets
 
   });
-
-  document.getElementById("claims").innerHTML=html;
-
-});
-
-/* VALIDATE */
-
-function validateClaim(name){
-
-  db.ref("players").once("value",snap=>{
-
-    let players=snap.val() || {};
-
-    let player=Object.values(players)
-    .find(p=>p.name===name);
-
-    if(!player)return;
-
-    let tickets=player.card;
-
-    let totalMarked=0;
-
-    tickets.flat().forEach(n=>{
-
-      if(n && called.includes(Number(n))){
-        totalMarked++;
-      }
-
-    });
-
-    alert(name + " has " + totalMarked + " called numbers marked.");
-
-  });
-
-}
-
-/* VIEW PLAYER */
-
-function viewPlayer(name){
-
-  db.ref("players").once("value",snap=>{
-
-    let players=snap.val() || {};
-
-    let player=Object.values(players)
-    .find(p=>p.name===name);
-
-    if(!player){
-      alert("No tickets found");
-      return;
-    }
-
-    let html="";
-
-    player.card.forEach(ticket=>{
-
-      html += `<div class="ticket">`;
-
-      ticket.forEach(n=>{
-
-        let marked=false;
-
-        if(n && called.includes(Number(n))){
-          marked=true;
-        }
-
-        html += `
-          <div class="cell ${!n ? 'blank' : ''} ${marked ? 'marked' : ''}">
-            ${n || ""}
-          </div>
-        `;
-
-      });
-
-      html += `</div>`;
-
-    });
-
-    document.getElementById("cardView").innerHTML=html;
-
-  });
-
-}
-
-/* APPROVE */
-
-function approve(id){
-
-  db.ref("winner").set(true);
-
-  db.ref("bingoClaims/"+id).remove();
-
-  alert("Winner approved!");
-
-}
-
-/* PLAYERS */
-
-db.ref("players").on("value",snap=>{
-
-  let data=snap.val() || {};
-
-  let html="";
-
-  Object.values(data).forEach(p=>{
-
-    html += `
-      <p onclick="viewPlayer('${p.name}')">
-        ${p.name}
-      </p>
-    `;
-
-  });
-
-  document.getElementById("players").innerHTML=html;
-
-});
-
-/* RESET */
-
-function resetGame(){
-
-  if(!confirm("Reset game?")) return;
-
-  called=[];
-
-  db.ref("calledNumbers").remove();
-
-  db.ref("bingoClaims").remove();
-
-  db.ref("players").remove();
-
-  db.ref("currentNumber").set(0);
-
-  db.ref("winner").set(false);
-
-  db.ref("gameId").set(Date.now());
-
-  document.getElementById("cardView").innerHTML="";
 
 }
 
