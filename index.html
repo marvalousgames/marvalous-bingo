@@ -296,6 +296,8 @@ function getLetter(num){
 }
 
 /* NUMBER */
+let lastCalledNumber = null;
+
 db.ref("currentNumber").on("value",snap=>{
   let num=snap.val();
   if(!num) return;
@@ -305,6 +307,22 @@ db.ref("currentNumber").on("value",snap=>{
   document.querySelectorAll(".cell").forEach(c=>{
     if(c.innerText==num)c.classList.add("marked");
   });
+
+  /* 🔊 SPEAK NUMBER */
+  if(lastCalledNumber !== num){
+
+    lastCalledNumber = num;
+
+    let speech = new SpeechSynthesisUtterance(
+      getLetter(num) + " " + num
+    );
+
+    speech.rate = 0.9;
+    speech.pitch = 1;
+
+    speechSynthesis.cancel();
+    speechSynthesis.speak(speech);
+  }
 });
 
 /* MODE */
