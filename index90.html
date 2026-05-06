@@ -1,70 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Marvalous Bingo 90</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+margin:0;
+background:#090512;
+font-family:Arial;
+color:white;
+padding:15px;
+}
+
+.section{
+background:#1c1735;
+border:2px solid #b84dff;
+border-radius:20px;
+padding:15px;
+margin-bottom:20px;
+}
+
+#video-container{
+width:100%;
+height:240px;
+border-radius:14px;
+overflow:hidden;
+}
+
+iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+#currentNumber{
+font-size:90px;
+font-weight:bold;
+text-align:center;
+margin-top:20px;
+color:#ff4df2;
+}
+
+#mode{
+text-align:center;
+color:#00ffcc;
+font-size:20px;
+margin-top:10px;
+}
+
+#messages{
+height:160px;
+overflow-y:auto;
+background:#120d28;
+border-radius:12px;
+padding:10px;
+margin-top:15px;
+}
+
+#chat-input{
+display:flex;
+gap:6px;
+margin-top:10px;
+}
+
+#chat-input input{
+flex:1;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#120d28;
+color:white;
+}
+
+#chat-input button{
+padding:12px 18px;
+border:none;
+border-radius:8px;
+background:#ff4df2;
+color:white;
+}
+
+.mainButton{
+width:100%;
+padding:18px;
+margin-top:20px;
+font-size:24px;
+font-weight:bold;
+background:#00ffcc;
+border:none;
+border-radius:14px;
+}
+
+#tickets{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.ticket{
+display:grid;
+grid-template-columns:repeat(9,1fr);
+gap:2px;
+background:#b84dff;
+padding:3px;
+border-radius:10px;
+}
+
+.cell{
+background:#120d28;
+min-height:48px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+}
+
+.blank{
+background:#0b0818;
+}
+
+.marked{
+background:#ff4df2;
+font-weight:bold;
+}
+
+.infoGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.infoCard{
+background:#1c1735;
+border:2px solid #b84dff;
+border-radius:14px;
+padding:14px;
+text-align:center;
+}
+
+</style>
+</head>
+
 <body>
 
-<div class="container">
+<!-- STREAM FIRST -->
 
-<h1>MARVALOUS BINGO</h1>
-
-<div class="subTitle">
-REAL PEOPLE • REAL WINNERS
-</div>
-
-<!-- TOP STREAM SECTION -->
-
-<div class="panel">
+<div class="section">
 
 <div id="video-container">
 <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
 </div>
 
-<div class="numberWrap">
-
 <div id="currentNumber">-</div>
 
 <div id="mode">Mode: 1 LINE</div>
 
-</div>
-
-<button class="mainButton" onclick="checkBingo()">
+<button class="mainButton">
 🎉 BINGO 🎉
 </button>
 
-<div class="panelTitle" style="margin-top:25px;">
+<!-- CHAT DIRECTLY UNDER STREAM -->
+
+<h2 style="text-align:center;margin-top:25px;">
 LIVE CHAT
-</div>
+</h2>
 
 <div id="messages"></div>
 
 <div id="chat-input">
-
-<input id="name" placeholder="Name">
-
-<input id="msg" placeholder="Type message...">
-
-<button onclick="sendMsg()">Send</button>
-
+<input placeholder="Name">
+<input placeholder="Type message...">
+<button>Send</button>
 </div>
 
 </div>
 
-<!-- TICKETS IN MIDDLE -->
+<!-- TICKETS SECOND -->
 
-<div class="panel">
+<div class="section">
 
-<div class="panelTitle">
+<h2 style="text-align:center;">
 YOUR TICKETS
+</h2>
+
+<div id="tickets">
+
+<div class="ticket">
+<div class="cell">1</div>
+<div class="cell blank"></div>
+<div class="cell">23</div>
+<div class="cell">34</div>
+<div class="cell blank"></div>
+<div class="cell">58</div>
+<div class="cell">67</div>
+<div class="cell blank"></div>
+<div class="cell">88</div>
 </div>
 
-<div id="tickets"></div>
+</div>
 
 </div>
 
-<!-- INFO BOXES AT VERY BOTTOM -->
+<!-- INFO BOXES LAST -->
 
 <div class="infoGrid">
 
 <div class="infoCard">
 <h3>GAME MODE</h3>
-<p id="topMode">1 LINE</p>
+<p>1 LINE</p>
 </div>
 
 <div class="infoCard">
@@ -84,4 +228,5 @@ YOUR TICKETS
 
 </div>
 
-</div>
+</body>
+</html>
