@@ -1,611 +1,288 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Marvalous Bingo Admin 90</title>
+<title>Marvalous Bingo Admin 90</title>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-  <style>
-    body{
-      font-family:Arial;
-      background:#0e0b1f;
-      color:white;
-      text-align:center;
-      margin:0;
-      padding-bottom:50px;
-    }
+<style>
+body{
+ background:#0e0b1f;
+ color:white;
+ font-family:Arial;
+ text-align:center;
+ margin:0;
+}
 
-    h1{
-      color:#b84dff;
-      margin:20px 0;
-    }
+.box{
+ background:#1c1735;
+ margin:15px;
+ padding:20px;
+ border-radius:14px;
+}
 
-    .box{
-      background:#1c1735;
-      margin:15px;
-      padding:20px;
-      border-radius:14px;
-      box-shadow:0 0 15px rgba(184,77,255,0.2);
-    }
+#current{
+ font-size:60px;
+ color:#ff4df2;
+}
 
-    button{
-      background:#00ffcc;
-      border:none;
-      padding:10px 15px;
-      margin:5px;
-      border-radius:8px;
-      font-weight:bold;
-      cursor:pointer;
-    }
+.numberGrid{
+ display:grid;
+ grid-template-columns:repeat(10,1fr);
+ gap:5px;
+ margin-top:20px;
+}
 
-    .danger{
-      background:#ff4d6d;
-      color:white;
-    }
+.ball{
+ background:#120d28;
+ padding:10px;
+ border-radius:8px;
+}
 
-    .active{
-      background:#ff4df2 !important;
-      color:white;
-    }
+.called{
+ background:#ff4df2;
+}
 
-    #current{
-      font-size:42px;
-      color:#ff4df2;
-      margin-bottom:10px;
-    }
+.latest{
+ background:#00ffcc !important;
+ color:black;
+}
 
-    #lastCalled{
-      font-size:20px;
-      margin-top:10px;
-      color:#00ffcc;
-    }
+.ticket{
+ display:grid;
+ grid-template-columns:repeat(9,1fr);
+ gap:2px;
+ margin:15px auto;
+ max-width:900px;
+ background:#b84dff;
+ padding:3px;
+ border-radius:10px;
+}
 
-    .numberGrid{
-      display:grid;
-      grid-template-columns:repeat(10,1fr);
-      gap:6px;
-      margin-top:20px;
-    }
+.cell{
+ background:#120d28;
+ min-height:55px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
 
-    .ball{
-      background:#120d28;
-      padding:10px 0;
-      border-radius:8px;
-      border:1px solid #2f2557;
-      font-weight:bold;
-    }
+.blank{
+ background:#0b0818;
+}
 
-    .called{
-      background:linear-gradient(45deg,#b84dff,#ff4df2);
-      color:white;
-      box-shadow:0 0 10px rgba(255,77,242,0.6);
-    }
+.marked{
+ background:#ff4df2;
+}
 
-    .latest{
-      background:#00ffcc !important;
-      color:black !important;
-      animation:pulse 1s infinite;
-    }
-
-    @keyframes pulse{
-      0%{transform:scale(1);}
-      50%{transform:scale(1.08);}
-      100%{transform:scale(1);}
-    }
-
-    .ticket{
-      display:grid;
-      grid-template-columns:repeat(9,1fr);
-      gap:2px;
-      margin:15px auto;
-      max-width:800px;
-      background:#b84dff;
-      padding:3px;
-      border-radius:10px;
-    }
-
-    .cell{
-      background:#120d28;
-      min-height:55px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:22px;
-      border-radius:4px;
-    }
-
-    .blank{
-      background:#0b0818;
-    }
-
-    .marked{
-      background:linear-gradient(45deg,#b84dff,#ff4df2);
-      color:white;
-      font-weight:bold;
-    }
-
-    .winner{
-      background:#00ffcc !important;
-      color:black !important;
-      font-weight:bold;
-    }
-
-    .claim{
-      background:#120d28;
-      padding:12px;
-      margin:10px 0;
-      border-radius:10px;
-    }
-
-    #players p{
-      background:#120d28;
-      padding:10px;
-      border-radius:8px;
-      margin:8px auto;
-      max-width:300px;
-      cursor:pointer;
-    }
-
-    .recent{
-      font-size:26px;
-      color:#00ffcc;
-      margin-top:15px;
-      font-weight:bold;
-    }
-
-  </style>
+button{
+ background:#00ffcc;
+ border:none;
+ padding:10px 15px;
+ margin:5px;
+ border-radius:8px;
+ font-weight:bold;
+}
+</style>
 </head>
-
 <body>
 
 <h1>🎯 MARVALOUS BINGO ADMIN</h1>
 
-<!-- CURRENT -->
 <div class="box">
-
-  <div id="current">-</div>
-
-  <button onclick="callNumber()">CALL NEXT</button>
-
-  <button onclick="undoLast()">UNDO LAST</button>
-
-  <button class="danger" onclick="resetGame()">RESET GAME</button>
-
-  <div class="recent" id="lastCalled"></div>
-
-  <div class="numberGrid" id="numberGrid"></div>
-
+<div id="current">-</div>
+<button onclick="callNumber()">CALL NEXT</button>
+<button onclick="undoLast()">UNDO LAST</button>
+<button onclick="resetGame()">RESET GAME</button>
+<div id="numberGrid" class="numberGrid"></div>
 </div>
 
-<!-- MODE -->
 <div class="box">
-
-  <h2>Game Mode</h2>
-
-  <button id="mode-1line" onclick="setMode('1line')">
-    1 LINE
-  </button>
-
-  <button id="mode-2lines" onclick="setMode('2lines')">
-    2 LINES
-  </button>
-
-  <button id="mode-fullhouse" onclick="setMode('fullhouse')">
-    FULL HOUSE
-  </button>
-
+<h2>Game Mode</h2>
+<button onclick="setMode('1line')">1 LINE</button>
+<button onclick="setMode('2lines')">2 LINES</button>
+<button onclick="setMode('fullhouse')">FULL HOUSE</button>
 </div>
 
-<!-- CLAIMS -->
 <div class="box">
-
-  <h2>🏆 Bingo Claims</h2>
-
-  <div id="claims"></div>
-
+<h2>Bingo Claims</h2>
+<div id="claims"></div>
 </div>
 
-<!-- CARD VIEW -->
 <div class="box">
-
-  <h2>🎫 Selected Tickets</h2>
-
-  <div id="cardView"></div>
-
-</div>
-
-<!-- PLAYERS -->
-<div class="box">
-
-  <h2>👥 Players</h2>
-
-  <div id="players"></div>
-
+<h2>Selected Tickets</h2>
+<div id="cardView"></div>
 </div>
 
 <script>
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
-  databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+const firebaseConfig={
+ apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 
-const db = firebase.database();
-
-let called = [];
-
-/* CREATE NUMBER BOARD */
-
-const numberGrid = document.getElementById("numberGrid");
+let called=[];
 
 for(let i=1;i<=90;i++){
-
-  let div=document.createElement("div");
-
-  div.className="ball";
-
-  div.id="ball-"+i;
-
-  div.innerText=i;
-
-  numberGrid.appendChild(div);
-
+ let div=document.createElement('div');
+ div.className='ball';
+ div.id='ball-'+i;
+ div.innerText=i;
+ document.getElementById('numberGrid').appendChild(div);
 }
-
-/* CALL NUMBER */
 
 function callNumber(){
+ let num;
 
-  if(called.length >= 90){
-    alert("All numbers called");
-    return;
-  }
+ do{
+  num=Math.floor(Math.random()*90)+1;
+ }while(called.includes(num));
 
-  let num;
+ called.push(num);
 
-  do{
-    num=Math.floor(Math.random()*90)+1;
-  }while(called.includes(num));
-
-  called.push(num);
-
-  db.ref("currentNumber").set(num);
-
-  db.ref("calledNumbers").set(called);
-
-  speakNumber(num);
-
+ db.ref('currentNumber').set(num);
+ db.ref('calledNumbers').set(called);
 }
-
-/* SPEAK */
-
-function speakNumber(num){
-
-  let speech=new SpeechSynthesisUtterance(num);
-
-  speech.rate=0.9;
-
-  speech.pitch=1;
-
-  speech.volume=1;
-
-  speechSynthesis.cancel();
-
-  speechSynthesis.speak(speech);
-
-}
-
-/* UNDO */
 
 function undoLast(){
-
-  if(called.length===0)return;
-
-  called.pop();
-
-  db.ref("calledNumbers").set(called);
-
-  let current=called[called.length-1] || 0;
-
-  db.ref("currentNumber").set(current);
-
+ called.pop();
+ db.ref('calledNumbers').set(called);
+ db.ref('currentNumber').set(called[called.length-1]||0);
 }
-
-/* MODE */
 
 function setMode(mode){
-
-  db.ref("mode").set(mode);
-
+ db.ref('mode').set(mode);
 }
 
-db.ref("mode").on("value",snap=>{
+ db.ref('calledNumbers').on('value',snap=>{
+  called=Object.values(snap.val()||{});
 
-  let mode=snap.val() || "1line";
-
-  document.querySelectorAll("button[id^='mode-']")
-  .forEach(btn=>btn.classList.remove("active"));
-
-  document.getElementById("mode-"+mode)
-  ?.classList.add("active");
-
-});
-
-/* CALLED NUMBERS */
-
-db.ref("calledNumbers").on("value",snap=>{
-
-  const data=snap.val() || {};
-
-  called=Object.values(data);
-
-  document.querySelectorAll(".ball")
-  .forEach(b=>{
-    b.classList.remove("called");
-    b.classList.remove("latest");
+  document.querySelectorAll('.ball').forEach(b=>{
+   b.classList.remove('called');
+   b.classList.remove('latest');
   });
 
   called.forEach(n=>{
-
-    let ball=document.getElementById("ball-"+n);
-
-    if(ball){
-      ball.classList.add("called");
-    }
-
+   let ball=document.getElementById('ball-'+n);
+   if(ball) ball.classList.add('called');
   });
 
   let latest=called[called.length-1];
 
   if(latest){
-
-    document.getElementById("ball-"+latest)
-    ?.classList.add("latest");
-
+   document.getElementById('ball-'+latest).classList.add('latest');
   }
+ });
 
-  let last10=called.slice(-10).reverse();
+ db.ref('currentNumber').on('value',snap=>{
+  document.getElementById('current').innerText=snap.val()||'-';
+ });
 
-  document.getElementById("lastCalled").innerText=
-  "Last Calls: " + last10.join(" • ");
-
-});
-
-/* CURRENT */
-
-db.ref("currentNumber").on("value",snap=>{
-
-  let num=snap.val();
-
-  if(!num){
-
-    document.getElementById("current").innerText="-";
-
-    return;
-
-  }
-
-  document.getElementById("current").innerText=num;
-
-});
-
-/* CLAIMS */
-
-db.ref("bingoClaims").on("value",snap=>{
-
-  let data=snap.val() || {};
-
-  let html="";
+ db.ref('bingoClaims').on('value',snap=>{
+  let data=snap.val()||{};
+  let html='';
 
   Object.entries(data).reverse().forEach(([id,claim])=>{
-
-    html += `
-      <div class="claim">
-
-        <strong>${claim.name}</strong>
-
-        <br><br>
-
-        <button onclick="viewPlayer('${claim.name}')">
-          VIEW TICKETS
-        </button>
-
-        <button onclick="validateClaim('${claim.name}')">
-          VALIDATE
-        </button>
-
-        <button onclick="approve('${id}')">
-          APPROVE
-        </button>
-
-      </div>
-    `;
-
+   html+=`
+   <div style="margin-bottom:15px;">
+    <b>${claim.name}</b><br><br>
+    <button onclick="viewPlayer('${claim.name}')">VIEW TICKETS</button>
+    <button onclick="validateClaim('${claim.name}')">VALIDATE</button>
+    <button onclick="approve('${id}')">APPROVE</button>
+   </div>`;
   });
 
-  document.getElementById("claims").innerHTML=html;
-
-});
-
-/* VALIDATE */
-
-function validateClaim(name){
-
-  db.ref("players").once("value",snap=>{
-
-    let players=snap.val() || {};
-
-    let player=Object.values(players)
-    .find(p=>p.name===name);
-
-    if(!player)return;
-
-    let totalMarked=0;
-
-    player.cards.forEach(ticket=>{
-
-      ticket.forEach(row=>{
-
-        row.forEach(n=>{
-
-          if(n && called.includes(Number(n))){
-            totalMarked++;
-          }
-
-        });
-
-      });
-
-    });
-
-    alert(name + " has " + totalMarked + " called numbers marked.");
-
-  });
-
-}
-
-/* VIEW PLAYER */
+  document.getElementById('claims').innerHTML=html;
+ });
 
 function viewPlayer(name){
+ db.ref('players').once('value').then(snap=>{
+  let players=snap.val()||{};
 
-  db.ref("players").once("value",snap=>{
+  let player=Object.values(players).find(p=>p.name===name);
 
-    let players=snap.val() || {};
+  if(!player){
+   alert('No tickets found');
+   return;
+  }
 
-    let player=Object.values(players)
-    .find(p=>p.name===name);
+  let html='';
 
-    if(!player){
-      alert("No tickets found");
-      return;
-    }
+  player.cards.forEach(ticket=>{
+   html+='<div class="ticket">';
 
-    let html="";
+   ticket.flat().forEach(n=>{
+    let marked=n && called.includes(Number(n));
 
-    player.cards.forEach(ticket=>{
+    html+=`<div class="cell ${!n?'blank':''} ${marked?'marked':''}">${n||''}</div>`;
+   });
 
-      html += `<div class="ticket">`;
-
-      ticket.forEach(row=>{
-
-        row.forEach(n=>{
-
-          let marked=false;
-
-          if(n && called.includes(Number(n))){
-            marked=true;
-          }
-
-          html += `
-            <div class="cell ${!n ? 'blank' : ''} ${marked ? 'marked' : ''}">
-              ${n || ""}
-            </div>
-          `;
-
-        });
-
-      });
-
-      html += `</div>`;
-
-    });
-
-    document.getElementById("cardView").innerHTML=html;
-
+   html+='</div>';
   });
 
+  document.getElementById('cardView').innerHTML=html;
+ });
 }
 
-/* APPROVE */
+function validateClaim(name){
+ db.ref('players').once('value').then(snap=>{
+  let players=snap.val()||{};
+
+  let player=Object.values(players).find(p=>p.name===name);
+
+  if(!player){
+   alert('No player found');
+   return;
+  }
+
+  let total=0;
+
+  player.cards.forEach(ticket=>{
+   ticket.flat().forEach(n=>{
+    if(n && called.includes(Number(n))) total++;
+   });
+  });
+
+  alert(name+' has '+total+' called numbers marked.');
+ });
+}
 
 function approve(id){
-
-  db.ref("winner").set(true);
-
-  db.ref("bingoClaims/"+id).remove();
-
-  alert("Winner approved!");
-
+ db.ref('winner').set(true);
+ db.ref('bingoClaims/'+id).remove();
+ alert('Winner approved');
 }
-
-/* PLAYERS */
-
-db.ref("players").on("value",snap=>{
-
-  let data=snap.val() || {};
-
-  let html="";
-
-  Object.values(data).forEach(p=>{
-
-    html += `
-      <p onclick="viewPlayer('${p.name}')">
-        ${p.name}
-      </p>
-    `;
-
-  });
-
-  document.getElementById("players").innerHTML=html;
-
-});
-
-/* RESET */
 
 function resetGame(){
-
-  if(!confirm("Reset game?")) return;
-
-  called=[];
-
-  db.ref("calledNumbers").remove();
-
-  db.ref("bingoClaims").remove();
-
-  db.ref("players").remove();
-
-  db.ref("currentNumber").set(0);
-
-  db.ref("winner").set(false);
-
-  db.ref("gameId").set(Date.now());
-
-  document.getElementById("cardView").innerHTML="";
-
+ called=[];
+ db.ref('calledNumbers').remove();
+ db.ref('bingoClaims').remove();
+ db.ref('currentNumber').set(0);
+ db.ref('winner').set(false);
+ db.ref('gameId').set(Date.now());
+ document.getElementById('cardView').innerHTML='';
 }
-const bingoAudio = new Audio(
-  "https://www.soundjay.com/human/cheering-01.mp3"
-);
 
-bingoAudio.volume = 1;
+const bingoAudio=new Audio('https://www.soundjay.com/human/cheering-01.mp3');
 
-document.body.addEventListener("click", () => {
+bingoAudio.volume=1;
 
-  bingoAudio.play().then(() => {
+document.body.addEventListener('click',()=>{
+ bingoAudio.play().then(()=>{
+  bingoAudio.pause();
+  bingoAudio.currentTime=0;
+ }).catch(()=>{});
+},{once:true});
 
-    bingoAudio.pause();
-
-    bingoAudio.currentTime = 0;
-
-  }).catch(()=>{});
-
-}, { once:true });
-
-db.ref("bingoSound").on("value",snap=>{
-
+ db.ref('bingoSound').on('value',snap=>{
   if(!snap.val()) return;
 
-  bingoAudio.currentTime = 0;
-
+  bingoAudio.currentTime=0;
   bingoAudio.play().catch(()=>{});
-
-});
-
-});
+ });
 </script>
-
 </body>
 </html>
