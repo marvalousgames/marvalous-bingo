@@ -283,6 +283,106 @@ document.body.addEventListener('click',()=>{
   bingoAudio.currentTime=0;
   bingoAudio.play().catch(()=>{});
  });
+ <!-- BINGO ALERT SYSTEM -->
+
+const claimAudio = new Audio(
+  "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
+);
+
+claimAudio.volume = 1;
+
+let lastClaimId = null;
+
+db.ref("bingoClaims").limitToLast(1).on("child_added",snap=>{
+
+  const claim = snap.val();
+
+  const claimId = snap.key;
+
+  if(lastClaimId === claimId) return;
+
+  lastClaimId = claimId;
+
+  claimAudio.currentTime = 0;
+
+  claimAudio.play().catch(()=>{});
+
+  showBingoPopup(claim.name);
+
+  viewPlayer(claim.name);
+
+});
+
+/* POPUP */
+
+function showBingoPopup(name){
+
+  let old = document.getElementById("bingoPopup");
+
+  if(old) old.remove();
+
+  const popup = document.createElement("div");
+
+  popup.id = "bingoPopup";
+
+  popup.style.position = "fixed";
+  popup.style.top = "0";
+  popup.style.left = "0";
+  popup.style.width = "100%";
+  popup.style.height = "100%";
+  popup.style.background = "rgba(0,0,0,0.9)";
+  popup.style.zIndex = "99999";
+  popup.style.display = "flex";
+  popup.style.alignItems = "center";
+  popup.style.justifyContent = "center";
+
+  popup.innerHTML = `
+    <div style="
+      background:#1c1735;
+      padding:40px;
+      border-radius:20px;
+      text-align:center;
+      border:4px solid #00ffcc;
+      box-shadow:0 0 40px #00ffcc;
+      max-width:90%;
+    ">
+
+      <h1 style="
+        color:#00ffcc;
+        font-size:48px;
+        margin-bottom:20px;
+      ">
+        🎉 BINGO CLAIM 🎉
+      </h1>
+
+      <h2 style="
+        color:white;
+        font-size:36px;
+      ">
+        ${name}
+      </h2>
+
+      <button onclick="
+        document.getElementById('bingoPopup').remove()
+      " style="
+        margin-top:25px;
+        background:#ff4df2;
+        color:white;
+        border:none;
+        padding:15px 30px;
+        border-radius:12px;
+        font-size:20px;
+        font-weight:bold;
+      ">
+        CLOSE
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+}
 </script>
 </body>
 </html>
