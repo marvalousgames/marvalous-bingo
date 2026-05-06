@@ -1,1 +1,260 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bingo Admin</title>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0e0b1f;
+      color: white;
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 {
+      color: #b84dff;
+      margin: 20px 0;
+    }
+
+    .box {
+      background: #1c1735;
+      margin: 15px;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    button {
+      background: #00ffcc;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .active {
+      background: #ff4df2 !important;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      max-width: 250px;
+      margin: 10px auto;
+    }
+
+    .cell {
+      border: 1px solid #333;
+      padding: 8px;
+    }
+
+    .marked {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🎯 BINGO ADMIN</h1>
+
+<!-- 🔢 NUMBER -->
+<div class="box">
+  <h2 id="current">Current: -</h2>
+  <button onclick="callNumber()">CALL NEXT</button>
+  <button onclick="resetGame()">RESET GAME</button>
+  <p id="calledList"></p>
+</div>
+
+<!-- 🎮 MODE -->
+<div class="box">
+  <h3>Game Mode</h3>
+  <button id="mode-1line" onclick="setMode('1line')">1 LINE</button>
+  <button id="mode-2lines" onclick="setMode('2lines')">2 LINES</button>
+  <button id="mode-fullhouse" onclick="setMode('fullhouse')">FULL HOUSE</button>
+</div>
+
+<!-- 🏆 CLAIMS -->
+<div class="box">
+  <h3>Bingo Claims</h3>
+  <div id="claims"></div>
+</div>
+
+<!-- 👀 CARD -->
+<div class="box">
+  <h3>Selected Card</h3>
+  <div id="cardView"></div>
+</div>
+
+<!-- 👥 PLAYERS -->
+<div class="box">
+  <h3>Players</h3>
+  <div id="players"></div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+  databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let called = [];
+
+/* 🔤 NUMBER → LETTER */
+function getLetter(num) {
+  if (num <= 15) return "B";
+  if (num <= 30) return "I";
+  if (num <= 45) return "N";
+  if (num <= 60) return "G";
+  return "O";
+}
+
+/* 🔢 CALL NUMBER */
+function callNumber() {
+  let num;
+
+  do {
+    num = Math.floor(Math.random() * 75) + 1;
+  } while (called.includes(num));
+
+  called.push(num);
+
+  db.ref("currentNumber").set(num);
+  db.ref("calledNumbers").set(called);
+}
+
+/* 🎮 MODE */
+function setMode(mode) {
+  db.ref("mode").set(mode);
+}
+
+/* 🎮 MODE LISTENER (FIXED PROPERLY) */
+db.ref("mode").on("value", snap => {
+  const mode = snap.val() || "1line";
+
+  document.querySelectorAll("#mode-1line, #mode-2lines, #mode-fullhouse")
+    .forEach(btn => btn.classList.remove("active"));
+
+  document.getElementById("mode-" + mode)?.classList.add("active");
+});
+
+/* 🏆 CLAIMS */
+db.ref("bingoClaims").on("value", snap => {
+  let data = snap.val() || {};
+  let html = "";
+
+  Object.entries(data).forEach(([id, claim]) => {
+    html += `
+      <div>
+        ${claim.name}
+        <button onclick="viewCard('${claim.name}')">CHECK</button>
+        <button onclick="approve('${id}')">APPROVE</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("claims").innerHTML = html;
+});
+
+/* 👀 VIEW CARD WITH HIGHLIGHT */
+function viewCard(name) {
+  db.ref("players").once("value", snap => {
+    let players = snap.val() || {};
+    let player = Object.values(players).find(p => p.name === name);
+
+    if (!player) return alert("No card found");
+
+    db.ref("calledNumbers").once("value").then(snap2 => {
+      const calledObj = snap2.val() || {};
+      const calledNums = Object.values(calledObj);
+
+      let html = "<div class='card'>";
+
+      player.card.forEach(n => {
+        let marked = false;
+
+        if (n === "FREE") marked = true;
+        else if (calledNums.includes(Number(n))) marked = true;
+
+        html += `<div class="cell ${marked ? "marked" : ""}">${n}</div>`;
+      });
+
+      html += "</div>";
+
+      document.getElementById("cardView").innerHTML = html;
+    });
+  });
+}
+
+/* ✅ APPROVE */
+function approve(id) {
+  db.ref("winner").set(true);
+  db.ref("bingoClaims/" + id).remove();
+}
+
+/* 👥 PLAYERS */
+db.ref("players").on("value", snap => {
+  let data = snap.val() || {};
+  let html = "";
+
+  Object.values(data).forEach(p => {
+    html += `<p>${p.name}</p>`;
+  });
+
+  document.getElementById("players").innerHTML = html;
+});
+
+/* 🔄 RESET */
+function resetGame() {
+  if (!confirm("Reset game?")) return;
+
+  called = [];
+
+  db.ref("calledNumbers").remove();
+  db.ref("bingoClaims").remove();
+  db.ref("players").remove();
+
+  db.ref("currentNumber").set(0);
+  db.ref("winner").set(false);
+  db.ref("gameId").set(Date.now());
+  document.getElementById("cardView").innerHTML = "";
+}
+
+/* 🔄 CALLED LIST + LETTERS */
+db.ref("calledNumbers").on("value", snap => {
+  const calledObj = snap.val() || {};
+  called = Object.values(calledObj);
+
+  const formatted = called.map(n => getLetter(n) + n);
+
+  document.getElementById("calledList").innerText =
+    "Called: " + formatted.join(", ");
+});
+
+/* 🔄 CURRENT NUMBER WITH LETTER */
+db.ref("currentNumber").on("value", snap => {
+  let num = snap.val();
+
+  if (!num) {
+    document.getElementById("current").innerText = "Current: -";
+    return;
+  }
+
+  document.getElementById("current").innerText =
+    "Current: " + getLetter(num) + num;
+});
+</script>
+
+</body>
+</html>
