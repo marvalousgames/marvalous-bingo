@@ -369,7 +369,7 @@ db.ref("gameId").on("value",snap=>{
     /* THIS IS THE FIX */
     db.ref("players/"+playerId).set({
       name:playerName,
-      card:cards
+      cards:cards
     });
 
   }
@@ -582,7 +582,7 @@ function saveName(){
   /* THIS IS THE FIX */
   db.ref("players/"+playerId).set({
     name:playerName,
-    card:cards
+    cards:cards
   });
 
 }
