@@ -1,148 +1,639 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Marvalous Bingo</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  <style>
-    body { font-family: system-ui, sans-serif; }
-    .neon-purple { text-shadow: 0 0 25px #c026d3, 0 0 40px #c026d3; }
-    .ticket-grid {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      gap: 3px;
-      background: #1e1b4b;
-      padding: 5px;
-      border-radius: 12px;
-      border: 2px solid #7e22ce;
-    }
-    .ticket-cell {
-      aspect-ratio: 1/1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      background: #312e81;
-      color: white;
-      border-radius: 5px;
-    }
-    .called { 
-      background: #22d3ee !important; 
-      color: #1e1b4b !important; 
-      font-weight: 800;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>Marvalous Bingo</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+background:#090512;
+font-family:'Poppins',sans-serif;
+color:white;
+height:100vh;
+overflow:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top,#8c2dff55,transparent 45%),
+radial-gradient(circle at bottom,#ff4df222,transparent 40%);
+z-index:-1;
+}
+
+.app{
+width:100%;
+max-width:430px;
+height:100vh;
+margin:auto;
+padding:8px;
+display:flex;
+flex-direction:column;
+gap:8px;
+overflow:hidden;
+}
+
+/* TOP */
+
+.top{
+display:grid;
+grid-template-columns:50px 1fr 70px;
+align-items:center;
+}
+
+.menu{
+font-size:38px;
+font-weight:700;
+text-align:center;
+}
+
+.logo{
+text-align:center;
+line-height:0.9;
+}
+
+.logo h1{
+font-size:20px;
+font-weight:800;
+text-shadow:
+0 0 10px #ff4df2,
+0 0 20px #ff4df2;
+}
+
+.sideInfo{
+font-size:11px;
+font-weight:700;
+text-align:right;
+}
+
+/* BALL AREA */
+
+.ballWrap{
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+height:190px;
+}
+
+.stream{
+position:absolute;
+left:0;
+top:50%;
+transform:translateY(-50%);
+width:78px;
+height:78px;
+border-radius:18px;
+overflow:hidden;
+border:3px solid #d94dff;
+box-shadow:0 0 15px #d94dff;
+background:#120d28;
+}
+
+.stream iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+.ball{
+width:165px;
+height:165px;
+border-radius:50%;
+border:5px solid #ff4df2;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:74px;
+font-weight:800;
+background:radial-gradient(circle,#220833,#090512);
+box-shadow:
+0 0 20px #ff4df2,
+0 0 50px #ff4df2;
+}
+
+/* LAST NUMBERS */
+
+.called{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+border:2px solid #b84dff;
+border-radius:18px;
+overflow:hidden;
+flex-shrink:0;
+}
+
+.called div{
+background:#120d28;
+padding:10px 0;
+text-align:center;
+font-size:18px;
+font-weight:700;
+border-right:2px solid #b84dff;
+}
+
+.called div:last-child{
+border-right:none;
+}
+
+/* TICKETS */
+
+.ticketPanel{
+background:#1b1034;
+border:3px solid #b84dff;
+border-radius:24px;
+padding:8px;
+flex:1;
+display:flex;
+flex-direction:column;
+min-height:0;
+}
+
+.ticketTitle{
+text-align:center;
+font-size:20px;
+font-weight:700;
+margin-bottom:6px;
+}
+
+.ticketGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+flex:1;
+}
+
+.ticket{
+background:#120d28;
+border:2px solid #7d4dff;
+border-radius:18px;
+padding:6px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.board{
+width:100%;
+display:grid;
+grid-template-columns:repeat(9,1fr);
+gap:2px;
+}
+
+.cell{
+height:26px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+font-weight:700;
+background:#090512;
+border-radius:6px;
+}
+
+.blank{
+background:transparent;
+}
+
+.marked{
+background:#48e7ff;
+color:white;
+box-shadow:0 0 12px #48e7ff;
+}
+
+/* BOTTOM */
+
+.bottom{
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:8px;
+height:210px;
+flex-shrink:0;
+}
+
+.chat{
+background:#1b1034;
+border:3px solid #7d4dff;
+border-radius:24px;
+padding:12px;
+display:flex;
+flex-direction:column;
+}
+
+.chat h2{
+font-size:18px;
+margin-bottom:6px;
+}
+
+.messages{
+flex:1;
+overflow-y:auto;
+font-size:14px;
+padding-right:4px;
+}
+
+.messages div{
+margin-bottom:6px;
+}
+
+.messages b{
+color:#48e7ff;
+}
+
+.chat input{
+width:100%;
+padding:9px;
+margin-top:6px;
+background:#120d28;
+border:2px solid #3a2761;
+border-radius:12px;
+color:white;
+font-size:14px;
+outline:none;
+}
+
+.chat button{
+width:100%;
+padding:10px;
+margin-top:6px;
+border:none;
+border-radius:14px;
+background:linear-gradient(45deg,#b84dff,#ff4df2);
+color:white;
+font-size:18px;
+font-weight:700;
+}
+
+.bingoBtn{
+background:linear-gradient(45deg,#4af1ff,#27d8ff);
+border:none;
+border-radius:26px;
+font-size:34px;
+font-weight:800;
+color:white;
+box-shadow:0 0 20px #48e7ff;
+height:100%;
+}
+
+</style>
 </head>
-<body class="bg-gradient-to-b from-[#1e1b4b] to-black text-white min-h-screen flex flex-col">
 
-  <!-- HEADER -->
-  <header class="bg-black/70 border-b border-purple-600 px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <i class="fas fa-bars text-2xl"></i>
-      <h1 class="text-3xl font-bold tracking-wider neon-purple">MARVALOUS BINGO</h1>
-    </div>
-    <div class="text-right">
-      <div class="text-purple-300 text-sm">2 LINES</div>
-      <div class="text-xl font-bold">GAME 90</div>
-    </div>
-  </header>
+<body>
 
-  <div class="flex-1 overflow-auto p-4 space-y-5">
+<div class="app">
 
-    <!-- LIVE STREAM + CALLED NUMBER -->
-    <div class="flex gap-4 items-start">
-      <!-- Live Stream -->
-      <div class="w-32 flex-shrink-0">
-        <div class="relative bg-zinc-900 rounded-2xl overflow-hidden border-2 border-purple-500">
-          <div class="absolute top-2 left-2 bg-red-600 text-xs px-2 py-0.5 rounded font-bold">LIVE</div>
-          <img src="https://picsum.photos/id/64/300/220" alt="Live Stream" class="w-full h-28 object-cover">
-          <div class="text-center text-xs py-1 bg-black/70">marvalouscomps</div>
-        </div>
-      </div>
+<div class="top">
 
-      <!-- Called Number -->
-      <div class="flex-1 flex justify-center pt-2">
-        <div class="relative w-56 h-56">
-          <div class="absolute inset-0 bg-purple-600 rounded-full blur-3xl opacity-40"></div>
-          <div class="relative w-full h-full border-8 border-purple-500 rounded-full flex items-center justify-center neon-purple">
-            <span class="text-8xl font-black">66</span>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="menu">☰</div>
 
-    <!-- LAST CALLED -->
-    <div class="grid grid-cols-5 gap-2 px-1">
-      <div class="bg-purple-900/80 border border-purple-500 rounded-2xl py-3 text-center text-xl font-bold">24</div>
-      <div class="bg-purple-900/80 border border-purple-500 rounded-2xl py-3 text-center text-xl font-bold">74</div>
-      <div class="bg-purple-900/80 border border-purple-500 rounded-2xl py-3 text-center text-xl font-bold">19</div>
-      <div class="bg-purple-900/80 border border-purple-500 rounded-2xl py-3 text-center text-xl font-bold">27</div>
-      <div class="bg-cyan-400 text-black border border-cyan-300 rounded-2xl py-3 text-center text-xl font-bold">45</div>
-    </div>
+<div class="logo">
+<h1>MARVALOUS<br>BINGO</h1>
+</div>
 
-    <!-- TICKETS -->
-    <div>
-      <h3 class="text-center font-semibold text-xl mb-4">Your Tickets: <span class="text-purple-400">4</span></h3>
-      
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Ticket 1 -->
-        <div class="ticket-grid">
-          <div class="ticket-cell">2</div><div class="ticket-cell">22</div><div class="ticket-cell">34</div><div class="ticket-cell">43</div><div class="ticket-cell"></div><div class="ticket-cell">73</div><div class="ticket-cell">83</div>
-          <div class="ticket-cell">4</div><div class="ticket-cell">13</div><div class="ticket-cell"></div><div class="ticket-cell"></div><div class="ticket-cell called">62</div><div class="ticket-cell called">78</div><div class="ticket-cell">85</div>
-          <div class="ticket-cell">8</div><div class="ticket-cell">27</div><div class="ticket-cell">44</div><div class="ticket-cell called">79</div><div class="ticket-cell">89</div>
-        </div>
+<div class="sideInfo">
+2 LINES<br><br>
+GAME 90
+</div>
 
-        <!-- Ticket 2 -->
-        <div class="ticket-grid">
-          <div class="ticket-cell"></div><div class="ticket-cell">28</div><div class="ticket-cell">36</div><div class="ticket-cell">40</div><div class="ticket-cell">54</div><div class="ticket-cell"></div><div class="ticket-cell">70</div>
-          <div class="ticket-cell">13</div><div class="ticket-cell">29</div><div class="ticket-cell">42</div><div class="ticket-cell"></div><div class="ticket-cell called">72</div><div class="ticket-cell">90</div>
-          <div class="ticket-cell">4</div><div class="ticket-cell">19</div><div class="ticket-cell">39</div><div class="ticket-cell">44</div><div class="ticket-cell"></div><div class="ticket-cell">79</div>
-        </div>
+</div>
 
-        <!-- Ticket 3 -->
-        <div class="ticket-grid">
-          <div class="ticket-cell">16</div><div class="ticket-cell">20</div><div class="ticket-cell">41</div><div class="ticket-cell">52</div><div class="ticket-cell"></div><div class="ticket-cell"></div><div class="ticket-cell">83</div>
-          <div class="ticket-cell">1</div><div class="ticket-cell">21</div><div class="ticket-cell">33</div><div class="ticket-cell called">54</div><div class="ticket-cell">77</div>
-          <div class="ticket-cell">2</div><div class="ticket-cell">29</div><div class="ticket-cell">39</div><div class="ticket-cell">55</div><div class="ticket-cell called">85</div>
-        </div>
+<div class="ballWrap">
 
-        <!-- Ticket 4 -->
-        <div class="ticket-grid">
-          <div class="ticket-cell">4</div><div class="ticket-cell">20</div><div class="ticket-cell"></div><div class="ticket-cell">50</div><div class="ticket-cell">62</div><div class="ticket-cell"></div><div class="ticket-cell">89</div>
-          <div class="ticket-cell">6</div><div class="ticket-cell">23</div><div class="ticket-cell called">44</div><div class="ticket-cell">53</div><div class="ticket-cell">70</div>
-          <div class="ticket-cell">8</div><div class="ticket-cell">12</div><div class="ticket-cell">28</div><div class="ticket-cell">59</div><div class="ticket-cell">72</div>
-        </div>
-      </div>
-    </div>
+<div class="stream">
+<iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app&muted=true"></iframe>
+</div>
 
-  </div>
+<div class="ball" id="currentNumber">66</div>
 
-  <!-- FIXED BOTTOM BAR -->
-  <div class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-purple-600 p-4 grid grid-cols-2 gap-4 z-50">
-    <!-- Live Chat -->
-    <div class="bg-[#1e1b4b] border border-purple-600 rounded-3xl p-4 text-sm max-h-32 overflow-y-auto">
-      <div class="font-semibold mb-2">Live Chat</div>
-      <div class="space-y-1 text-xs">
-        <div><span class="text-cyan-400">Kee:</span> hi</div>
-        <div><span class="text-cyan-400">Kee:</span> hi again</div>
-        <div><span class="text-cyan-400">Player2:</span> GG</div>
-      </div>
-    </div>
+</div>
 
-    <!-- BINGO Button -->
-    <button onclick="claimBingo()" 
-            class="bg-gradient-to-br from-cyan-400 to-cyan-500 text-black font-black text-4xl py-8 rounded-3xl active:scale-95 transition-all shadow-2xl shadow-cyan-500/50">
-      BINGO!
-    </button>
-  </div>
+<div class="called">
+<div>24</div>
+<div>74</div>
+<div>19</div>
+<div>27</div>
+<div>45</div>
+</div>
 
-  <script>
-    function claimBingo() {
-      alert("🎉 BINGO claimed!");
-    }
-  </script>
+<div class="ticketPanel">
+
+<div class="ticketTitle">
+Your Tickets: 4
+</div>
+
+<div class="ticketGrid" id="tickets"></div>
+
+</div>
+
+<div class="bottom">
+
+<div class="chat">
+
+<h2>Live Chat</h2>
+
+<div class="messages" id="messages"></div>
+
+<input id="name" placeholder="Name">
+<input id="msg" placeholder="Message...">
+
+<button onclick="sendMsg()">Send</button>
+
+</div>
+
+<button class="bingoBtn" onclick="checkBingo()">
+BINGO!
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const firebaseConfig={
+apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.database();
+
+let playerName=localStorage.getItem('playerName')||'Player';
+let playerId=localStorage.getItem('playerId');
+
+if(!playerId){
+playerId=Date.now().toString();
+localStorage.setItem('playerId',playerId);
+}
+
+if(localStorage.getItem('fixedCardsV6')!=="yes"){
+localStorage.removeItem('cards');
+localStorage.setItem('fixedCardsV6',"yes");
+}
+
+function generateTicket(){
+
+const ranges=[
+[1,9],[10,19],[20,29],[30,39],[40,49],
+[50,59],[60,69],[70,79],[80,90]
+];
+
+let ticket=[
+["","","","","","","","",""],
+["","","","","","","","",""],
+["","","","","","","","",""]
+];
+
+let used=new Set();
+
+for(let row=0;row<3;row++){
+
+let cols=[];
+
+while(cols.length<5){
+
+let col=Math.floor(Math.random()*9);
+
+if(!cols.includes(col)) cols.push(col);
+
+}
+
+cols.sort((a,b)=>a-b);
+
+cols.forEach(col=>{
+
+let min=ranges[col][0];
+let max=ranges[col][1];
+
+let num;
+
+do{
+num=Math.floor(Math.random()*(max-min+1))+min;
+}while(used.has(num));
+
+used.add(num);
+
+ticket[row][col]=num;
+
+});
+
+}
+
+for(let col=0;col<9;col++){
+
+let nums=[];
+
+for(let row=0;row<3;row++){
+if(ticket[row][col]!=="") nums.push(ticket[row][col]);
+}
+
+nums.sort((a,b)=>a-b);
+
+let i=0;
+
+for(let row=0;row<3;row++){
+
+if(ticket[row][col]!==""){
+
+ticket[row][col]=nums[i];
+i++;
+
+}
+
+}
+
+}
+
+return ticket;
+
+}
+
+let savedCards=localStorage.getItem('cards');
+
+let cards=savedCards
+?JSON.parse(savedCards)
+:[
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem('cards',JSON.stringify(cards));
+
+function renderBoards(){
+
+const wrap=document.getElementById('tickets');
+
+wrap.innerHTML='';
+
+cards.forEach(ticket=>{
+
+let board=document.createElement('div');
+
+board.className='ticket';
+
+let inner=document.createElement('div');
+
+inner.className='board';
+
+ticket.flat().forEach(n=>{
+
+let div=document.createElement('div');
+
+if(n===''){
+div.className='cell blank';
+}else{
+div.className='cell';
+div.innerText=n;
+div.dataset.num=n;
+}
+
+inner.appendChild(div);
+
+});
+
+board.appendChild(inner);
+
+wrap.appendChild(board);
+
+});
+
+}
+
+renderBoards();
+
+let currentGameId;
+
+db.ref('gameId').on('value',snap=>{
+
+let gameId=snap.val();
+
+if(!gameId) return;
+
+if(currentGameId!==gameId){
+
+currentGameId=gameId;
+
+let savedGame=localStorage.getItem('gameId');
+
+if(savedGame!==String(gameId)){
+
+cards=[
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem('cards',JSON.stringify(cards));
+localStorage.setItem('gameId',gameId);
+
+location.reload();
+
+}
+
+}
+
+});
+
+db.ref('calledNumbers').on('value',snap=>{
+
+const called=Object.values(snap.val()||{});
+
+document.querySelectorAll('.cell').forEach(c=>{
+c.classList.remove('marked');
+});
+
+called.forEach(num=>{
+
+document.querySelectorAll('.cell').forEach(c=>{
+
+if(c.dataset.num==num){
+c.classList.add('marked');
+}
+
+});
+
+});
+
+});
+
+db.ref('currentNumber').on('value',snap=>{
+
+let num=snap.val();
+
+if(!num) return;
+
+document.getElementById('currentNumber').innerText=num;
+
+});
+
+function checkBingo(){
+
+db.ref('bingoClaims').push({
+name:playerName,
+time:Date.now()
+});
+
+alert('Bingo Claimed!');
+
+}
+
+function sendMsg(){
+
+let name=document.getElementById('name').value||'Player';
+
+let msg=document.getElementById('msg').value;
+
+if(!msg) return;
+
+localStorage.setItem('playerName',name);
+
+db.ref('chat').push({
+name:name,
+message:msg
+});
+
+document.getElementById('msg').value='';
+
+}
+
+db.ref('chat').limitToLast(30).on('child_added',snap=>{
+
+let d=snap.val();
+
+let div=document.createElement('div');
+
+div.innerHTML='<b>'+d.name+':</b> '+d.message;
+
+let box=document.getElementById('messages');
+
+box.appendChild(div);
+
+box.scrollTop=box.scrollHeight;
+
+});
+
+</script>
+
 </body>
 </html>
