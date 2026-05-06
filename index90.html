@@ -53,8 +53,13 @@
       font-size: 14px;
     }
 
-    .msg { margin-bottom: 6px; }
-    .msg b { color: #00ffcc; }
+    .msg {
+      margin-bottom: 6px;
+    }
+
+    .msg b {
+      color: #00ffcc;
+    }
 
     #chat-input {
       display: flex;
@@ -88,32 +93,45 @@
       margin-bottom: 10px;
     }
 
-    #board {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
+    #tickets {
+      width: 95%;
       max-width: 900px;
       margin: auto;
-      border: 4px solid #b84dff;
-      border-radius: 12px;
-      overflow: hidden;
+    }
+
+    .ticket {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      background: white;
+      border: 2px solid #444;
+      margin-bottom: 20px;
     }
 
     .cell {
-      background: #1c1735;
-      padding: 22px;
-      font-size: 22px;
-      border: 1px solid #0e0b1f;
-      cursor: pointer;
-      min-height: 35px;
-    }
+      background: white;
+      color: black;
+      padding: 18px 8px;
+      font-size: 28px;
+      font-weight: bold;
+      border: 1px solid #999;
+      min-height: 45px;
 
-    .marked {
-      background: linear-gradient(45deg, #b84dff, #ff4df2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
     }
 
     .free {
-      background: transparent;
+      background: #f2f2f2;
+      color: transparent;
       cursor: default;
+    }
+
+    .marked {
+      background: #ffeb3b;
+      color: black;
     }
 
     button {
@@ -141,7 +159,9 @@
 <div id="nameModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;">
   <div style="background:#1c1735;padding:20px;border-radius:12px;text-align:center;width:80%;max-width:300px;">
     <h2 style="color:#b84dff;">Enter your name</h2>
+
     <input id="modalName" placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-top:10px;">
+
     <button onclick="saveName()" style="margin-top:10px;width:100%;padding:10px;background:#00ffcc;border:none;border-radius:8px;font-weight:bold;">
       Join Game
     </button>
@@ -156,6 +176,7 @@
 
 <div id="chat-box">
   <div id="messages"></div>
+
   <div id="chat-input">
     <input id="name" placeholder="Name">
     <input id="msg" placeholder="Type message...">
@@ -164,25 +185,33 @@
 </div>
 
 <div id="currentNumber">Waiting...</div>
+
 <div id="mode">Mode: 1 LINE</div>
+
 <div id="winner">🎉 WE HAVE A WINNER 🎉</div>
-<div id="board"></div>
+
+<div id="tickets"></div>
+
 <button onclick="checkBingo()">BINGO</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
+
 const firebaseConfig = {
   apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
   databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db = firebase.database();
 
 /* PLAYER */
+
 let playerName = localStorage.getItem("playerName") || "Player";
+
 let playerId = localStorage.getItem("playerId");
 
 if (!playerId) {
@@ -191,6 +220,7 @@ if (!playerId) {
 }
 
 /* CARD */
+
 function generateCard() {
 
   let rows = [
@@ -230,6 +260,7 @@ function generateCard() {
     let row=possible[Math.floor(Math.random()*possible.length)];
 
     rows[row][col]=num;
+
     rowCounts[row]++;
 
   });
@@ -238,27 +269,38 @@ function generateCard() {
 
 }
 
-/* ALWAYS LOAD CARD FIRST */
+/* LOAD CARD */
+
 let savedCard = localStorage.getItem("card");
+
 let card = savedCard ? JSON.parse(savedCard) : generateCard();
+
 renderBoard();
 
 /* GAME SYNC */
+
 let currentGameId;
 
 db.ref("gameId").on("value", snap=>{
+
   let gameId=snap.val();
+
   if(!gameId) return;
 
   if(currentGameId!==gameId){
+
     currentGameId=gameId;
 
     let savedGame=localStorage.getItem("gameId");
 
     if(savedGame!==String(gameId)){
+
       card=generateCard();
+
       localStorage.setItem("card",JSON.stringify(card));
+
       localStorage.setItem("gameId",gameId);
+
       location.reload();
     }
 
@@ -266,35 +308,60 @@ db.ref("gameId").on("value", snap=>{
       name: playerName,
       card: card
     });
+
   }
+
 });
 
 /* BOARD */
+
 function renderBoard(){
-  const board=document.getElementById("board");
-  board.innerHTML="";
 
-  card.forEach(n=>{
-    let div=document.createElement("div");
+  const tickets=document.getElementById("tickets");
 
-    if(n===""){
-      div.className="cell free";
-      div.innerHTML="&nbsp;";
-    } else {
-      div.className="cell";
-      div.innerText=n;
-      div.onclick=()=>div.classList.toggle("marked");
+  tickets.innerHTML="";
+
+  for(let t=0;t<3;t++){
+
+    let board=document.createElement("div");
+
+    board.className="ticket";
+
+    card.forEach(n=>{
+
+      let div=document.createElement("div");
+
+      if(n===""){
+        div.className="cell free";
+        div.innerText="";
+      } else {
+        div.className="cell";
+        div.innerText=n;
+        div.onclick=()=>div.classList.toggle("marked");
+      }
+
+      board.appendChild(div);
+
+    });
+
+    tickets.appendChild(board);
+
+    if(t<2){
+      card=generateCard();
     }
 
-    board.appendChild(div);
-  });
+  }
+
 }
 
 /* NUMBER */
+
 let lastCalledNumber = null;
 
 db.ref("currentNumber").on("value",snap=>{
+
   let num=snap.val();
+
   if(!num) return;
 
   document.getElementById("currentNumber").innerText=num;
@@ -303,7 +370,6 @@ db.ref("currentNumber").on("value",snap=>{
     if(c.innerText==num)c.classList.add("marked");
   });
 
-  /* 🔊 SPEAK NUMBER */
   if(lastCalledNumber !== num){
 
     lastCalledNumber = num;
@@ -315,63 +381,101 @@ db.ref("currentNumber").on("value",snap=>{
 
     speechSynthesis.cancel();
     speechSynthesis.speak(speech);
+
   }
+
 });
 
 /* MODE */
+
 db.ref("mode").on("value",snap=>{
+
   let mode=snap.val()||"1line";
 
   document.getElementById("mode").innerText=
   "Mode: "+(mode==="1line"?"1 LINE":mode==="2lines"?"2 LINES":"FULL HOUSE");
+
 });
 
 /* BINGO */
+
 function checkBingo(){
+
   alert("90 Ball Bingo checking coming next");
+
 }
 
 /* CHAT */
+
 function sendMsg(){
+
   let name=document.getElementById("name").value||"Player";
+
   let msg=document.getElementById("msg").value;
+
   if(!msg)return;
 
   localStorage.setItem("playerName",name);
 
-  db.ref("chat").push({name,message:msg});
+  db.ref("chat").push({
+    name:name,
+    message:msg
+  });
+
   document.getElementById("msg").value="";
+
 }
 
 db.ref("chat").limitToLast(50).on("child_added",snap=>{
+
   let d=snap.val();
+
   let div=document.createElement("div");
+
   div.className="msg";
+
   div.innerHTML="<b>"+d.name+":</b> "+d.message;
+
   let box=document.getElementById("messages");
+
   box.appendChild(div);
+
   box.scrollTop=box.scrollHeight;
+
 });
 
 /* NAME MODAL */
+
 window.onload=()=>{
+
   let modal=document.getElementById("nameModal");
+
   let saved=localStorage.getItem("playerName");
 
   if(saved){
+
     document.getElementById("name").value=saved;
+
     modal.style.display="none";
+
   }
 
   window.saveName=function(){
+
     let name=document.getElementById("modalName").value.trim();
+
     if(!name)return alert("Enter name");
 
     localStorage.setItem("playerName",name);
+
     document.getElementById("name").value=name;
+
     modal.style.display="none";
+
   }
+
 };
+
 </script>
 
 </body>
