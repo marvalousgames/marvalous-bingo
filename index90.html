@@ -8,9 +8,6 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <style>
 
 *{
@@ -25,7 +22,6 @@ font-family:'Poppins',sans-serif;
 color:white;
 overflow-y:auto;
 overflow-x:hidden;
-min-height:100vh;
 }
 
 body::before{
@@ -39,39 +35,35 @@ z-index:-1;
 }
 
 .app{
-display:flex;
-flex-direction:column;
-padding:8px;
-gap:8px;
-min-height:100vh;
-padding-bottom:40px;
-max-width:430px;
+max-width:420px;
 margin:auto;
+padding:6px;
+padding-bottom:20px;
 }
 
 /* TOP */
 
-.topBar{
+.top{
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:5px 4px;
+align-items:flex-start;
+margin-bottom:4px;
 }
 
 .menu{
 font-size:42px;
 font-weight:700;
-width:50px;
-text-align:center;
+padding:5px 10px;
 }
 
 .logo{
 text-align:center;
 flex:1;
+margin-top:6px;
 }
 
 .logo h1{
-font-size:30px;
+font-size:24px;
 line-height:0.9;
 font-weight:800;
 text-shadow:
@@ -79,51 +71,46 @@ text-shadow:
 0 0 25px #ff4df2;
 }
 
-.topInfo{
-position:absolute;
-right:10px;
-top:105px;
-text-align:right;
+.sideInfo{
+font-size:12px;
 font-weight:700;
-font-size:15px;
-line-height:1.2;
+text-align:right;
+padding:8px 6px 0 0;
 }
 
-/* BALL AREA */
+/* MAIN BALL */
 
-.ballWrap{
-display:flex;
-justify-content:center;
-align-items:center;
+.ballArea{
 position:relative;
-margin-top:-5px;
-margin-bottom:4px;
+display:flex;
+justify-content:center;
+align-items:center;
+margin-top:-10px;
 }
 
-.bigBall{
-width:240px;
-height:240px;
+.ball{
+width:190px;
+height:190px;
 border-radius:50%;
-border:6px solid #ff4df2;
+border:5px solid #ff4df2;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:105px;
+font-size:88px;
 font-weight:800;
-background:radial-gradient(circle,#2b1040,#090512);
+background:radial-gradient(circle,#240b39,#090512);
 box-shadow:
 0 0 20px #ff4df2,
-0 0 50px #ff4df2;
-margin:auto;
+0 0 45px #ff4df2;
 }
 
-.streamBtn{
+.streamBox{
 position:absolute;
 left:0;
 top:50%;
 transform:translateY(-50%);
-width:85px;
-height:85px;
+width:70px;
+height:70px;
 border-radius:18px;
 overflow:hidden;
 border:3px solid #d94dff;
@@ -131,147 +118,145 @@ box-shadow:0 0 15px #d94dff;
 background:#120d28;
 }
 
-.streamBtn iframe{
+.streamBox iframe{
 width:100%;
 height:100%;
 border:none;
 pointer-events:none;
 }
 
-/* CALLED NUMBERS */
+/* LAST NUMBERS */
 
-.calledStrip{
+.called{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-border:3px solid #b84dff;
-border-radius:18px;
+margin-top:8px;
+border:2px solid #b84dff;
+border-radius:16px;
 overflow:hidden;
-background:#120d28;
 }
 
-.calledCell{
-padding:14px 0;
+.called div{
+padding:10px 0;
 text-align:center;
-font-size:22px;
+font-size:18px;
 font-weight:700;
+background:#120d28;
 border-right:2px solid #b84dff;
 }
 
-.calledCell:last-child{
+.called div:last-child{
 border-right:none;
 }
 
 /* TICKETS */
 
-.ticketSection{
-background:#1a1033;
+.ticketWrap{
+margin-top:10px;
+background:#1b1034;
 border:3px solid #b84dff;
-border-radius:26px;
-padding:12px;
+border-radius:24px;
+padding:10px;
 }
 
-.ticketHeader{
+.ticketTitle{
 text-align:center;
-font-size:24px;
+font-size:20px;
 font-weight:700;
-margin-bottom:12px;
+margin-bottom:10px;
 }
 
 .ticketGrid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:12px;
+gap:8px;
 }
 
 .ticket{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:4px;
 background:#120d28;
-padding:8px;
-border-radius:18px;
+padding:5px;
+border-radius:16px;
 border:2px solid #7d3cff;
-box-shadow:
-0 0 12px rgba(180,77,255,.25),
-inset 0 0 10px rgba(255,255,255,.03);
+}
+
+.ticketBoard{
+display:grid;
+grid-template-columns:repeat(9,1fr);
+gap:2px;
 }
 
 .cell{
-height:42px;
+height:24px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:16px;
+font-size:12px;
 font-weight:700;
 background:#090512;
-border-radius:8px;
+border-radius:5px;
+}
+
+.blank{
+background:transparent;
 }
 
 .marked{
-background:#45e7ff;
+background:#48e7ff;
 color:white;
-box-shadow:0 0 14px #45e7ff;
+box-shadow:0 0 10px #48e7ff;
 }
 
-/* BOTTOM AREA */
+/* BOTTOM */
 
-.bottomArea{
+.bottom{
 display:grid;
-grid-template-columns:1.1fr .9fr;
-gap:10px;
-align-items:stretch;
-}
-
-.chatBox{
-background:#1a1033;
-border:3px solid #7f4dff;
-border-radius:24px;
-padding:14px;
-display:flex;
-flex-direction:column;
-}
-
-.chatTitle{
-font-size:22px;
-font-weight:700;
-margin-bottom:10px;
-}
-
-#messages{
-height:120px;
-overflow-y:auto;
-font-size:14px;
-padding-right:5px;
-}
-
-.msg{
-margin-bottom:8px;
-}
-
-.msg b{
-color:#45e7ff;
-}
-
-#chat-input{
-display:flex;
-flex-direction:column;
+grid-template-columns:1fr 1fr;
 gap:8px;
 margin-top:10px;
 }
 
-#chat-input input{
-width:100%;
+.chat{
+background:#1b1034;
+border:3px solid #7d4dff;
+border-radius:22px;
 padding:10px;
+}
+
+.chat h2{
+font-size:18px;
+margin-bottom:8px;
+}
+
+.messages{
+height:85px;
+overflow-y:auto;
+font-size:13px;
+margin-bottom:8px;
+}
+
+.messages div{
+margin-bottom:6px;
+}
+
+.messages b{
+color:#48e7ff;
+}
+
+.chat input{
+width:100%;
+margin-bottom:6px;
+padding:8px;
 background:#120d28;
-border:2px solid #3f2c66;
-border-radius:12px;
+border:2px solid #38255e;
+border-radius:10px;
 color:white;
-font-size:14px;
+font-size:13px;
 outline:none;
 }
 
-#chat-input button{
-padding:12px;
+.chat button{
+width:100%;
+padding:10px;
 border:none;
 border-radius:12px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
@@ -280,46 +265,40 @@ font-weight:700;
 font-size:16px;
 }
 
-.bingoBtn{
+.bingo{
 display:flex;
 align-items:center;
 justify-content:center;
-background:linear-gradient(45deg,#45f3ff,#27d9ff);
+background:linear-gradient(45deg,#48f3ff,#29d9ff);
 border-radius:24px;
-font-size:42px;
+font-size:38px;
 font-weight:800;
-color:white;
-box-shadow:0 0 20px #45f3ff;
-min-height:230px;
+box-shadow:0 0 18px #48f3ff;
+min-height:210px;
 }
 
 /* MOBILE */
 
-@media(max-width:430px){
+@media(max-width:400px){
 
-.bigBall{
-width:220px;
-height:220px;
-font-size:90px;
+.ball{
+width:170px;
+height:170px;
+font-size:78px;
 }
 
-.streamBtn{
-width:75px;
-height:75px;
+.logo h1{
+font-size:22px;
 }
 
 .cell{
-height:38px;
-font-size:15px;
+height:22px;
+font-size:11px;
 }
 
-.calledCell{
-font-size:20px;
-}
-
-.bingoBtn{
-font-size:36px;
-min-height:210px;
+.bingo{
+font-size:32px;
+min-height:190px;
 }
 
 }
@@ -331,7 +310,7 @@ min-height:210px;
 
 <div class="app">
 
-<div class="topBar">
+<div class="top">
 
 <div class="menu">☰</div>
 
@@ -339,213 +318,145 @@ min-height:210px;
 <h1>MARVALOUS<br>BINGO</h1>
 </div>
 
-<div class="menu">☰</div>
+<div class="sideInfo">
+2 LINES<br><br>
+GAME 90
+</div>
 
 </div>
 
-<div class="topInfo">
-<div id="modeText">2 LINES</div>
-<div style="margin-top:10px;">GAME<br>90</div>
-</div>
+<div class="ballArea">
 
-<div class="ballWrap">
-
-<div class="streamBtn">
+<div class="streamBox">
 <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"></iframe>
 </div>
 
-<div class="bigBall" id="currentNumber">66</div>
+<div class="ball">66</div>
 
 </div>
 
-<div class="calledStrip">
-<div class="calledCell">24</div>
-<div class="calledCell">74</div>
-<div class="calledCell">19</div>
-<div class="calledCell">27</div>
-<div class="calledCell">45</div>
+<div class="called">
+<div>24</div>
+<div>74</div>
+<div>19</div>
+<div>27</div>
+<div>45</div>
 </div>
 
-<div class="ticketSection">
+<div class="ticketWrap">
 
-<div class="ticketHeader">
+<div class="ticketTitle">
 Your Tickets: 4
 </div>
 
-<div class="ticketGrid" id="tickets">
+<div class="ticketGrid">
+
+<!-- TICKET 1 -->
 
 <div class="ticket">
+<div class="ticketBoard">
 
-<div class="cell marked">27</div>
-<div class="cell">4</div>
-<div class="cell">36</div>
-<div class="cell">85</div>
-<div class="cell">60</div>
-
-<div class="cell">32</div>
-<div class="cell marked">30</div>
-<div class="cell">8</div>
-<div class="cell marked">58</div>
-<div class="cell marked">36</div>
-
+<div class="cell marked">2</div>
+<div class="cell blank"></div>
+<div class="cell">22</div>
 <div class="cell">34</div>
-<div class="cell">34</div>
-<div class="cell">26</div>
-<div class="cell">9</div>
-<div class="cell">13</div>
-
-<div class="cell marked">27</div>
-<div class="cell">23</div>
-<div class="cell">85</div>
 <div class="cell">43</div>
-<div class="cell">49</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">73</div>
+<div class="cell">83</div>
+
+<div class="cell">4</div>
+<div class="cell">13</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">62</div>
+<div class="cell marked">78</div>
+<div class="cell">85</div>
+
+<div class="cell">8</div>
+<div class="cell blank"></div>
+<div class="cell">27</div>
+<div class="cell blank"></div>
+<div class="cell">44</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell marked">79</div>
+<div class="cell">89</div>
 
 </div>
+</div>
+
+<!-- TICKET 2 -->
 
 <div class="ticket">
+<div class="ticketBoard">
 
-<div class="cell marked">81</div>
-<div class="cell">32</div>
-<div class="cell marked">23</div>
-<div class="cell">82</div>
-<div class="cell">44</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">28</div>
+<div class="cell">36</div>
+<div class="cell">40</div>
+<div class="cell">54</div>
+<div class="cell blank"></div>
+<div class="cell">70</div>
+<div class="cell blank"></div>
 
-<div class="cell marked">10</div>
-<div class="cell marked">46</div>
-<div class="cell">8</div>
-<div class="cell">56</div>
-<div class="cell marked">41</div>
-
-<div class="cell">38</div>
-<div class="cell">14</div>
-<div class="cell marked">44</div>
-<div class="cell">75</div>
-<div class="cell">16</div>
-
-<div class="cell">75</div>
-<div class="cell marked">62</div>
-<div class="cell marked">75</div>
+<div class="cell blank"></div>
 <div class="cell">13</div>
-<div class="cell">31</div>
+<div class="cell">29</div>
+<div class="cell blank"></div>
+<div class="cell">42</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell marked">72</div>
+<div class="cell">90</div>
 
+<div class="cell">4</div>
+<div class="cell">19</div>
+<div class="cell blank"></div>
+<div class="cell">39</div>
+<div class="cell">44</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">79</div>
+<div class="cell blank"></div>
+
+</div>
 </div>
 
 </div>
 
 </div>
 
-<div class="bottomArea">
+<div class="bottom">
 
-<div class="chatBox">
+<div class="chat">
 
-<div class="chatTitle">Live Chat</div>
+<h2>Live Chat</h2>
 
-<div id="messages">
-<div class="msg"><b>Player2:</b> GG</div>
-<div class="msg"><b>Kee:</b> hi</div>
-<div class="msg"><b>Kee:</b> hi again</div>
+<div class="messages">
+<div><b>Kee:</b> hi</div>
+<div><b>Kee:</b> hi again</div>
+<div><b>Player2:</b> GG</div>
 </div>
 
-<div id="chat-input">
+<input placeholder="Name">
+<input placeholder="Message...">
 
-<input id="name" placeholder="Name">
-
-<input id="msg" placeholder="Message...">
-
-<button onclick="sendMsg()">Send</button>
+<button>Send</button>
 
 </div>
 
-</div>
-
-<div class="bingoBtn" onclick="checkBingo()">
+<div class="bingo">
 BINGO!
 </div>
 
 </div>
 
 </div>
-
-<script>
-
-const firebaseConfig={
-apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
-databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const db=firebase.database();
-
-function checkBingo(){
-
-db.ref('bingoClaims').push({
-time:Date.now()
-});
-
-alert('🎉 Bingo Claimed!');
-
-}
-
-function sendMsg(){
-
-let name=document.getElementById('name').value || 'Player';
-
-let msg=document.getElementById('msg').value;
-
-if(!msg) return;
-
-db.ref('chat').push({
-name:name,
-message:msg
-});
-
-document.getElementById('msg').value='';
-
-}
-
-db.ref('chat').limitToLast(20).on('child_added',snap=>{
-
-let d=snap.val();
-
-let div=document.createElement('div');
-
-div.className='msg';
-
-div.innerHTML='<b>'+d.name+':</b> '+d.message;
-
-let box=document.getElementById('messages');
-
-box.appendChild(div);
-
-box.scrollTop=box.scrollHeight;
-
-});
-
-db.ref('currentNumber').on('value',snap=>{
-
-let num=snap.val();
-
-if(!num) return;
-
-document.getElementById('currentNumber').innerText=num;
-
-});
-
-db.ref('mode').on('value',snap=>{
-
-let mode=snap.val() || '2lines';
-
-let text=
-mode==='1line'?'1 LINE':
-mode==='2lines'?'2 LINES':
-'FULL HOUSE';
-
-document.getElementById('modeText').innerText=text;
-
-});
-
-</script>
 
 </body>
 </html>
