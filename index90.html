@@ -1,1 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Marvalous Bingo</title>
 
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0e0b1f;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      color: #b84dff;
+      margin-top: 10px;
+    }
+
+    #video-container {
+      width: 95%;
+      max-width: 700px;
+      height: 320px;
+      margin: 15px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #1c1735;
+      box-shadow: 0 0 25px rgba(184,77,255,0.4);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #chat-box {
+      width: 95%;
+      max-width: 700px;
+      margin: 10px auto;
+      background: #1c1735;
+      border-radius: 15px;
+      padding: 10px;
+    }
+
+    #messages {
+      height: 180px;
+      overflow-y: auto;
+      text-align: left;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .msg { margin-bottom: 6px; }
+    .msg b { color: #00ffcc; }
+
+    #chat-input {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    #chat-input input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #chat-input button {
+      background: #b84dff;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    #currentNumber {
+      font-size: 46px;
+      margin: 15px 0;
+      color: #ff4df2;
+    }
+
+    #mode {
+      color: #00ffcc;
+      margin-bottom: 10px;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      max-width: 600px;
+      margin: auto;
+      border: 4px solid #b84dff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(45deg, #b84dff, #7a2cff);
+      font-weight: bold;
+      font-size: 22px;
+      padding: 12px;
+      border-right: 2px solid #0e0b1f;
+    }
+
+    .cell {
+      background: #1c1735;
+      padding: 28px;
+      font-size: 22px;
+      border: 1px solid #0e0b1f;
+      cursor: pointer;
+    }
+
+    .marked {
+      background: linear-gradient(45deg, #b84dff, #ff4df2);
+    }
+
+    .free {
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      background: #00ffcc;
+      font-weight: bold;
+    }
+
+    #winner {
+      display: none;
+      background: #00ffcc;
+      color: black;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAME POPUP -->
+<div id="nameModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#1c1735;padding:20px;border-radius:12px;text-align:center;width:80%;max-width:300px;">
+    <h2 style="color:#b84dff;">Enter your name</h2>
+    <input id="modalName" placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-top:10px;">
+    <button onclick="saveName()" style="margin-top:10px;width:100%;padding:10px;background:#00ffcc;border:none;border-radius:8px;font-weight:bold;">
+      Join Game
+    </button>
+  </div>
+</div>
+
+<h1>MARVALOUS BINGO</h1>
+
+<div id="video-container">
+  <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
+</div>
+
+<div id="chat-box">
+  <div id="messages"></div>
+  <div id="chat-input">
+    <input id="name" placeholder="Name">
+    <input id="msg" placeholder="Type message...">
+    <button onclick="sendMsg()">Send</button>
+  </div>
+</div>
+
+<div id="currentNumber">Waiting...</div>
+<div id="mode">Mode: 1 LINE</div>
+<div id="winner">🎉 WE HAVE A WINNER 🎉</div>
+<div id="board"></div>
+<button onclick="checkBingo()">BINGO</button>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+  databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* PLAYER */
+let playerName = localStorage.getItem("playerName") || "Player";
+let playerId = localStorage.getItem("playerId");
+
+if (!playerId) {
+  playerId = Date.now().toString();
+  localStorage.setItem("playerId", playerId);
+}
+
+/* CARD */
+function generateCard() {
+  function getNumbers(min,max,count){
+    let nums=[];
+    while(nums.length<count){
+      let n=Math.floor(Math.random()*(max-min+1))+min;
+      if(!nums.includes(n)) nums.push(n);
+    }
+    return nums;
+  }
+
+  let card=[];
+  let B=getNumbers(1,15,5);
+  let I=getNumbers(16,30,5);
+  let N=getNumbers(31,45,4);
+  let G=getNumbers(46,60,5);
+  let O=getNumbers(61,75,5);
+
+  for(let i=0;i<5;i++){
+    card.push(B[i]);
+    card.push(I[i]);
+    card.push(i===2?"FREE":N[i>2?i-1:i]);
+    card.push(G[i]);
+    card.push(O[i]);
+  }
+
+  return card;
+}
+
+/* ALWAYS LOAD CARD FIRST */
+let savedCard = localStorage.getItem("card");
+let card = savedCard ? JSON.parse(savedCard) : generateCard();
+renderBoard();
+
+/* GAME SYNC */
+let currentGameId;
+
+db.ref("gameId").on("value", snap=>{
+  let gameId=snap.val();
+  if(!gameId) return;
+
+  if(currentGameId!==gameId){
+    currentGameId=gameId;
+
+    let savedGame=localStorage.getItem("gameId");
+
+    if(savedGame!==String(gameId)){
+      card=generateCard();
+      localStorage.setItem("card",JSON.stringify(card));
+      localStorage.setItem("gameId",gameId);
+      location.reload();
+    }
+
+    db.ref("players/"+playerId).set({
+      name: playerName,
+      card: card
+    });
+  }
+});
+
+/* BOARD */
+function renderBoard(){
+  const board=document.getElementById("board");
+  board.innerHTML="";
+
+  ["B","I","N","G","O"].forEach(l=>{
+    let h=document.createElement("div");
+    h.className="header";
+    h.innerText=l;
+    board.appendChild(h);
+  });
+
+  card.forEach(n=>{
+    let div=document.createElement("div");
+
+    if(n==="FREE"){
+      div.className="cell free marked";
+      div.innerText="FREE";
+    } else {
+      div.className="cell";
+      div.innerText=n;
+      div.onclick=()=>div.classList.toggle("marked");
+    }
+
+    board.appendChild(div);
+  });
+}
+
+/* LETTER */
+function getLetter(num){
+  if(num<=15)return"B";
+  if(num<=30)return"I";
+  if(num<=45)return"N";
+  if(num<=60)return"G";
+  return"O";
+}
+
+/* NUMBER */
+let lastCalledNumber = null;
+
+db.ref("currentNumber").on("value",snap=>{
+  let num=snap.val();
+  if(!num) return;
+
+  document.getElementById("currentNumber").innerText=getLetter(num)+num;
+
+  document.querySelectorAll(".cell").forEach(c=>{
+    if(c.innerText==num)c.classList.add("marked");
+  });
+
+  /* 🔊 SPEAK NUMBER */
+  if(lastCalledNumber !== num){
+
+    lastCalledNumber = num;
+
+    let speech = new SpeechSynthesisUtterance(
+      getLetter(num) + " " + num
+    );
+
+    speech.rate = 0.9;
+    speech.pitch = 1;
+
+    speechSynthesis.cancel();
+    speechSynthesis.speak(speech);
+  }
+});
+
+/* MODE */
+db.ref("mode").on("value",snap=>{
+  let mode=snap.val()||"1line";
+
+  document.getElementById("mode").innerText=
+  "Mode: "+(mode==="1line"?"1 LINE":mode==="2lines"?"2 LINES":"FULL HOUSE");
+});
+
+/* BINGO */
+function checkBingo(){
+  const cells=[...document.querySelectorAll(".cell")];
+  const marked=cells.map(c=>c.classList.contains("marked"));
+
+  const wins=[
+    [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],
+    [15,16,17,18,19],[20,21,22,23,24],
+    [0,5,10,15,20],[1,6,11,16,21],
+    [2,7,12,17,22],[3,8,13,18,23],
+    [4,9,14,19,24],[0,6,12,18,24],[4,8,12,16,20]
+  ];
+
+  let lines=wins.filter(w=>w.every(i=>marked[i]));
+
+  db.ref("mode").once("value").then(m=>{
+    let mode=m.val()||"1line";
+    let win=false;
+
+    if(mode==="1line"&&lines.length>=1)win=true;
+    if(mode==="2lines"&&lines.length>=2)win=true;
+    if(mode==="fullhouse"&&marked.every(x=>x))win=true;
+
+    if(win){
+      db.ref("bingoClaims").push({
+        name: playerName,
+        time: Date.now()
+      });
+      alert("🎉 Bingo claimed!");
+    } else {
+      alert("❌ Not yet");
+    }
+  });
+}
+
+/* CHAT */
+function sendMsg(){
+  let name=document.getElementById("name").value||"Player";
+  let msg=document.getElementById("msg").value;
+  if(!msg)return;
+
+  localStorage.setItem("playerName",name);
+
+  db.ref("chat").push({name,message:msg});
+  document.getElementById("msg").value="";
+}
+
+db.ref("chat").limitToLast(50).on("child_added",snap=>{
+  let d=snap.val();
+  let div=document.createElement("div");
+  div.className="msg";
+  div.innerHTML="<b>"+d.name+":</b> "+d.message;
+  let box=document.getElementById("messages");
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;
+});
+
+/* NAME MODAL */
+window.onload=()=>{
+  let modal=document.getElementById("nameModal");
+  let saved=localStorage.getItem("playerName");
+
+  if(saved){
+    document.getElementById("name").value=saved;
+    modal.style.display="none";
+  }
+
+  window.saveName=function(){
+    let name=document.getElementById("modalName").value.trim();
+    if(!name)return alert("Enter name");
+
+    localStorage.setItem("playerName",name);
+    document.getElementById("name").value=name;
+    modal.style.display="none";
+  }
+};
+</script>
+
+</body>
+</html>
