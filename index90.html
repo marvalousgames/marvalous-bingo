@@ -1,142 +1,310 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Marvalous Bingo 90</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Marvalous Bingo</title>
+
 <style>
-body{
+
+*{
 margin:0;
-background:#090512;
-font-family:Arial;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+background:
+radial-gradient(circle at top,#3b0066 0%,#140021 45%,#050008 100%);
 color:white;
-padding:15px;
+padding:12px;
+overflow-x:hidden;
 }
 
-.section{
-background:#1c1735;
-border:2px solid #b84dff;
-border-radius:20px;
-padding:15px;
-margin-bottom:20px;
+/* LOGO */
+
+.logo{
+text-align:center;
+margin-bottom:14px;
 }
 
-#video-container{
+.logo h1{
+font-size:34px;
+font-weight:900;
+line-height:0.9;
+text-shadow:
+0 0 8px #ff4df2,
+0 0 25px #ff4df2;
+}
+
+.logo p{
+margin-top:6px;
+font-size:10px;
+letter-spacing:3px;
+color:#49ffee;
+}
+
+/* STREAM */
+
+.streamWrap{
+background:#1a1033;
+border:3px solid #8e42ff;
+border-radius:24px;
+padding:8px;
+margin-bottom:14px;
+box-shadow:0 0 18px rgba(255,0,255,0.3);
+}
+
+.streamBox{
 width:100%;
-height:240px;
-border-radius:14px;
+aspect-ratio:16/9;
+border-radius:18px;
 overflow:hidden;
+background:black;
 }
 
-iframe{
+.streamBox iframe{
 width:100%;
 height:100%;
 border:none;
 }
 
-#currentNumber{
+/* NUMBER BOX */
+
+.numberWrap{
+background:#1a1033;
+border:3px solid #8e42ff;
+border-radius:24px;
+padding:20px;
+text-align:center;
+margin-bottom:14px;
+}
+
+.currentNumber{
 font-size:90px;
-font-weight:bold;
-text-align:center;
-margin-top:20px;
-color:#ff4df2;
-}
-
-#mode{
-text-align:center;
-color:#00ffcc;
-font-size:20px;
-margin-top:10px;
-}
-
-#messages{
-height:160px;
-overflow-y:auto;
-background:#120d28;
-border-radius:12px;
-padding:10px;
-margin-top:15px;
-}
-
-#chat-input{
-display:flex;
-gap:6px;
-margin-top:10px;
-}
-
-#chat-input input{
-flex:1;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#120d28;
+font-weight:900;
 color:white;
+text-shadow:
+0 0 10px #ff4df2,
+0 0 30px #ff4df2;
+line-height:1;
 }
 
-#chat-input button{
-padding:12px 18px;
-border:none;
-border-radius:8px;
-background:#ff4df2;
-color:white;
+.modeText{
+margin-top:8px;
+font-size:18px;
+font-weight:700;
+color:#46ffee;
 }
 
-.mainButton{
+/* BINGO BUTTON */
+
+.bingoBtn{
 width:100%;
-padding:18px;
-margin-top:20px;
-font-size:24px;
-font-weight:bold;
-background:#00ffcc;
+height:58px;
 border:none;
-border-radius:14px;
+border-radius:18px;
+background:linear-gradient(45deg,#47f2ff,#2de0ff);
+color:black;
+font-size:24px;
+font-weight:900;
+margin-bottom:14px;
+box-shadow:0 0 18px #47f2ff;
 }
 
-#tickets{
-display:flex;
-flex-direction:column;
-gap:15px;
+/* CHAT */
+
+.chatWrap{
+background:#1a1033;
+border:3px solid #8e42ff;
+border-radius:24px;
+padding:12px;
+margin-bottom:18px;
+}
+
+.chatTitle{
+text-align:center;
+font-size:18px;
+font-weight:900;
+margin-bottom:10px;
+}
+
+.messages{
+height:120px;
+overflow-y:auto;
+background:#10071f;
+border-radius:14px;
+padding:10px;
+margin-bottom:10px;
+}
+
+.msg{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.msg b{
+color:#4ff0ff;
+}
+
+.chatInputs{
+display:grid;
+grid-template-columns:1fr 1fr 60px;
+gap:6px;
+}
+
+.chatInputs input{
+height:42px;
+border:none;
+border-radius:10px;
+padding:0 10px;
+background:#0d0217;
+color:white;
+outline:none;
+}
+
+.sendBtn{
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#b84dff,#ff4df2);
+color:white;
+font-weight:900;
+}
+
+/* STATUS */
+
+.statusWrap{
+text-align:center;
+margin-bottom:16px;
+}
+
+.statusWrap h2{
+font-size:46px;
+font-weight:300;
+color:#ff4df2;
+margin-bottom:8px;
+}
+
+.statusWrap p{
+font-size:16px;
+color:#46ffee;
+}
+
+/* TICKETS */
+
+.ticketSection{
+background:#1a1033;
+border:3px solid #8e42ff;
+border-radius:24px;
+padding:10px;
+margin-bottom:16px;
+}
+
+.ticketHeader{
+text-align:center;
+font-size:16px;
+font-weight:900;
+margin-bottom:10px;
 }
 
 .ticket{
+border:2px solid #b84dff;
+border-radius:12px;
+overflow:hidden;
+margin-bottom:10px;
+}
+
+.ticket:last-child{
+margin-bottom:0;
+}
+
+.ticketGrid{
 display:grid;
 grid-template-columns:repeat(9,1fr);
-gap:2px;
-background:#b84dff;
-padding:3px;
-border-radius:10px;
 }
 
 .cell{
-background:#120d28;
-min-height:48px;
+height:38px;
+border-right:1px solid #b84dff;
+border-bottom:1px solid #b84dff;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:18px;
+font-size:15px;
+font-weight:700;
+background:#0a0014;
+}
+
+.ticketGrid .cell:nth-child(9n){
+border-right:none;
+}
+
+.ticketGrid .cell:nth-last-child(-n+9){
+border-bottom:none;
 }
 
 .blank{
-background:#0b0818;
+background:#12071f;
 }
 
 .marked{
-background:#ff4df2;
-font-weight:bold;
+background:#bb4dff;
+box-shadow:inset 0 0 12px rgba(255,255,255,0.3);
 }
 
-.infoGrid{
+/* STATS */
+
+.stats{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
+margin-bottom:18px;
 }
 
-.infoCard{
-background:#1c1735;
-border:2px solid #b84dff;
-border-radius:14px;
-padding:14px;
+.statBox{
+background:#1a1033;
+border:3px solid #8e42ff;
+border-radius:18px;
+padding:16px;
 text-align:center;
+}
+
+.statBox span{
+display:block;
+font-size:12px;
+letter-spacing:2px;
+color:#46ffee;
+margin-bottom:8px;
+}
+
+.statBox strong{
+font-size:24px;
+}
+
+/* FOOTER */
+
+.footer{
+text-align:center;
+padding:18px 0 8px;
+}
+
+.footer h2{
+font-size:30px;
+font-weight:900;
+line-height:0.9;
+text-shadow:
+0 0 8px #ff4df2,
+0 0 25px #ff4df2;
+}
+
+.footer p{
+margin-top:6px;
+font-size:10px;
+letter-spacing:3px;
+color:#49ffee;
 }
 
 </style>
@@ -144,89 +312,312 @@ text-align:center;
 
 <body>
 
-<!-- STREAM FIRST -->
+<!-- LOGO -->
 
-<div class="section">
-
-<div id="video-container">
-<iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
+<div class="logo">
+<h1>MARVALOUS BINGO</h1>
+<p>REAL PEOPLE • REAL WINNERS</p>
 </div>
 
-<div id="currentNumber">-</div>
+<!-- STREAM -->
 
-<div id="mode">Mode: 1 LINE</div>
+<div class="streamWrap">
 
-<button class="mainButton">
+<div class="streamBox">
+
+<iframe
+src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
+allowfullscreen>
+</iframe>
+
+</div>
+
+</div>
+
+<!-- NUMBER -->
+
+<div class="numberWrap">
+
+<div class="currentNumber" id="currentNumber">
+57
+</div>
+
+<div class="modeText">
+Mode: 1 LINE
+</div>
+
+</div>
+
+<!-- BINGO BUTTON -->
+
+<button class="bingoBtn">
 🎉 BINGO 🎉
 </button>
 
-<!-- CHAT DIRECTLY UNDER STREAM -->
+<!-- CHAT -->
 
-<h2 style="text-align:center;margin-top:25px;">
+<div class="chatWrap">
+
+<div class="chatTitle">
 LIVE CHAT
-</h2>
+</div>
 
-<div id="messages"></div>
+<div class="messages" id="messages">
 
-<div id="chat-input">
-<input placeholder="Name">
-<input placeholder="Type message...">
-<button>Send</button>
+<div class="msg"><b>Keeley:</b> hi</div>
+<div class="msg"><b>Player2:</b> good luck</div>
+
+</div>
+
+<div class="chatInputs">
+
+<input id="name" placeholder="Name">
+
+<input id="message" placeholder="Type message...">
+
+<button class="sendBtn" onclick="sendMessage()">
+Send
+</button>
+
 </div>
 
 </div>
 
-<!-- TICKETS SECOND -->
+<!-- STATUS -->
 
-<div class="section">
+<div class="statusWrap">
+<h2>Waiting...</h2>
+<p>Mode: 1 LINE</p>
+</div>
 
-<h2 style="text-align:center;">
+<!-- TICKETS -->
+
+<div class="ticketSection">
+
+<div class="ticketHeader">
 YOUR TICKETS
-</h2>
+</div>
 
-<div id="tickets">
+<!-- TICKET 1 -->
 
 <div class="ticket">
-<div class="cell">1</div>
+
+<div class="ticketGrid">
+
+<div class="cell">7</div>
+<div class="cell">10</div>
 <div class="cell blank"></div>
-<div class="cell">23</div>
-<div class="cell">34</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">61</div>
+<div class="cell">79</div>
+<div class="cell">85</div>
+
+<div class="cell">8</div>
+<div class="cell">18</div>
+<div class="cell blank"></div>
+<div class="cell">32</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">68</div>
+<div class="cell blank"></div>
+<div class="cell">87</div>
+
+<div class="cell">9</div>
+<div class="cell blank"></div>
+<div class="cell">28</div>
+<div class="cell blank"></div>
 <div class="cell blank"></div>
 <div class="cell">58</div>
-<div class="cell">67</div>
+<div class="cell">69</div>
 <div class="cell blank"></div>
-<div class="cell">88</div>
+<div class="cell">90</div>
+
+</div>
+
+</div>
+
+<!-- TICKET 2 -->
+
+<div class="ticket">
+
+<div class="ticketGrid">
+
+<div class="cell">2</div>
+<div class="cell">12</div>
+<div class="cell">20</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">64</div>
+<div class="cell">73</div>
+<div class="cell blank"></div>
+
+<div class="cell">4</div>
+<div class="cell">13</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">41</div>
+<div class="cell">52</div>
+<div class="cell blank"></div>
+<div class="cell">76</div>
+<div class="cell blank"></div>
+
+<div class="cell">9</div>
+<div class="cell">19</div>
+<div class="cell blank"></div>
+<div class="cell">38</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">79</div>
+<div class="cell">89</div>
+
+</div>
+
+</div>
+
+<!-- TICKET 3 -->
+
+<div class="ticket">
+
+<div class="ticketGrid">
+
+<div class="cell">1</div>
+<div class="cell">10</div>
+<div class="cell">13</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">62</div>
+<div class="cell">79</div>
+<div class="cell blank"></div>
+
+<div class="cell">7</div>
+<div class="cell">16</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">50</div>
+<div class="cell">66</div>
+<div class="cell">72</div>
+<div class="cell blank"></div>
+
+<div class="cell">8</div>
+<div class="cell blank"></div>
+<div class="cell">36</div>
+<div class="cell blank"></div>
+<div class="cell">49</div>
+<div class="cell">54</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">87</div>
+
+</div>
+
+</div>
+
+<!-- TICKET 4 -->
+
+<div class="ticket">
+
+<div class="ticketGrid">
+
+<div class="cell blank"></div>
+<div class="cell">15</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">45</div>
+<div class="cell">58</div>
+<div class="cell">69</div>
+<div class="cell">75</div>
+<div class="cell blank"></div>
+
+<div class="cell">2</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell">34</div>
+<div class="cell">48</div>
+<div class="cell">52</div>
+<div class="cell blank"></div>
+<div class="cell">79</div>
+<div class="cell blank"></div>
+
+<div class="cell">9</div>
+<div class="cell">17</div>
+<div class="cell">28</div>
+<div class="cell">39</div>
+<div class="cell blank"></div>
+<div class="cell">58</div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+<div class="cell blank"></div>
+
 </div>
 
 </div>
 
 </div>
 
-<!-- INFO BOXES LAST -->
+<!-- STATS -->
 
-<div class="infoGrid">
+<div class="stats">
 
-<div class="infoCard">
-<h3>GAME MODE</h3>
-<p>1 LINE</p>
+<div class="statBox">
+<span>GAME MODE</span>
+<strong>1 LINE</strong>
 </div>
 
-<div class="infoCard">
-<h3>TICKETS</h3>
-<p>4</p>
+<div class="statBox">
+<span>TICKETS</span>
+<strong>4</strong>
 </div>
 
-<div class="infoCard">
-<h3>LIVE GAME</h3>
-<p>90 BALL</p>
+<div class="statBox">
+<span>GAME TYPE</span>
+<strong>90 BALL</strong>
 </div>
 
-<div class="infoCard">
-<h3>STATUS</h3>
-<p>LIVE</p>
+<div class="statBox">
+<span>STATUS</span>
+<strong>LIVE</strong>
 </div>
 
 </div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+<h2>MARVALOUS BINGO</h2>
+<p>REAL PEOPLE • REAL WINNERS</p>
+</div>
+
+<script>
+
+function sendMessage(){
+
+let name=document.getElementById("name").value || "Player";
+let message=document.getElementById("message").value;
+
+if(message.trim()=="") return;
+
+let div=document.createElement("div");
+
+div.className="msg";
+
+div.innerHTML="<b>"+name+":</b> "+message;
+
+document.getElementById("messages").appendChild(div);
+
+document.getElementById("message").value="";
+
+document.getElementById("messages").scrollTop=
+document.getElementById("messages").scrollHeight;
+
+}
+
+</script>
 
 </body>
 </html>
