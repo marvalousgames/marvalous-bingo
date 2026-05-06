@@ -6,158 +6,152 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #0e0b1f;
-      color: white;
-      text-align: center;
+    body{
+      margin:0;
+      font-family:'Poppins',sans-serif;
+      background:#0e0b1f;
+      color:white;
+      text-align:center;
     }
 
-    h1 {
-      color: #b84dff;
-      margin-top: 10px;
+    h1{
+      color:#b84dff;
+      margin-top:10px;
     }
 
-    #video-container {
-      width: 95%;
-      max-width: 700px;
-      height: 320px;
-      margin: 15px auto;
-      border-radius: 15px;
-      overflow: hidden;
-      background: #1c1735;
-      box-shadow: 0 0 25px rgba(184,77,255,0.4);
+    #video-container{
+      width:95%;
+      max-width:700px;
+      height:320px;
+      margin:15px auto;
+      border-radius:15px;
+      overflow:hidden;
+      background:#1c1735;
+      box-shadow:0 0 25px rgba(184,77,255,0.4);
     }
 
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    iframe{
+      width:100%;
+      height:100%;
+      border:none;
     }
 
-    #chat-box {
-      width: 95%;
-      max-width: 700px;
-      margin: 10px auto;
-      background: #1c1735;
-      border-radius: 15px;
-      padding: 10px;
+    #chat-box{
+      width:95%;
+      max-width:700px;
+      margin:10px auto;
+      background:#1c1735;
+      border-radius:15px;
+      padding:10px;
     }
 
-    #messages {
-      height: 180px;
-      overflow-y: auto;
-      text-align: left;
-      padding: 10px;
-      font-size: 14px;
+    #messages{
+      height:180px;
+      overflow-y:auto;
+      text-align:left;
+      padding:10px;
+      font-size:14px;
     }
 
-    .msg {
-      margin-bottom: 6px;
+    .msg{
+      margin-bottom:6px;
     }
 
-    .msg b {
-      color: #00ffcc;
+    .msg b{
+      color:#00ffcc;
     }
 
-    #chat-input {
-      display: flex;
-      gap: 6px;
-      margin-top: 8px;
+    #chat-input{
+      display:flex;
+      gap:6px;
+      margin-top:8px;
     }
 
-    #chat-input input {
-      flex: 1;
-      padding: 8px;
-      border-radius: 8px;
-      border: none;
+    #chat-input input{
+      flex:1;
+      padding:8px;
+      border-radius:8px;
+      border:none;
     }
 
-    #chat-input button {
-      background: #b84dff;
-      border: none;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
+    #chat-input button{
+      background:#b84dff;
+      border:none;
+      color:white;
+      padding:8px 12px;
+      border-radius:8px;
     }
 
-    #currentNumber {
-      font-size: 46px;
-      margin: 15px 0;
-      color: #ff4df2;
+    #currentNumber{
+      font-size:46px;
+      margin:15px 0;
+      color:#ff4df2;
     }
 
-    #mode {
-      color: #00ffcc;
-      margin-bottom: 10px;
+    #mode{
+      color:#00ffcc;
+      margin-bottom:10px;
     }
 
-    #tickets {
-      width: 95%;
-      max-width: 900px;
-      margin: auto;
+    #tickets{
+      width:95%;
+      max-width:700px;
+      margin:auto;
     }
 
-    .ticket {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      background: white;
-      border: 2px solid #444;
-      margin-bottom: 20px;
+    .ticket{
+      display:grid;
+      grid-template-columns:repeat(9,1fr);
+      gap:0;
+      margin-bottom:15px;
+      border:3px solid #b84dff;
+      border-radius:10px;
+      overflow:hidden;
+      background:#1c1735;
     }
 
-    .cell {
-      background: white;
-      color: black;
-      padding: 18px 8px;
-      font-size: 28px;
-      font-weight: bold;
-      border: 1px solid #999;
-      min-height: 45px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      cursor: pointer;
+    .cell{
+      min-height:55px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid #0e0b1f;
+      font-size:22px;
     }
 
-    .free {
-      background: #f2f2f2;
-      color: transparent;
-      cursor: default;
+    .empty{
+      background:#120d25;
     }
 
-    .marked {
-      background: #ffeb3b;
-      color: black;
+    .marked{
+      background:linear-gradient(45deg,#b84dff,#ff4df2);
     }
 
-    button {
-      margin-top: 15px;
-      padding: 12px 20px;
-      border-radius: 10px;
-      border: none;
-      background: #00ffcc;
-      font-weight: bold;
+    button{
+      margin-top:15px;
+      padding:12px 20px;
+      border-radius:10px;
+      border:none;
+      background:#00ffcc;
+      font-weight:bold;
     }
 
-    #winner {
-      display: none;
-      background: #00ffcc;
-      color: black;
-      padding: 10px;
-      margin-top: 10px;
+    #winner{
+      display:none;
+      background:#00ffcc;
+      color:black;
+      padding:10px;
+      margin-top:10px;
     }
   </style>
 </head>
 
 <body>
 
-<!-- NAME POPUP -->
 <div id="nameModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;">
+
   <div style="background:#1c1735;padding:20px;border-radius:12px;text-align:center;width:80%;max-width:300px;">
+
     <h2 style="color:#b84dff;">Enter your name</h2>
 
     <input id="modalName" placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-top:10px;">
@@ -165,7 +159,9 @@
     <button onclick="saveName()" style="margin-top:10px;width:100%;padding:10px;background:#00ffcc;border:none;border-radius:8px;font-weight:bold;">
       Join Game
     </button>
+
   </div>
+
 </div>
 
 <h1>MARVALOUS BINGO</h1>
@@ -175,6 +171,7 @@
 </div>
 
 <div id="chat-box">
+
   <div id="messages"></div>
 
   <div id="chat-input">
@@ -182,6 +179,7 @@
     <input id="msg" placeholder="Type message...">
     <button onclick="sendMsg()">Send</button>
   </div>
+
 </div>
 
 <div id="currentNumber">Waiting...</div>
@@ -214,94 +212,110 @@ let playerName = localStorage.getItem("playerName") || "Player";
 
 let playerId = localStorage.getItem("playerId");
 
-if (!playerId) {
+if(!playerId){
   playerId = Date.now().toString();
-  localStorage.setItem("playerId", playerId);
+  localStorage.setItem("playerId",playerId);
 }
 
-/* CARD */
+/* GENERATE 90 BALL TICKET */
 
-function generateCard() {
+function generateTicket(){
 
-  let rows = [
-    ["","","","","","","","",""],
-    ["","","","","","","","",""],
-    ["","","","","","","","",""]
-  ];
+  let ticket = [];
 
-  let nums = [];
-
-  for(let i=1;i<=90;i++){
-    nums.push(i);
+  for(let r=0;r<3;r++){
+    ticket.push(["","","","","","","","",""]);
   }
 
-  nums.sort(()=>Math.random()-0.5);
+  for(let col=0;col<9;col++){
 
-  let used = nums.slice(0,15);
+    let min = col===0 ? 1 : col*10;
+    let max = col===8 ? 90 : (col*10)+9;
 
-  used.sort((a,b)=>a-b);
+    let nums = [];
 
-  let rowCounts=[0,0,0];
+    while(nums.length < 3){
 
-  used.forEach(num=>{
+      let n = Math.floor(Math.random()*(max-min+1))+min;
 
-    let col=Math.floor((num-1)/10);
-
-    if(num===90) col=8;
-
-    let possible=[];
-
-    for(let r=0;r<3;r++){
-      if(rowCounts[r]<5 && rows[r][col]===""){
-        possible.push(r);
-      }
+      if(!nums.includes(n)) nums.push(n);
     }
 
-    let row=possible[Math.floor(Math.random()*possible.length)];
+    nums.sort((a,b)=>a-b);
 
-    rows[row][col]=num;
+    let rows = [0,1,2].sort(()=>Math.random()-0.5);
 
-    rowCounts[row]++;
+    let amount = Math.random() > 0.5 ? 2 : 1;
 
-  });
+    for(let i=0;i<amount;i++){
+      ticket[rows[i]][col] = nums[i];
+    }
+  }
 
-  return rows.flat();
+  for(let r=0;r<3;r++){
 
+    let filled = ticket[r].filter(x=>x!=="").length;
+
+    while(filled < 5){
+
+      let col = Math.floor(Math.random()*9);
+
+      if(ticket[r][col] === ""){
+
+        let min = col===0 ? 1 : col*10;
+        let max = col===8 ? 90 : (col*10)+9;
+
+        let n = Math.floor(Math.random()*(max-min+1))+min;
+
+        ticket[r][col] = n;
+
+        filled++;
+      }
+    }
+  }
+
+  return ticket;
 }
 
-/* LOAD CARD */
+/* LOAD SAVED */
 
-let cards = [
-  generateCard(),
-  generateCard(),
-  generateCard()
-];
+let savedCards = localStorage.getItem("cards");
 
-renderBoard();
+let cards = savedCards
+? JSON.parse(savedCards)
+: [
+    generateTicket(),
+    generateTicket(),
+    generateTicket()
+  ];
 
-/* GAME SYNC */
+renderBoards();
+
+/* GAME RESET */
 
 let currentGameId;
 
-db.ref("gameId").on("value", snap=>{
+db.ref("gameId").on("value",snap=>{
 
-  let gameId=snap.val();
+  let gameId = snap.val();
 
   if(!gameId) return;
 
-  if(currentGameId!==gameId){
+  if(currentGameId !== gameId){
 
-    currentGameId=gameId;
+    currentGameId = gameId;
 
-    let savedGame=localStorage.getItem("gameId");
+    let savedGame = localStorage.getItem("gameId");
 
-    if(savedGame!==String(gameId)){
+    if(savedGame !== String(gameId)){
 
       cards = [
-        generateCard(),
-        generateCard(),
-        generateCard()
+        generateTicket(),
+        generateTicket(),
+        generateTicket()
       ];
+
+      localStorage.setItem("cards",JSON.stringify(cards));
 
       localStorage.setItem("gameId",gameId);
 
@@ -309,46 +323,49 @@ db.ref("gameId").on("value", snap=>{
     }
 
     db.ref("players/"+playerId).set({
-      name: playerName,
-      cards: cards
+      name:playerName,
+      cards:cards
     });
-
   }
 
 });
 
-/* BOARD */
+/* RENDER */
 
-function renderBoard(){
+function renderBoards(){
 
-  const tickets=document.getElementById("tickets");
+  const wrap = document.getElementById("tickets");
 
-  tickets.innerHTML="";
+  wrap.innerHTML = "";
 
-  cards.forEach(card=>{
+  cards.forEach(ticket=>{
 
-    let board=document.createElement("div");
+    let board = document.createElement("div");
 
-    board.className="ticket";
+    board.className = "ticket";
 
-    card.forEach(n=>{
+    ticket.flat().forEach(n=>{
 
-      let div=document.createElement("div");
+      let div = document.createElement("div");
 
       if(n===""){
-        div.className="cell free";
-        div.innerText="";
+
+        div.className = "cell empty";
+
       } else {
-        div.className="cell";
-        div.innerText=n;
-        div.onclick=()=>div.classList.toggle("marked");
+
+        div.className = "cell";
+
+        div.innerText = n;
+
+        div.onclick = ()=>div.classList.toggle("marked");
       }
 
       board.appendChild(div);
 
     });
 
-    tickets.appendChild(board);
+    wrap.appendChild(board);
 
   });
 
@@ -360,14 +377,18 @@ let lastCalledNumber = null;
 
 db.ref("currentNumber").on("value",snap=>{
 
-  let num=snap.val();
+  let num = snap.val();
 
   if(!num) return;
 
-  document.getElementById("currentNumber").innerText=num;
+  document.getElementById("currentNumber").innerText = num;
 
   document.querySelectorAll(".cell").forEach(c=>{
-    if(c.innerText==num)c.classList.add("marked");
+
+    if(c.innerText == num){
+      c.classList.add("marked");
+    }
+
   });
 
   if(lastCalledNumber !== num){
@@ -377,9 +398,11 @@ db.ref("currentNumber").on("value",snap=>{
     let speech = new SpeechSynthesisUtterance(num);
 
     speech.rate = 0.9;
+
     speech.pitch = 1;
 
     speechSynthesis.cancel();
+
     speechSynthesis.speak(speech);
 
   }
@@ -390,18 +413,26 @@ db.ref("currentNumber").on("value",snap=>{
 
 db.ref("mode").on("value",snap=>{
 
-  let mode=snap.val()||"1line";
+  let mode = snap.val() || "1line";
 
-  document.getElementById("mode").innerText=
-  "Mode: "+(mode==="1line"?"1 LINE":mode==="2lines"?"2 LINES":"FULL HOUSE");
+  document.getElementById("mode").innerText =
+  "Mode: " +
+  (mode==="1line" ? "1 LINE" :
+   mode==="2lines" ? "2 LINES" :
+   "FULL HOUSE");
 
 });
 
-/* BINGO */
+/* SIMPLE CHECK */
 
 function checkBingo(){
 
-  alert("90 Ball Bingo checking coming next");
+  alert("Bingo claimed!");
+
+  db.ref("bingoClaims").push({
+    name:playerName,
+    time:Date.now()
+  });
 
 }
 
@@ -409,11 +440,11 @@ function checkBingo(){
 
 function sendMsg(){
 
-  let name=document.getElementById("name").value||"Player";
+  let name = document.getElementById("name").value || "Player";
 
-  let msg=document.getElementById("msg").value;
+  let msg = document.getElementById("msg").value;
 
-  if(!msg)return;
+  if(!msg) return;
 
   localStorage.setItem("playerName",name);
 
@@ -422,61 +453,62 @@ function sendMsg(){
     message:msg
   });
 
-  document.getElementById("msg").value="";
+  document.getElementById("msg").value = "";
 
 }
 
 db.ref("chat").limitToLast(50).on("child_added",snap=>{
 
-  let d=snap.val();
+  let d = snap.val();
 
-  let div=document.createElement("div");
+  let div = document.createElement("div");
 
-  div.className="msg";
+  div.className = "msg";
 
-  div.innerHTML="<b>"+d.name+":</b> "+d.message;
+  div.innerHTML = "<b>"+d.name+":</b> "+d.message;
 
-  let box=document.getElementById("messages");
+  let box = document.getElementById("messages");
 
   box.appendChild(div);
 
-  box.scrollTop=box.scrollHeight;
+  box.scrollTop = box.scrollHeight;
 
 });
 
 /* NAME MODAL */
 
-window.onload = () => {
+const modal = document.getElementById("nameModal");
 
-  let modal = document.getElementById("nameModal");
+let saved = localStorage.getItem("playerName");
 
-  let saved = localStorage.getItem("playerName");
+if(saved){
 
-  if(saved){
-    document.getElementById("name").value = saved;
-    modal.style.display = "none";
+  document.getElementById("name").value = saved;
+
+  modal.style.display = "none";
+
+}
+
+function saveName(){
+
+  let name = document.getElementById("modalName").value.trim();
+
+  if(!name){
+
+    alert("Enter name");
+
+    return;
   }
 
-  window.saveName = function () {
+  localStorage.setItem("playerName",name);
 
-    let name = document.getElementById("modalName").value.trim();
+  playerName = name;
 
-    if(!name){
-      alert("Enter name");
-      return;
-    }
+  document.getElementById("name").value = name;
 
-    localStorage.setItem("playerName", name);
+  modal.style.display = "none";
 
-    playerName = name;
-
-    document.getElementById("name").value = name;
-
-    modal.style.display = "none";
-
-  };
-
-};
+}
 
 </script>
 
