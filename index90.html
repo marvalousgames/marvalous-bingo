@@ -20,86 +20,64 @@ box-sizing:border-box;
 }
 
 body{
-background:
-radial-gradient(circle at top,#4b0a73,#090512 70%);
 font-family:'Poppins',sans-serif;
+background:
+radial-gradient(circle at top,#55107d 0%,#14051f 55%,#07010d 100%);
 color:white;
-min-height:100vh;
-overflow-y:auto;
 overflow-x:hidden;
 }
 
 .app{
 max-width:430px;
 margin:auto;
-padding:10px 10px 30px;
-display:flex;
-flex-direction:column;
-gap:10px;
+padding:10px 10px 25px;
 }
 
 /* HEADER */
 
-.topBar{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
+.header{
+text-align:center;
+position:relative;
+margin-bottom:10px;
 }
 
 .logo{
-text-align:center;
-flex:1;
-}
-
-.logo h1{
-font-size:38px;
-line-height:.9;
+font-size:46px;
 font-weight:800;
+line-height:.9;
 color:white;
 text-shadow:
-0 0 10px #ff4df2,
-0 0 25px #ff4df2;
+0 0 12px #ff4df2,
+0 0 30px #ff4df2;
 }
 
-.logo span{
-display:block;
-font-size:14px;
+.sub{
+margin-top:8px;
+font-size:12px;
 letter-spacing:4px;
-color:#3dfff2;
-margin-top:6px;
+color:#42fff5;
 }
 
-.sideInfo{
-width:75px;
-text-align:right;
-font-weight:800;
-font-size:14px;
-padding-top:5px;
-}
+/* TOP AREA */
 
-.menu{
-font-size:60px;
-line-height:45px;
-font-weight:300;
-}
-
-/* MAIN */
-
-.mainArea{
+.topArea{
 display:grid;
-grid-template-columns:100px 1fr 75px;
+grid-template-columns:75px 1fr 70px;
+gap:8px;
 align-items:center;
-gap:10px;
+margin-top:10px;
 }
+
+/* TWITCH */
 
 .stream{
-width:100px;
-height:100px;
-border-radius:24px;
+width:75px;
+height:75px;
+border-radius:20px;
 overflow:hidden;
-border:4px solid #d14dff;
-box-shadow:0 0 18px #ff4df2;
+border:3px solid #db4dff;
 background:#12071f;
+box-shadow:0 0 15px #ff4df2;
 }
 
 .stream iframe{
@@ -108,6 +86,8 @@ height:100%;
 border:none;
 }
 
+/* NUMBER BALL */
+
 .ballWrap{
 display:flex;
 justify-content:center;
@@ -115,64 +95,68 @@ align-items:center;
 }
 
 .ball{
-width:250px;
-height:250px;
+width:210px;
+height:210px;
 border-radius:50%;
-border:8px solid #ff4df2;
+border:6px solid #ff4df2;
 display:flex;
-justify-content:center;
 align-items:center;
-font-size:120px;
+justify-content:center;
+font-size:96px;
 font-weight:800;
-background:#14071f;
+background:#12071f;
 box-shadow:
-0 0 35px #ff4df2,
-inset 0 0 40px #5c167a;
+0 0 25px #ff4df2,
+inset 0 0 25px #44105c;
 }
 
-.rightStats{
+/* SIDE */
+
+.sideStats{
 display:flex;
 flex-direction:column;
-gap:22px;
-font-size:18px;
-font-weight:800;
+gap:18px;
 text-align:center;
+font-weight:800;
+font-size:14px;
 }
 
 /* LAST NUMBERS */
 
-.lastNumbers{
+.lastWrap{
+margin-top:12px;
 display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:3px;
-border:4px solid #c84dff;
-border-radius:28px;
+border:3px solid #c84dff;
+border-radius:24px;
 overflow:hidden;
 background:#c84dff;
 }
 
 .lastNum{
-background:#14071f;
-height:74px;
+height:58px;
+background:#12071f;
 display:flex;
-justify-content:center;
 align-items:center;
-font-size:26px;
+justify-content:center;
+font-size:22px;
 font-weight:800;
 }
 
 /* TICKETS */
 
 .ticketPanel{
-background:#1a1033;
-border:4px solid #b84dff;
-border-radius:34px;
-padding:12px;
+margin-top:12px;
+background:#1b1034;
+border:3px solid #bb4dff;
+border-radius:30px;
+padding:14px;
 }
 
 .ticketTitle{
 text-align:center;
-font-size:30px;
+font-size:24px;
 font-weight:800;
 margin-bottom:12px;
 }
@@ -180,26 +164,26 @@ margin-bottom:12px;
 .ticketGrid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:14px;
+gap:12px;
 }
 
 .ticket{
-background:#13081f;
-border:4px solid #8240ff;
-border-radius:26px;
+background:#12071f;
+border:3px solid #8847ff;
+border-radius:22px;
 padding:8px;
 display:grid;
 grid-template-columns:repeat(9,1fr);
-gap:4px;
+gap:3px;
 }
 
 .cell{
 aspect-ratio:1;
-border-radius:10px;
+border-radius:8px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:13px;
+font-size:11px;
 font-weight:700;
 background:#090312;
 }
@@ -211,25 +195,27 @@ background:transparent;
 .marked{
 background:#59ecff;
 color:white;
-box-shadow:0 0 12px #59ecff;
+box-shadow:0 0 10px #59ecff;
 }
 
 /* BOTTOM */
 
 .bottom{
+margin-top:12px;
 display:grid;
-grid-template-columns:1fr 105px;
+grid-template-columns:1fr 115px;
 gap:10px;
-height:160px;
+align-items:stretch;
 }
 
 .chat{
 background:#1a1033;
-border:4px solid #7647ff;
+border:3px solid #7647ff;
 border-radius:28px;
 padding:12px;
 display:flex;
 flex-direction:column;
+height:260px;
 }
 
 .chat h2{
@@ -245,7 +231,7 @@ margin-bottom:8px;
 }
 
 .msg{
-margin-bottom:5px;
+margin-bottom:6px;
 }
 
 .msg b{
@@ -254,8 +240,8 @@ color:#4fe9ff;
 
 .chat input{
 width:100%;
-margin-bottom:6px;
 padding:10px;
+margin-bottom:6px;
 border:none;
 border-radius:14px;
 background:#12071f;
@@ -265,59 +251,52 @@ outline:none;
 }
 
 .sendBtn{
-width:100%;
 padding:10px;
 border:none;
 border-radius:14px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
 color:white;
-font-size:15px;
+font-size:16px;
 font-weight:700;
 }
 
 .bingoBtn{
 border:none;
-border-radius:22px;
+border-radius:24px;
 background:linear-gradient(45deg,#48f3ff,#29d9ff);
-font-size:24px;
-font-weight:800;
 color:white;
-box-shadow:0 0 14px #48e7ff;
-max-height:140px;
-align-self:center;
+font-size:28px;
+font-weight:800;
+box-shadow:0 0 18px #48e7ff;
+height:120px;
+margin-top:auto;
+margin-bottom:auto;
 }
 
 /* MOBILE */
 
 @media(max-width:430px){
 
+.logo{
+font-size:42px;
+}
+
 .ball{
-width:210px;
-height:210px;
-font-size:100px;
+width:190px;
+height:190px;
+font-size:88px;
 }
 
-.stream{
-width:85px;
-height:85px;
-}
-
-.ticketTitle{
-font-size:24px;
+.ticket{
+padding:6px;
 }
 
 .cell{
-font-size:11px;
-}
-
-.lastNum{
-height:62px;
-font-size:22px;
+font-size:10px;
 }
 
 .bottom{
-grid-template-columns:1fr 95px;
-height:150px;
+grid-template-columns:1fr 105px;
 }
 
 }
@@ -329,28 +308,23 @@ height:150px;
 
 <div class="app">
 
-<!-- TOP -->
+<!-- HEADER -->
 
-<div class="topBar">
-
-<div class="menu">☰</div>
+<div class="header">
 
 <div class="logo">
-<h1>MARVALOUS<br>BINGO</h1>
-<span>REAL PEOPLE • REAL WINNERS</span>
+MARVALOUS<br>BINGO
 </div>
 
-<div class="sideInfo">
-<div id="modeText">2 LINES</div>
-<br>
-<div>GAME 90</div>
+<div class="sub">
+REAL PEOPLE • REAL WINNERS
 </div>
 
 </div>
 
-<!-- MAIN -->
+<!-- TOP -->
 
-<div class="mainArea">
+<div class="topArea">
 
 <div class="stream">
 <iframe
@@ -363,13 +337,16 @@ allowfullscreen>
 <div class="ball" id="currentNumber">-</div>
 </div>
 
-<div class="rightStats"></div>
+<div class="sideStats">
+<div id="modeText">2 LINES</div>
+<div>GAME 90</div>
+</div>
 
 </div>
 
-<!-- LAST CALLED -->
+<!-- LAST NUMBERS -->
 
-<div class="lastNumbers" id="lastNumbers">
+<div class="lastWrap" id="lastNumbers">
 
 <div class="lastNum">-</div>
 <div class="lastNum">-</div>
@@ -442,7 +419,17 @@ localStorage.setItem('playerId',playerId);
 
 let playerName=localStorage.getItem('playerName')||'Player';
 
-/* GENERATE 90 BALL TICKET */
+/* RESET SAFE */
+
+if(localStorage.getItem('fixedCardsV8')!=="yes"){
+
+localStorage.removeItem('cards');
+
+localStorage.setItem('fixedCardsV8',"yes");
+
+}
+
+/* TICKET GENERATOR */
 
 function generateTicket(){
 
@@ -481,7 +468,9 @@ let max=ranges[col][1];
 let num;
 
 do{
+
 num=Math.floor(Math.random()*(max-min+1))+min;
+
 }while(used.has(num));
 
 used.add(num);
@@ -523,15 +512,7 @@ return ticket;
 
 }
 
-/* RESET SAFE */
-
-if(localStorage.getItem('fixedCardsV7')!=="yes"){
-
-localStorage.removeItem('cards');
-
-localStorage.setItem('fixedCardsV7',"yes");
-
-}
+/* LOAD */
 
 let savedCards=localStorage.getItem('cards');
 
@@ -588,7 +569,7 @@ wrap.appendChild(board);
 
 renderBoards();
 
-/* GAME RESET */
+/* RESET SYSTEM */
 
 let currentGameId;
 
@@ -614,6 +595,7 @@ generateTicket()
 ];
 
 localStorage.setItem('cards',JSON.stringify(cards));
+
 localStorage.setItem('gameId',gameId);
 
 location.reload();
@@ -624,7 +606,7 @@ location.reload();
 
 });
 
-/* CALLED NUMBERS */
+/* CALLED */
 
 db.ref('calledNumbers').on('value',snap=>{
 
@@ -662,7 +644,7 @@ b.innerText=last[i]||'-';
 
 });
 
-/* CURRENT NUMBER */
+/* CURRENT */
 
 db.ref('currentNumber').on('value',snap=>{
 
