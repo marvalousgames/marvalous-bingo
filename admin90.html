@@ -284,69 +284,34 @@ document.body.addEventListener('click',()=>{
   bingoAudio.play().catch(()=>{});
  });
  <!-- BINGO ALERT SYSTEM -->
+
 const claimAudio = new Audio(
- 'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
+  "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
 );
 
 claimAudio.volume = 1;
 
-let audioUnlocked = false;
-
-/* UNLOCK AUDIO */
-
-function unlockAudio(){
-
- if(audioUnlocked) return;
-
- claimAudio.play()
- .then(()=>{
-
-  claimAudio.pause();
-
-  claimAudio.currentTime = 0;
-
-  audioUnlocked = true;
-
- })
- .catch(()=>{});
-
-}
-
-document.addEventListener('click', unlockAudio);
-document.addEventListener('touchstart', unlockAudio);
-
 let lastClaimId = null;
-
-/* BINGO CLAIM ALERT */
 
 db.ref("bingoClaims").limitToLast(1).on("child_added",snap=>{
 
- const claim = snap.val();
+  const claim = snap.val();
 
- const claimId = snap.key;
+  const claimId = snap.key;
 
- if(lastClaimId === claimId) return;
+  if(lastClaimId === claimId) return;
 
- lastClaimId = claimId;
-
- if(audioUnlocked){
-
-  claimAudio.pause();
+  lastClaimId = claimId;
 
   claimAudio.currentTime = 0;
 
   claimAudio.play().catch(()=>{});
 
- }
+  showBingoPopup(claim.name);
 
- alert('🚨 BINGO CLAIMED BY ' + claim.name + ' 🚨');
-
- viewPlayer(claim.name);
+  viewPlayer(claim.name);
 
 });
-
-
-
 
 /* POPUP */
 
