@@ -576,7 +576,33 @@ function saveName(){
   playerName = name;
 
   document.getElementById("name").value = name;
+const bingoAudio = new Audio(
+  "https://www.soundjay.com/human/cheering-01.mp3"
+);
 
+bingoAudio.volume = 1;
+
+document.body.addEventListener("click", () => {
+
+  bingoAudio.play().then(() => {
+
+    bingoAudio.pause();
+
+    bingoAudio.currentTime = 0;
+
+  }).catch(()=>{});
+
+}, { once:true });
+
+db.ref("bingoSound").on("value",snap=>{
+
+  if(!snap.val()) return;
+
+  bingoAudio.currentTime = 0;
+
+  bingoAudio.play().catch(()=>{});
+
+});
   modal.style.display = "none";
 
   /* THIS IS THE FIX */
@@ -586,17 +612,7 @@ function saveName(){
   });
 
 }
-const bingoAudio = new Audio(
-  "https://www.soundjay.com/human/cheering-01.mp3"
-);
 
-db.ref("bingoSound").on("value",snap=>{
-
-  if(!snap.val()) return;
-
-  bingoAudio.currentTime = 0;
-
-  bingoAudio.play();
 
 });
 </script>
