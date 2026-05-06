@@ -192,6 +192,7 @@ function setMode(mode){
     <button onclick="viewPlayer('${claim.name}')">VIEW TICKETS</button>
     <button onclick="validateClaim('${claim.name}')">VALIDATE</button>
     <button onclick="approve('${id}')">APPROVE</button>
+    <button class="danger" onclick="denyClaim('${id}')">DENY</button>
    </div>`;
   });
 
@@ -255,7 +256,13 @@ function approve(id){
  db.ref('bingoClaims/'+id).remove();
  alert('Winner approved');
 }
+function denyClaim(id){
 
+ db.ref('bingoClaims/'+id).remove();
+
+ alert('❌ Bingo claim denied');
+
+}
 function resetGame(){
  called=[];
  db.ref('calledNumbers').remove();
