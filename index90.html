@@ -279,8 +279,13 @@ function generateTicket(){
       let min = col===0 ? 1 : col*10;
       let max = col===8 ? 90 : col*10+9;
 
-      ticket[row][col] =
-      Math.floor(Math.random()*(max-min+1))+min;
+      let num;
+
+      do{
+        num=Math.floor(Math.random()*(max-min+1))+min;
+      }while(ticket.flat().includes(num));
+
+      ticket[row][col] = num;
 
     });
 
@@ -361,9 +366,10 @@ db.ref("gameId").on("value",snap=>{
       location.reload();
     }
 
+    /* THIS IS THE FIX */
     db.ref("players/"+playerId).set({
       name:playerName,
-      cards:cards
+      card:cards
     });
 
   }
@@ -572,6 +578,12 @@ function saveName(){
   document.getElementById("name").value = name;
 
   modal.style.display = "none";
+
+  /* THIS IS THE FIX */
+  db.ref("players/"+playerId).set({
+    name:playerName,
+    card:cards
+  });
 
 }
 
