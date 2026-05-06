@@ -6,6 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
   <style>
+
     body{
       margin:0;
       font-family:'Poppins',sans-serif;
@@ -83,9 +84,10 @@
     }
 
     #currentNumber{
-      font-size:46px;
+      font-size:56px;
       margin:15px 0;
       color:#ff4df2;
+      font-weight:bold;
     }
 
     #mode{
@@ -102,21 +104,22 @@
     .ticket{
       display:grid;
       grid-template-columns:repeat(9,1fr);
-      gap:0;
       margin-bottom:15px;
       border:3px solid #b84dff;
       border-radius:10px;
       overflow:hidden;
       background:#1c1735;
+      box-shadow:0 0 12px rgba(184,77,255,0.3);
     }
 
     .cell{
-      min-height:55px;
+      min-height:58px;
       display:flex;
       align-items:center;
       justify-content:center;
       border:1px solid #0e0b1f;
       font-size:22px;
+      transition:0.2s;
     }
 
     .empty{
@@ -125,6 +128,12 @@
 
     .marked{
       background:linear-gradient(45deg,#b84dff,#ff4df2);
+      animation:pulse 0.4s;
+    }
+
+    @keyframes pulse{
+      0%{transform:scale(0.9);}
+      100%{transform:scale(1);}
     }
 
     button{
@@ -136,13 +145,36 @@
       font-weight:bold;
     }
 
+    #calledBoard{
+      width:95%;
+      max-width:700px;
+      margin:20px auto;
+      display:grid;
+      grid-template-columns:repeat(10,1fr);
+      gap:4px;
+    }
+
+    .calledNum{
+      background:#1c1735;
+      padding:8px;
+      border-radius:6px;
+      font-size:14px;
+    }
+
+    .calledActive{
+      background:#ff4df2;
+      color:white;
+    }
+
     #winner{
       display:none;
       background:#00ffcc;
       color:black;
       padding:10px;
       margin-top:10px;
+      font-weight:bold;
     }
+
   </style>
 </head>
 
@@ -190,6 +222,8 @@
 
 <div id="tickets"></div>
 
+<div id="calledBoard"></div>
+
 <button onclick="checkBingo()">BINGO</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -217,67 +251,72 @@ if(!playerId){
   localStorage.setItem("playerId",playerId);
 }
 
-/* GENERATE 90 BALL TICKET */
+/* 90 BALL TICKET */
 
 function generateTicket(){
 
-  let ticket = [];
+  let ticket = [
+    ["","","","","","","","",""],
+    ["","","","","","","","",""],
+    ["","","","","","","","",""]
+  ];
 
-  for(let r=0;r<3;r++){
-    ticket.push(["","","","","","","","",""]);
+  for(let row=0;row<3;row++){
+
+    let cols=[];
+
+    while(cols.length<5){
+
+      let c=Math.floor(Math.random()*9);
+
+      if(!cols.includes(c)) cols.push(c);
+    }
+
+    cols.sort((a,b)=>a-b);
+
+    cols.forEach(col=>{
+
+      let min = col===0 ? 1 : col*10;
+      let max = col===8 ? 90 : col*10+9;
+
+      ticket[row][col] =
+      Math.floor(Math.random()*(max-min+1))+min;
+
+    });
+
   }
 
   for(let col=0;col<9;col++){
 
-    let min = col===0 ? 1 : col*10;
-    let max = col===8 ? 90 : (col*10)+9;
+    let nums=[];
 
-    let nums = [];
+    for(let row=0;row<3;row++){
 
-    while(nums.length < 3){
+      if(ticket[row][col] !== ""){
+        nums.push(ticket[row][col]);
+      }
 
-      let n = Math.floor(Math.random()*(max-min+1))+min;
-
-      if(!nums.includes(n)) nums.push(n);
     }
 
     nums.sort((a,b)=>a-b);
 
-    let rows = [0,1,2].sort(()=>Math.random()-0.5);
+    let i=0;
 
-    let amount = Math.random() > 0.5 ? 2 : 1;
+    for(let row=0;row<3;row++){
 
-    for(let i=0;i<amount;i++){
-      ticket[rows[i]][col] = nums[i];
-    }
-  }
-
-  for(let r=0;r<3;r++){
-
-    let filled = ticket[r].filter(x=>x!=="").length;
-
-    while(filled < 5){
-
-      let col = Math.floor(Math.random()*9);
-
-      if(ticket[r][col] === ""){
-
-        let min = col===0 ? 1 : col*10;
-        let max = col===8 ? 90 : (col*10)+9;
-
-        let n = Math.floor(Math.random()*(max-min+1))+min;
-
-        ticket[r][col] = n;
-
-        filled++;
+      if(ticket[row][col] !== ""){
+        ticket[row][col]=nums[i];
+        i++;
       }
+
     }
+
   }
 
   return ticket;
 }
 
-/* LOAD SAVED */
+/* LOAD CARDS */
 
 let savedCards = localStorage.getItem("cards");
 
@@ -291,7 +330,7 @@ let cards = savedCards
 
 renderBoards();
 
-/* GAME RESET */
+/* GAME SYNC */
 
 let currentGameId;
 
@@ -326,6 +365,7 @@ db.ref("gameId").on("value",snap=>{
       name:playerName,
       cards:cards
     });
+
   }
 
 });
@@ -338,7 +378,7 @@ function renderBoards(){
 
   wrap.innerHTML = "";
 
-  cards.forEach(ticket=>{
+  cards.forEach((ticket,index)=>{
 
     let board = document.createElement("div");
 
@@ -355,8 +395,9 @@ function renderBoards(){
       } else {
 
         div.className = "cell";
-
         div.innerText = n;
+
+        div.setAttribute("data-num",n);
 
         div.onclick = ()=>div.classList.toggle("marked");
       }
@@ -368,6 +409,24 @@ function renderBoards(){
     wrap.appendChild(board);
 
   });
+
+}
+
+/* CALLED BOARD */
+
+const calledBoard = document.getElementById("calledBoard");
+
+for(let i=1;i<=90;i++){
+
+  let div = document.createElement("div");
+
+  div.className = "calledNum";
+
+  div.id = "called-"+i;
+
+  div.innerText = i;
+
+  calledBoard.appendChild(div);
 
 }
 
@@ -385,11 +444,17 @@ db.ref("currentNumber").on("value",snap=>{
 
   document.querySelectorAll(".cell").forEach(c=>{
 
-    if(c.innerText == num){
+    if(c.dataset.num == num){
       c.classList.add("marked");
     }
 
   });
+
+  let called = document.getElementById("called-"+num);
+
+  if(called){
+    called.classList.add("calledActive");
+  }
 
   if(lastCalledNumber !== num){
 
@@ -423,16 +488,16 @@ db.ref("mode").on("value",snap=>{
 
 });
 
-/* SIMPLE CHECK */
+/* BINGO CHECK */
 
 function checkBingo(){
-
-  alert("Bingo claimed!");
 
   db.ref("bingoClaims").push({
     name:playerName,
     time:Date.now()
   });
+
+  alert("🎉 Bingo claimed!");
 
 }
 
