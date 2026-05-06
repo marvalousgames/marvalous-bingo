@@ -6,7 +6,7 @@
 
 <title>Marvalous Bingo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -17,15 +17,15 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
 }
 
 body{
 background:#090512;
 font-family:'Poppins',sans-serif;
 color:white;
-overflow:hidden;
-height:100vh;
+overflow-y:auto;
+overflow-x:hidden;
+min-height:100vh;
 }
 
 body::before{
@@ -33,32 +33,29 @@ content:'';
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at top,#8c2dff44,transparent 35%),
+radial-gradient(circle at top,#8c2dff55,transparent 45%),
 radial-gradient(circle at bottom,#ff4df222,transparent 40%);
 z-index:-1;
 }
 
 .app{
-height:100vh;
 display:flex;
 flex-direction:column;
 padding:10px;
 gap:10px;
+min-height:100vh;
+padding-bottom:100px;
+max-width:700px;
+margin:auto;
 }
 
-/* TOP BAR */
+/* TOP */
 
-.top{
+.topBar{
 display:flex;
 justify-content:space-between;
-align-items:flex-start;
-}
-
-.menuBtn{
-font-size:34px;
-font-weight:bold;
-width:50px;
-text-align:center;
+align-items:center;
+padding:5px 10px;
 }
 
 .logo{
@@ -67,270 +64,276 @@ flex:1;
 }
 
 .logo h1{
-font-size:28px;
-line-height:0.95;
+font-size:46px;
+line-height:0.9;
 font-weight:800;
 text-shadow:
 0 0 10px #ff4df2,
 0 0 30px #ff4df2;
 }
 
-.liveThumb{
-width:86px;
-height:70px;
-border-radius:16px;
-overflow:hidden;
-border:2px solid #b84dff;
-box-shadow:0 0 15px rgba(255,77,242,.5);
-cursor:pointer;
+.menu{
+font-size:52px;
+font-weight:700;
+width:60px;
+text-align:center;
 }
 
-.liveThumb img{
+.topInfo{
+position:absolute;
+right:15px;
+top:110px;
+text-align:right;
+font-weight:700;
+font-size:18px;
+}
+
+/* MAIN BALL */
+
+.ballWrap{
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+margin-top:10px;
+}
+
+.bigBall{
+width:360px;
+height:360px;
+border-radius:50%;
+border:8px solid #ff4df2;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:140px;
+font-weight:800;
+background:radial-gradient(circle,#2b1040,#090512);
+box-shadow:
+0 0 30px #ff4df2,
+0 0 80px #ff4df2;
+}
+
+.streamBtn{
+position:absolute;
+left:0;
+top:50%;
+transform:translateY(-50%);
+width:130px;
+height:130px;
+border-radius:25px;
+overflow:hidden;
+border:4px solid #d94dff;
+box-shadow:0 0 20px #d94dff;
+background:#120d28;
+}
+
+.streamBtn iframe{
 width:100%;
 height:100%;
-object-fit:cover;
+border:none;
+pointer-events:none;
 }
 
-/* NUMBER */
+/* LAST CALLED */
 
-.numberWrap{
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.numberCircle{
-width:190px;
-height:190px;
-border-radius:50%;
-border:4px solid #ff4df2;
-display:flex;
-justify-content:center;
-align-items:center;
-box-shadow:
-0 0 25px #ff4df2,
-0 0 70px rgba(255,77,242,.4),
-inset 0 0 40px rgba(255,77,242,.2);
-}
-
-#currentNumber{
-font-size:78px;
-font-weight:900;
-text-shadow:
-0 0 10px #ff4df2,
-0 0 25px #ff4df2;
-}
-
-/* RECENT */
-
-.recentNumbers{
+.calledStrip{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-gap:2px;
-background:#b84dff;
-padding:2px;
-border-radius:18px;
+border:3px solid #b84dff;
+border-radius:20px;
 overflow:hidden;
+background:#120d28;
 }
 
-.recentCell{
-height:55px;
-background:#171028;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:24px;
+.calledCell{
+padding:18px 0;
+text-align:center;
+font-size:34px;
 font-weight:700;
+border-right:2px solid #b84dff;
+}
+
+.calledCell:last-child{
+border-right:none;
 }
 
 /* TICKETS */
 
-.ticketArea{
-flex:1;
+.ticketSection{
+background:#1a1033;
+border:4px solid #b84dff;
+border-radius:30px;
+padding:15px;
+}
+
+.ticketHeader{
+text-align:center;
+font-size:28px;
+font-weight:700;
+margin-bottom:15px;
+}
+
+.ticketGrid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:8px;
+gap:15px;
 }
 
 .ticket{
-background:#1b1430;
-border:2px solid #3a3155;
-border-radius:18px;
-padding:6px;
 display:grid;
 grid-template-columns:repeat(5,1fr);
-grid-template-rows:repeat(5,1fr);
-gap:2px;
+gap:4px;
+background:#22103b;
+padding:6px;
+border-radius:20px;
 }
 
-.ticketCell{
-background:#120d20;
+.cell{
+height:54px;
 display:flex;
-justify-content:center;
 align-items:center;
-font-size:15px;
+justify-content:center;
+font-size:20px;
 font-weight:700;
-border-radius:4px;
+background:#0b0818;
+border-radius:10px;
 }
 
 .marked{
-background:#3ee7ff;
+background:#45e7ff;
 color:white;
-box-shadow:0 0 10px #3ee7ff;
+box-shadow:0 0 15px #45e7ff;
 }
 
-.ticketFooter{
-text-align:center;
-font-size:14px;
-margin-top:2px;
-opacity:.9;
-}
+/* CHAT + BINGO */
 
-/* BOTTOM */
-
-.bottom{
+.bottomArea{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px;
+gap:15px;
 }
 
-.chatPreview{
-background:#1c1735;
-border:2px solid #3a3155;
-border-radius:18px;
-padding:12px;
-height:100px;
-overflow:hidden;
-}
-
-.chatPreview h3{
-font-size:18px;
-margin-bottom:4px;
-}
-
-.chatLine{
-font-size:14px;
-color:#00eaff;
-margin-top:3px;
-}
-
-.bingoBtn{
-border:none;
-border-radius:20px;
-background:linear-gradient(45deg,#00d9ff,#52ffe8);
-font-size:38px;
-font-weight:800;
-color:white;
-box-shadow:0 0 20px rgba(0,255,204,.6);
-}
-
-/* NAV */
-
-.nav{
-height:68px;
-background:#120d20;
-border-top:2px solid #2d2546;
-border-radius:20px;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-}
-
-.navItem{
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-font-size:12px;
-font-weight:600;
-}
-
-/* MODALS */
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.92);
-display:none;
-justify-content:center;
-align-items:center;
+.chatBox{
+background:#1a1033;
+border:4px solid #7f4dff;
+border-radius:25px;
 padding:15px;
-z-index:999;
 }
 
-.modalContent{
-background:#1c1735;
-border:2px solid #b84dff;
-border-radius:20px;
-padding:15px;
-width:100%;
-max-width:500px;
-}
-
-#video-container{
-width:100%;
-height:260px;
-border-radius:14px;
-overflow:hidden;
-margin-bottom:10px;
-}
-
-iframe{
-width:100%;
-height:100%;
-border:none;
-}
-
-.closeBtn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#ff4df2;
-color:white;
+.chatTitle{
+font-size:24px;
 font-weight:700;
+margin-bottom:10px;
 }
 
 #messages{
-height:260px;
+height:120px;
 overflow-y:auto;
-background:#120d28;
-border-radius:12px;
-padding:10px;
-margin-bottom:10px;
+font-size:14px;
 }
 
 .msg{
 margin-bottom:8px;
-font-size:14px;
 }
 
 .msg b{
-color:#00ffcc;
+color:#45e7ff;
 }
 
 #chat-input{
 display:flex;
 gap:6px;
-margin-bottom:10px;
+margin-top:12px;
+flex-wrap:wrap;
 }
 
 #chat-input input{
 flex:1;
-padding:12px;
-border:none;
-border-radius:10px;
+min-width:120px;
+padding:10px;
 background:#120d28;
+border:2px solid #3f2c66;
+border-radius:12px;
 color:white;
-min-width:0;
+font-size:14px;
 }
 
 #chat-input button{
-padding:12px 16px;
+padding:10px 16px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#ff4df2;
 color:white;
 font-weight:700;
+}
+
+.bingoBtn{
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(45deg,#45f3ff,#27d9ff);
+border-radius:25px;
+font-size:64px;
+font-weight:800;
+color:white;
+box-shadow:0 0 25px #45f3ff;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.logo h1{
+font-size:34px;
+}
+
+.bigBall{
+width:240px;
+height:240px;
+font-size:110px;
+}
+
+.streamBtn{
+width:90px;
+height:90px;
+left:0;
+}
+
+.calledCell{
+font-size:22px;
+padding:12px 0;
+}
+
+.ticketGrid{
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.ticket{
+gap:3px;
+padding:4px;
+}
+
+.cell{
+height:42px;
+font-size:16px;
+}
+
+.bottomArea{
+grid-template-columns:1fr 1fr;
+}
+
+.bingoBtn{
+font-size:48px;
+min-height:220px;
+}
+
+.topInfo{
+font-size:16px;
+top:95px;
+}
+
 }
 
 </style>
@@ -340,139 +343,129 @@ font-weight:700;
 
 <div class="app">
 
-<div class="top">
+<div class="topBar">
 
-<div class="menuBtn">☰</div>
+<div class="menu">☰</div>
 
 <div class="logo">
 <h1>MARVALOUS<br>BINGO</h1>
 </div>
 
-<div class="menuBtn">☰</div>
+<div class="menu">☰</div>
 
 </div>
 
-<div class="top" style="align-items:center;">
-
-<div class="liveThumb" onclick="openStream()">
-<img src="https://static-cdn.jtvnw.net/previews-ttv/live_user_marvalouscomps-320x180.jpg">
+<div class="topInfo">
+<div id="modeText">2 LINES</div>
+<div style="margin-top:10px;">GAME<br>90</div>
 </div>
 
-<div class="numberWrap" style="flex:1;">
+<div class="ballWrap">
 
-<div class="numberCircle">
-<div id="currentNumber">85</div>
+<div class="streamBtn">
+<iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"></iframe>
 </div>
 
-</div>
-
-<div style="width:70px;text-align:center;font-weight:700;">
-2 LINES
-<br><br>
-GAME 90
-</div>
+<div class="bigBall" id="currentNumber">24</div>
 
 </div>
 
-<div class="recentNumbers" id="recentRow">
+<div class="calledStrip">
 
-<div class="recentCell">14</div>
-<div class="recentCell">63</div>
-<div class="recentCell">27</div>
-<div class="recentCell">42</div>
-<div class="recentCell">91</div>
+<div class="calledCell">24</div>
+<div class="calledCell">74</div>
+<div class="calledCell">19</div>
+<div class="calledCell">27</div>
+<div class="calledCell">45</div>
 
 </div>
 
-<div class="ticketArea" id="ticketArea"></div>
+<div class="ticketSection">
 
-<div class="ticketFooter">
+<div class="ticketHeader">
 Your Tickets: 4
 </div>
 
-<div class="bottom">
+<div class="ticketGrid" id="tickets">
 
-<div class="chatPreview" onclick="openChat()">
+<div class="ticket">
+<div class="cell marked">27</div>
+<div class="cell">4</div>
+<div class="cell">36</div>
+<div class="cell">85</div>
+<div class="cell">60</div>
 
-<h3>Live Chat</h3>
+<div class="cell">32</div>
+<div class="cell marked">30</div>
+<div class="cell">8</div>
+<div class="cell marked">58</div>
+<div class="cell marked">36</div>
 
-<div class="chatLine" id="chatPreview">
-Player1: Nice win!
+<div class="cell">34</div>
+<div class="cell">34</div>
+<div class="cell">26</div>
+<div class="cell">9</div>
+<div class="cell">13</div>
+
+<div class="cell marked">27</div>
+<div class="cell">23</div>
+<div class="cell">85</div>
+<div class="cell">43</div>
+<div class="cell">49</div>
 </div>
 
-<div class="chatLine">
-Player2: GG
+<div class="ticket">
+<div class="cell marked">81</div>
+<div class="cell">32</div>
+<div class="cell marked">23</div>
+<div class="cell">82</div>
+<div class="cell">44</div>
+
+<div class="cell marked">10</div>
+<div class="cell marked">46</div>
+<div class="cell">8</div>
+<div class="cell">56</div>
+<div class="cell marked">41</div>
+
+<div class="cell">38</div>
+<div class="cell">14</div>
+<div class="cell marked">44</div>
+<div class="cell">75</div>
+<div class="cell">16</div>
+
+<div class="cell">75</div>
+<div class="cell marked">62</div>
+<div class="cell marked">75</div>
+<div class="cell">13</div>
+<div class="cell">31</div>
 </div>
-
-</div>
-
-<button class="bingoBtn" onclick="checkBingo()">
-BINGO!
-</button>
-
-</div>
-
-<div class="nav">
-
-<div class="navItem">
-🏠<br>Mode
-</div>
-
-<div class="navItem">
-🎟️<br>Tickets
-</div>
-
-<div class="navItem">
-🎮<br>Game
-</div>
-
-<div class="navItem" onclick="openStream()">
-📺<br>Live Stream
-</div>
-
-</div>
-
-</div>
-
-<!-- STREAM MODAL -->
-
-<div class="modal" id="streamModal">
-
-<div class="modalContent">
-
-<div id="video-container">
-<iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
-</div>
-
-<button class="closeBtn" onclick="closeStream()">
-Close Stream
-</button>
 
 </div>
 
 </div>
 
-<!-- CHAT MODAL -->
+<div class="bottomArea">
 
-<div class="modal" id="chatModal">
+<div class="chatBox">
 
-<div class="modalContent">
+<div class="chatTitle">Live Chat</div>
 
-<div id="messages"></div>
+<div id="messages">
+<div class="msg"><b>Kee:</b> hi again</div>
+<div class="msg"><b>Player2:</b> GG</div>
+</div>
 
 <div id="chat-input">
-
 <input id="name" placeholder="Name">
-
 <input id="msg" placeholder="Message...">
-
 <button onclick="sendMsg()">Send</button>
+</div>
 
 </div>
 
-<button class="closeBtn" onclick="closeChat()">
-Close Chat
-</button>
+<div class="bingoBtn" onclick="checkBingo()">
+BINGO!
+</div>
 
 </div>
 
@@ -489,114 +482,27 @@ firebase.initializeApp(firebaseConfig);
 
 const db=firebase.database();
 
-function generateMiniTicket(){
+function checkBingo(){
 
-let arr=[];
+db.ref('bingoClaims').push({
+time:Date.now()
+});
 
-for(let i=0;i<25;i++){
-
-arr.push(Math.floor(Math.random()*90)+1);
+alert('🎉 Bingo Claimed!');
 
 }
-
-return arr;
-
-}
-
-let tickets=[
-generateMiniTicket(),
-generateMiniTicket()
-];
-
-function renderTickets(){
-
-const area=document.getElementById('ticketArea');
-
-area.innerHTML='';
-
-tickets.forEach(ticket=>{
-
-let board=document.createElement('div');
-
-board.className='ticket';
-
-ticket.forEach(n=>{
-
-let div=document.createElement('div');
-
-div.className='ticketCell';
-
-if(Math.random()>.7){
-
-div.classList.add('marked');
-
-}
-
-div.innerText=n;
-
-board.appendChild(div);
-
-});
-
-area.appendChild(board);
-
-});
-
-}
-
-renderTickets();
-
-/* NUMBER */
-
-db.ref('currentNumber').on('value',snap=>{
-
-let num=snap.val();
-
-if(!num) return;
-
-document.getElementById('currentNumber').innerText=num;
-
-});
-
-/* RECENT */
-
-db.ref('calledNumbers').on('value',snap=>{
-
-const called=Object.values(snap.val()||{}).slice(-5).reverse();
-
-const row=document.getElementById('recentRow');
-
-row.innerHTML='';
-
-called.forEach(n=>{
-
-let d=document.createElement('div');
-
-d.className='recentCell';
-
-d.innerText=n;
-
-row.appendChild(d);
-
-});
-
-});
-
-/* CHAT */
 
 function sendMsg(){
 
-let name=document.getElementById('name').value||'Player';
+let name=document.getElementById('name').value || 'Player';
 
 let msg=document.getElementById('msg').value;
 
 if(!msg) return;
 
 db.ref('chat').push({
-
 name:name,
 message:msg
-
 });
 
 document.getElementById('msg').value='';
@@ -619,44 +525,30 @@ box.appendChild(div);
 
 box.scrollTop=box.scrollHeight;
 
-document.getElementById('chatPreview').innerHTML=
-'<b>'+d.name+':</b> '+d.message;
+});
+
+db.ref('currentNumber').on('value',snap=>{
+
+let num=snap.val();
+
+if(!num) return;
+
+document.getElementById('currentNumber').innerText=num;
 
 });
 
-/* BINGO */
+db.ref('mode').on('value',snap=>{
 
-function checkBingo(){
+let mode=snap.val() || '2lines';
 
-alert('🎉 Bingo Claimed!');
+let text=
+mode==='1line'?'1 LINE':
+mode==='2lines'?'2 LINES':
+'FULL HOUSE';
 
-}
+document.getElementById('modeText').innerText=text;
 
-/* MODALS */
-
-function openStream(){
-
-document.getElementById('streamModal').style.display='flex';
-
-}
-
-function closeStream(){
-
-document.getElementById('streamModal').style.display='none';
-
-}
-
-function openChat(){
-
-document.getElementById('chatModal').style.display='flex';
-
-}
-
-function closeChat(){
-
-document.getElementById('chatModal').style.display='none';
-
-}
+});
 
 </script>
 
