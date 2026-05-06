@@ -101,7 +101,7 @@
       width:96%;
       margin:auto;
       display:grid;
-      grid-template-columns:320px 1fr 320px;
+      grid-template-columns:1fr 1fr;
       gap:18px;
       align-items:start;
       padding-bottom:30px;
@@ -456,6 +456,18 @@
 
     <div class="panel">
 
+      <div class="panelTitle">YOUR TICKETS</div>
+
+      <div id="tickets"></div>
+
+    </div>
+
+  </div>
+
+  <div>
+
+    <div class="panel">
+
       <div id="video-container">
         <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
       </div>
@@ -478,25 +490,21 @@
         EYES DOWN • GOOD LUCK • PLAY RESPONSIBLY
       </div>
 
-    </div>
+      <div class="panel" id="chat-box" style="margin-top:18px;">
 
-  </div>
+        <div class="panelTitle">LIVE CHAT</div>
 
-  <div>
+        <div id="messages"></div>
 
-    <div class="panel" id="chat-box">
+        <div id="chat-input">
 
-      <div class="panelTitle">LIVE CHAT</div>
+          <input id="name" placeholder="Name">
 
-      <div id="messages"></div>
+          <input id="msg" placeholder="Type message...">
 
-      <div id="chat-input">
+          <button onclick="sendMsg()">Send</button>
 
-        <input id="name" placeholder="Name">
-
-        <input id="msg" placeholder="Type message...">
-
-        <button onclick="sendMsg()">Send</button>
+        </div>
 
       </div>
 
