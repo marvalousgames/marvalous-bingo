@@ -223,7 +223,17 @@ if(!playerId){
 
 }
 
-/* PROPER 90 BALL GENERATOR */
+/* REMOVE OLD BROKEN CARDS */
+
+if(localStorage.getItem('fixedCardsV2')!=="yes"){
+
+ localStorage.removeItem('cards');
+
+ localStorage.setItem('fixedCardsV2',"yes");
+
+}
+
+/* PERFECT TICKET GENERATOR */
 
 function generateTicket(){
 
@@ -245,63 +255,54 @@ function generateTicket(){
     ["","","","","","","","",""]
   ];
 
-  let usedNumbers = [];
-
-  for(let col=0; col<9; col++){
-
-    let row = Math.floor(Math.random()*3);
-
-    let min = ranges[col][0];
-    let max = ranges[col][1];
-
-    let num;
-
-    do{
-
-      num = Math.floor(Math.random()*(max-min+1))+min;
-
-    }while(usedNumbers.includes(num));
-
-    usedNumbers.push(num);
-
-    ticket[row][col] = num;
-
-  }
+  let used = new Set();
 
   for(let row=0; row<3; row++){
 
-    while(ticket[row].filter(x=>x!=="").length < 5){
+    let cols=[];
 
-      let col = Math.floor(Math.random()*9);
+    while(cols.length<5){
 
-      if(ticket[row][col] !== "") continue;
+      let col=Math.floor(Math.random()*9);
 
-      let min = ranges[col][0];
-      let max = ranges[col][1];
+      if(!cols.includes(col)){
+
+        cols.push(col);
+
+      }
+
+    }
+
+    cols.sort((a,b)=>a-b);
+
+    cols.forEach(col=>{
+
+      let min=ranges[col][0];
+      let max=ranges[col][1];
 
       let num;
 
       do{
 
-        num = Math.floor(Math.random()*(max-min+1))+min;
+        num=Math.floor(Math.random()*(max-min+1))+min;
 
-      }while(usedNumbers.includes(num));
+      }while(used.has(num));
 
-      usedNumbers.push(num);
+      used.add(num);
 
-      ticket[row][col] = num;
+      ticket[row][col]=num;
 
-    }
+    });
 
   }
 
   for(let col=0; col<9; col++){
 
-    let nums = [];
+    let nums=[];
 
     for(let row=0; row<3; row++){
 
-      if(ticket[row][col] !== ""){
+      if(ticket[row][col]!==""){
 
         nums.push(ticket[row][col]);
 
@@ -311,13 +312,13 @@ function generateTicket(){
 
     nums.sort((a,b)=>a-b);
 
-    let i = 0;
+    let i=0;
 
     for(let row=0; row<3; row++){
 
-      if(ticket[row][col] !== ""){
+      if(ticket[row][col]!==""){
 
-        ticket[row][col] = nums[i];
+        ticket[row][col]=nums[i];
 
         i++;
 
@@ -338,6 +339,10 @@ let savedCards=localStorage.getItem('cards');
 let cards=savedCards
 ?JSON.parse(savedCards)
 :[generateTicket(),generateTicket(),generateTicket()];
+
+/* SAVE CARDS */
+
+localStorage.setItem('cards',JSON.stringify(cards));
 
 /* RENDER */
 
