@@ -3,35 +3,137 @@
 <head>
   <title>Marvalous Bingo 90</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <style>
 
+    *{
+      box-sizing:border-box;
+    }
+
     body{
       margin:0;
-      background:#0e0b1f;
+      background:#090512;
       color:white;
       font-family:'Poppins',sans-serif;
+      overflow-x:hidden;
+      min-height:100vh;
+      position:relative;
+    }
+
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background:
+      radial-gradient(circle at top,#8c2dff55,transparent 40%),
+      radial-gradient(circle at bottom,#ff4df233,transparent 35%),
+      radial-gradient(circle at left,#00ffcc11,transparent 30%);
+      pointer-events:none;
+      z-index:-2;
+    }
+
+    body::after{
+      content:'';
+      position:fixed;
+      inset:0;
+      background:url('https://www.transparenttextures.com/patterns/stardust.png');
+      opacity:.12;
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .topBar{
+      width:100%;
+      padding:18px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .topCard{
+      background:rgba(28,23,53,.92);
+      border:2px solid #c44dff;
+      border-radius:18px;
+      padding:14px;
       text-align:center;
+      box-shadow:0 0 25px rgba(196,77,255,.25);
+      backdrop-filter:blur(10px);
+    }
+
+    .topCard h3{
+      margin:0;
+      font-size:14px;
+      color:#00ffcc;
+      letter-spacing:1px;
+    }
+
+    .topCard p{
+      margin:8px 0 0;
+      font-size:28px;
+      font-weight:800;
+      color:#fff;
     }
 
     h1{
-      color:#d94dff;
-      margin-top:15px;
+      text-align:center;
+      font-size:56px;
+      margin:10px 0 5px;
+      color:white;
+      text-shadow:
+      0 0 10px #ff4df2,
+      0 0 25px #ff4df2,
+      0 0 45px #8c2dff;
+    }
+
+    .subTitle{
+      text-align:center;
+      color:#00ffcc;
+      margin-bottom:20px;
+      letter-spacing:3px;
+      font-size:14px;
+    }
+
+    .layout{
+      width:96%;
+      margin:auto;
+      display:grid;
+      grid-template-columns:320px 1fr 320px;
+      gap:18px;
+      align-items:start;
+      padding-bottom:30px;
+    }
+
+    .panel{
+      background:rgba(28,23,53,.92);
+      border:2px solid #c44dff;
+      border-radius:22px;
+      padding:18px;
+      box-shadow:
+      0 0 25px rgba(196,77,255,.22),
+      inset 0 0 25px rgba(255,255,255,.03);
+      backdrop-filter:blur(10px);
+    }
+
+    .panelTitle{
+      font-size:20px;
+      font-weight:700;
+      margin-bottom:14px;
+      text-align:center;
+      color:white;
     }
 
     #video-container{
-      width:95%;
-      max-width:700px;
-      height:320px;
-      margin:15px auto;
-      border-radius:16px;
+      width:100%;
+      height:270px;
+      border-radius:18px;
       overflow:hidden;
-      box-shadow:0 0 25px rgba(217,77,255,.4);
-      background:#1c1735;
+      background:#120d28;
+      border:2px solid #d94dff;
+      box-shadow:0 0 30px rgba(217,77,255,.35);
     }
 
     iframe{
@@ -40,86 +142,83 @@
       border:none;
     }
 
-    #chat-box{
-      width:95%;
-      max-width:700px;
-      margin:15px auto;
-      background:#1c1735;
-      border-radius:16px;
-      padding:10px;
+    .numberWrap{
+      margin-top:18px;
+      background:#120d28;
+      border-radius:24px;
+      border:2px solid #d94dff;
+      padding:20px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
     }
 
-    #messages{
-      height:180px;
-      overflow-y:auto;
-      text-align:left;
-      padding:10px;
-    }
-
-    .msg{
-      margin-bottom:6px;
-    }
-
-    .msg b{
-      color:#00ffcc;
-    }
-
-    #chat-input{
-      display:flex;
-      gap:6px;
-    }
-
-    #chat-input input{
-      flex:1;
-      padding:10px;
-      border:none;
-      border-radius:8px;
-    }
-
-    #chat-input button{
-      background:#d94dff;
-      color:white;
-      border:none;
-      padding:10px 14px;
-      border-radius:8px;
+    .numberWrap::before{
+      content:'';
+      position:absolute;
+      width:500px;
+      height:500px;
+      background:radial-gradient(circle,#ff4df233,transparent 70%);
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
     }
 
     #currentNumber{
-      font-size:70px;
-      color:#ff4df2;
-      font-weight:bold;
-      margin-top:10px;
+      position:relative;
+      z-index:2;
+      font-size:140px;
+      line-height:1;
+      font-weight:900;
+      color:white;
+      text-shadow:
+      0 0 15px #ff4df2,
+      0 0 35px #ff4df2,
+      0 0 60px #8c2dff;
+      animation:pulseGlow 1.8s infinite;
+    }
+
+    @keyframes pulseGlow{
+      0%{transform:scale(1);}
+      50%{transform:scale(1.04);}
+      100%{transform:scale(1);}
     }
 
     #mode{
       color:#00ffcc;
-      margin-bottom:20px;
+      font-size:18px;
+      font-weight:700;
+      margin-top:10px;
+      letter-spacing:2px;
     }
 
     #tickets{
-      width:95%;
-      max-width:900px;
-      margin:auto;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
     }
 
     .ticket{
       display:grid;
       grid-template-columns:repeat(9,1fr);
       gap:2px;
-      margin-bottom:18px;
-      background:#b84dff;
+      background:#d94dff;
       padding:3px;
-      border-radius:12px;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 0 20px rgba(217,77,255,.25);
     }
 
     .cell{
+      min-height:60px;
       background:#120d28;
-      min-height:58px;
       display:flex;
       align-items:center;
       justify-content:center;
       font-size:22px;
-      border-radius:4px;
+      font-weight:600;
+      border-radius:3px;
+      transition:.2s;
     }
 
     .blank{
@@ -129,42 +228,179 @@
     .marked{
       background:linear-gradient(45deg,#b84dff,#ff4df2);
       color:white;
-      font-weight:bold;
-      box-shadow:0 0 10px rgba(255,77,242,.6);
+      font-weight:800;
+      box-shadow:
+      inset 0 0 12px rgba(255,255,255,.3),
+      0 0 12px rgba(255,77,242,.8);
+      animation:pop .25s;
+    }
+
+    @keyframes pop{
+      0%{transform:scale(.7);}
+      100%{transform:scale(1);}
     }
 
     #calledBoard{
-      width:95%;
-      max-width:900px;
-      margin:20px auto;
+      margin-top:18px;
       display:grid;
       grid-template-columns:repeat(10,1fr);
       gap:5px;
     }
 
     .calledNum{
-      background:#1c1735;
-      padding:10px;
-      border-radius:8px;
+      background:#120d28;
+      border:1px solid #31245f;
+      border-radius:10px;
+      padding:10px 0;
       font-size:14px;
+      font-weight:600;
+      transition:.2s;
     }
 
     .calledActive{
-      background:#ff4df2;
+      background:linear-gradient(45deg,#b84dff,#ff4df2);
+      color:white;
+      box-shadow:0 0 15px rgba(255,77,242,.7);
     }
 
     .latest{
       background:#00ffcc !important;
-      color:black;
+      color:black !important;
+      animation:latestPulse 1s infinite;
     }
 
-    button.main{
-      background:#00ffcc;
-      border:none;
-      padding:14px 24px;
+    @keyframes latestPulse{
+      0%{transform:scale(1);}
+      50%{transform:scale(1.08);}
+      100%{transform:scale(1);}
+    }
+
+    #chat-box{
+      display:flex;
+      flex-direction:column;
+      height:760px;
+    }
+
+    #messages{
+      flex:1;
+      overflow-y:auto;
+      background:#120d28;
+      border-radius:14px;
+      padding:14px;
+      text-align:left;
+      border:1px solid #31245f;
+    }
+
+    .msg{
+      margin-bottom:10px;
+      line-height:1.4;
+      font-size:14px;
+    }
+
+    .msg b{
+      color:#00ffcc;
+    }
+
+    #chat-input{
+      display:flex;
+      gap:6px;
+      margin-top:12px;
+    }
+
+    #chat-input input{
+      flex:1;
+      background:#120d28;
+      border:1px solid #44336f;
       border-radius:10px;
-      font-weight:bold;
-      margin:20px;
+      color:white;
+      padding:12px;
+      outline:none;
+    }
+
+    #chat-input button{
+      background:linear-gradient(45deg,#b84dff,#ff4df2);
+      border:none;
+      color:white;
+      border-radius:10px;
+      padding:0 18px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .mainButton{
+      width:100%;
+      margin-top:18px;
+      background:linear-gradient(45deg,#00ffcc,#00d9ff);
+      border:none;
+      color:black;
+      font-weight:800;
+      font-size:22px;
+      padding:18px;
+      border-radius:16px;
+      cursor:pointer;
+      box-shadow:0 0 25px rgba(0,255,204,.4);
+      transition:.2s;
+    }
+
+    .mainButton:hover{
+      transform:scale(1.03);
+    }
+
+    .footerText{
+      text-align:center;
+      color:#9c84d6;
+      margin-top:14px;
+      font-size:13px;
+      letter-spacing:1px;
+    }
+
+    @media(max-width:1200px){
+
+      .layout{
+        grid-template-columns:1fr;
+      }
+
+      #chat-box{
+        height:auto;
+      }
+
+      #messages{
+        height:220px;
+      }
+
+      #currentNumber{
+        font-size:100px;
+      }
+
+      .topBar{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+    }
+
+    @media(max-width:700px){
+
+      .topBar{
+        grid-template-columns:1fr;
+      }
+
+      h1{
+        font-size:36px;
+      }
+
+      #currentNumber{
+        font-size:78px;
+      }
+
+      .cell{
+        min-height:42px;
+        font-size:16px;
+      }
+
+      .calledNum{
+        font-size:11px;
+      }
+
     }
 
   </style>
@@ -172,33 +408,103 @@
 
 <body>
 
-<h1>MARVALOUS BINGO</h1>
+<div class="topBar">
 
-<div id="video-container">
-  <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
-</div>
+  <div class="topCard">
+    <h3>GAME MODE</h3>
+    <p id="topMode">1 LINE</p>
+  </div>
 
-<div id="chat-box">
+  <div class="topCard">
+    <h3>TICKETS</h3>
+    <p>4</p>
+  </div>
 
-  <div id="messages"></div>
+  <div class="topCard">
+    <h3>LIVE GAME</h3>
+    <p>90 BALL</p>
+  </div>
 
-  <div id="chat-input">
-    <input id="name" placeholder="Name">
-    <input id="msg" placeholder="Type message...">
-    <button onclick="sendMsg()">Send</button>
+  <div class="topCard">
+    <h3>STATUS</h3>
+    <p>LIVE</p>
   </div>
 
 </div>
 
-<div id="currentNumber">-</div>
+<h1>MARVALOUS BINGO</h1>
 
-<div id="mode">Mode: 1 LINE</div>
+<div class="subTitle">
+  REAL PEOPLE • REAL BINGO • REAL WINNERS
+</div>
 
-<div id="tickets"></div>
+<div class="layout">
 
-<div id="calledBoard"></div>
+  <div>
 
-<button class="main" onclick="checkBingo()">BINGO</button>
+    <div class="panel">
+
+      <div class="panelTitle">YOUR TICKETS</div>
+
+      <div id="tickets"></div>
+
+    </div>
+
+  </div>
+
+  <div>
+
+    <div class="panel">
+
+      <div id="video-container">
+        <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
+      </div>
+
+      <div class="numberWrap">
+
+        <div id="currentNumber">-</div>
+
+        <div id="mode">Mode: 1 LINE</div>
+
+      </div>
+
+      <div id="calledBoard"></div>
+
+      <button class="mainButton" onclick="checkBingo()">
+        🎉 BINGO 🎉
+      </button>
+
+      <div class="footerText">
+        EYES DOWN • GOOD LUCK • PLAY RESPONSIBLY
+      </div>
+
+    </div>
+
+  </div>
+
+  <div>
+
+    <div class="panel" id="chat-box">
+
+      <div class="panelTitle">LIVE CHAT</div>
+
+      <div id="messages"></div>
+
+      <div id="chat-input">
+
+        <input id="name" placeholder="Name">
+
+        <input id="msg" placeholder="Type message...">
+
+        <button onclick="sendMsg()">Send</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
 <script>
 
@@ -223,8 +529,6 @@ if(!playerId){
 
 }
 
-/* REMOVE OLD BROKEN CARDS */
-
 if(localStorage.getItem('fixedCardsV2')!=="yes"){
 
  localStorage.removeItem('cards');
@@ -232,8 +536,6 @@ if(localStorage.getItem('fixedCardsV2')!=="yes"){
  localStorage.setItem('fixedCardsV2',"yes");
 
 }
-
-/* PERFECT TICKET GENERATOR */
 
 function generateTicket(){
 
@@ -332,19 +634,13 @@ function generateTicket(){
 
 }
 
-/* LOAD CARDS */
-
 let savedCards=localStorage.getItem('cards');
 
 let cards=savedCards
 ?JSON.parse(savedCards)
 :[generateTicket(),generateTicket(),generateTicket(),generateTicket()];
 
-/* SAVE CARDS */
-
 localStorage.setItem('cards',JSON.stringify(cards));
-
-/* RENDER */
 
 function renderBoards(){
 
@@ -387,8 +683,6 @@ function renderBoards(){
 }
 
 renderBoards();
-
-/* SAVE PLAYER */
 
 let currentGameId;
 
@@ -433,8 +727,6 @@ db.ref('gameId').on('value',snap=>{
 
 });
 
-/* CALLED BOARD */
-
 for(let i=1;i<=90;i++){
 
  let div=document.createElement('div');
@@ -448,8 +740,6 @@ for(let i=1;i<=90;i++){
  document.getElementById('calledBoard').appendChild(div);
 
 }
-
-/* AUTO MARK */
 
 let lastCalled=0;
 
@@ -513,7 +803,6 @@ db.ref('calledNumbers').on('value',snap=>{
 
 });
 
-/* CURRENT NUMBER */
 
 db.ref('currentNumber').on('value',snap=>{
 
@@ -539,21 +828,20 @@ db.ref('currentNumber').on('value',snap=>{
 
 });
 
-/* MODE */
 
 db.ref('mode').on('value',snap=>{
 
  let mode=snap.val()||'1line';
 
- document.getElementById('mode').innerText=
- 'Mode: '+(
+ let text=
   mode==='1line'?'1 LINE':
-  mode==='2lines'?'2 LINES':'FULL HOUSE'
- );
+  mode==='2lines'?'2 LINES':'FULL HOUSE';
+
+ document.getElementById('mode').innerText='Mode: '+text;
+
+ document.getElementById('topMode').innerText=text;
 
 });
-
-/* BINGO */
 
 function checkBingo(){
 
@@ -570,8 +858,6 @@ function checkBingo(){
  alert('🎉 Bingo claimed!');
 
 }
-
-/* CHAT */
 
 function sendMsg(){
 
@@ -595,6 +881,7 @@ function sendMsg(){
 
 }
 
+
 db.ref('chat').limitToLast(50).on('child_added',snap=>{
 
  let d=snap.val();
@@ -612,8 +899,6 @@ db.ref('chat').limitToLast(50).on('child_added',snap=>{
  box.scrollTop=box.scrollHeight;
 
 });
-
-/* SOUND */
 
 const bingoAudio=new Audio(
  'https://www.soundjay.com/human/cheering-01.mp3'
@@ -634,6 +919,7 @@ document.body.addEventListener('click',()=>{
  .catch(()=>{});
 
 },{once:true});
+
 
 db.ref('bingoSound').on('value',snap=>{
 
