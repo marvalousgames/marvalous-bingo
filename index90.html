@@ -271,9 +271,11 @@ function generateCard() {
 
 /* LOAD CARD */
 
-let savedCard = localStorage.getItem("card");
-
-let card = savedCard ? JSON.parse(savedCard) : generateCard();
+let cards = [
+  generateCard(),
+  generateCard(),
+  generateCard()
+];
 
 renderBoard();
 
@@ -295,9 +297,11 @@ db.ref("gameId").on("value", snap=>{
 
     if(savedGame!==String(gameId)){
 
-      card=generateCard();
-
-      localStorage.setItem("card",JSON.stringify(card));
+      cards = [
+        generateCard(),
+        generateCard(),
+        generateCard()
+      ];
 
       localStorage.setItem("gameId",gameId);
 
@@ -306,7 +310,7 @@ db.ref("gameId").on("value", snap=>{
 
     db.ref("players/"+playerId).set({
       name: playerName,
-      card: card
+      cards: cards
     });
 
   }
@@ -321,7 +325,7 @@ function renderBoard(){
 
   tickets.innerHTML="";
 
-  for(let t=0;t<3;t++){
+  cards.forEach(card=>{
 
     let board=document.createElement("div");
 
@@ -346,11 +350,7 @@ function renderBoard(){
 
     tickets.appendChild(board);
 
-    if(t<2){
-      card=generateCard();
-    }
-
-  }
+  });
 
 }
 
@@ -446,33 +446,35 @@ db.ref("chat").limitToLast(50).on("child_added",snap=>{
 
 /* NAME MODAL */
 
-window.onload=()=>{
+window.onload = () => {
 
-  let modal=document.getElementById("nameModal");
+  let modal = document.getElementById("nameModal");
 
-  let saved=localStorage.getItem("playerName");
+  let saved = localStorage.getItem("playerName");
 
   if(saved){
-
-    document.getElementById("name").value=saved;
-
-    modal.style.display="none";
-
+    document.getElementById("name").value = saved;
+    modal.style.display = "none";
   }
 
-  window.saveName=function(){
+  window.saveName = function () {
 
-    let name=document.getElementById("modalName").value.trim();
+    let name = document.getElementById("modalName").value.trim();
 
-    if(!name)return alert("Enter name");
+    if(!name){
+      alert("Enter name");
+      return;
+    }
 
-    localStorage.setItem("playerName",name);
+    localStorage.setItem("playerName", name);
 
-    document.getElementById("name").value=name;
+    playerName = name;
 
-    modal.style.display="none";
+    document.getElementById("name").value = name;
 
-  }
+    modal.style.display = "none";
+
+  };
 
 };
 
