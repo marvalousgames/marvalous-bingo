@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Marvalous Bingo</title>
+  <title>Marvalous Bingo 90</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 
-  <style>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
+  <style>
     body{
       margin:0;
-      font-family:'Poppins',sans-serif;
       background:#0e0b1f;
       color:white;
+      font-family:'Poppins',sans-serif;
       text-align:center;
     }
 
     h1{
-      color:#b84dff;
-      margin-top:10px;
+      color:#d94dff;
+      margin-top:15px;
     }
 
     #video-container{
@@ -25,10 +27,10 @@
       max-width:700px;
       height:320px;
       margin:15px auto;
-      border-radius:15px;
+      border-radius:16px;
       overflow:hidden;
+      box-shadow:0 0 25px rgba(217,77,255,.4);
       background:#1c1735;
-      box-shadow:0 0 25px rgba(184,77,255,0.4);
     }
 
     iframe{
@@ -40,9 +42,9 @@
     #chat-box{
       width:95%;
       max-width:700px;
-      margin:10px auto;
+      margin:15px auto;
       background:#1c1735;
-      border-radius:15px;
+      border-radius:16px;
       padding:10px;
     }
 
@@ -51,150 +53,117 @@
       overflow-y:auto;
       text-align:left;
       padding:10px;
-      font-size:14px;
     }
 
-    .msg{
-      margin-bottom:6px;
-    }
+    .msg{margin-bottom:6px;}
 
-    .msg b{
-      color:#00ffcc;
-    }
+    .msg b{color:#00ffcc;}
 
     #chat-input{
       display:flex;
       gap:6px;
-      margin-top:8px;
     }
 
     #chat-input input{
       flex:1;
-      padding:8px;
-      border-radius:8px;
+      padding:10px;
       border:none;
+      border-radius:8px;
     }
 
     #chat-input button{
-      background:#b84dff;
-      border:none;
+      background:#d94dff;
       color:white;
-      padding:8px 12px;
+      border:none;
+      padding:10px 14px;
       border-radius:8px;
     }
 
     #currentNumber{
-      font-size:56px;
-      margin:15px 0;
+      font-size:70px;
       color:#ff4df2;
       font-weight:bold;
+      margin-top:10px;
     }
 
     #mode{
       color:#00ffcc;
-      margin-bottom:10px;
+      margin-bottom:20px;
     }
 
     #tickets{
       width:95%;
-      max-width:700px;
+      max-width:900px;
       margin:auto;
     }
 
     .ticket{
       display:grid;
       grid-template-columns:repeat(9,1fr);
-      margin-bottom:15px;
-      border:3px solid #b84dff;
-      border-radius:10px;
-      overflow:hidden;
-      background:#1c1735;
-      box-shadow:0 0 12px rgba(184,77,255,0.3);
+      gap:2px;
+      margin-bottom:18px;
+      background:#b84dff;
+      padding:3px;
+      border-radius:12px;
     }
 
     .cell{
+      background:#120d28;
       min-height:58px;
       display:flex;
       align-items:center;
       justify-content:center;
-      border:1px solid #0e0b1f;
       font-size:22px;
-      transition:0.2s;
+      border-radius:4px;
     }
 
-    .empty{
-      background:#120d25;
+    .blank{
+      background:#0b0818;
     }
 
     .marked{
       background:linear-gradient(45deg,#b84dff,#ff4df2);
-      animation:pulse 0.4s;
-    }
-
-    @keyframes pulse{
-      0%{transform:scale(0.9);}
-      100%{transform:scale(1);}
-    }
-
-    button{
-      margin-top:15px;
-      padding:12px 20px;
-      border-radius:10px;
-      border:none;
-      background:#00ffcc;
+      color:white;
       font-weight:bold;
+      box-shadow:0 0 10px rgba(255,77,242,.6);
     }
 
     #calledBoard{
       width:95%;
-      max-width:700px;
+      max-width:900px;
       margin:20px auto;
       display:grid;
       grid-template-columns:repeat(10,1fr);
-      gap:4px;
+      gap:5px;
     }
 
     .calledNum{
       background:#1c1735;
-      padding:8px;
-      border-radius:6px;
+      padding:10px;
+      border-radius:8px;
       font-size:14px;
     }
 
     .calledActive{
       background:#ff4df2;
-      color:white;
     }
 
-    #winner{
-      display:none;
-      background:#00ffcc;
+    .latest{
+      background:#00ffcc !important;
       color:black;
-      padding:10px;
-      margin-top:10px;
-      font-weight:bold;
     }
 
+    button.main{
+      background:#00ffcc;
+      border:none;
+      padding:14px 24px;
+      border-radius:10px;
+      font-weight:bold;
+      margin:20px;
+    }
   </style>
 </head>
-
 <body>
-
-<div id="nameModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;">
-
-  <div style="background:#1c1735;padding:20px;border-radius:12px;text-align:center;width:80%;max-width:300px;">
-
-    <h2 style="color:#b84dff;">Enter your name</h2>
-
-    <input id="modalName" placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:none;margin-top:10px;">
-
-    <button onclick="saveName()" style="margin-top:10px;width:100%;padding:10px;background:#00ffcc;border:none;border-radius:8px;font-weight:bold;">
-      Join Game
-    </button>
-
-  </div>
-
-</div>
 
 <h1>MARVALOUS BINGO</h1>
 
@@ -203,7 +172,6 @@
 </div>
 
 <div id="chat-box">
-
   <div id="messages"></div>
 
   <div id="chat-input">
@@ -211,411 +179,236 @@
     <input id="msg" placeholder="Type message...">
     <button onclick="sendMsg()">Send</button>
   </div>
-
 </div>
 
-<div id="currentNumber">Waiting...</div>
-
+<div id="currentNumber">-</div>
 <div id="mode">Mode: 1 LINE</div>
 
-<div id="winner">🎉 WE HAVE A WINNER 🎉</div>
-
 <div id="tickets"></div>
-
 <div id="calledBoard"></div>
 
-<button onclick="checkBingo()">BINGO</button>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<button class="main" onclick="checkBingo()">BINGO</button>
 
 <script>
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
-  databaseURL: "https://marvalous-bingo-default-rtdb.firebaseio.com"
+const firebaseConfig={
+ apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 
-const db = firebase.database();
-
-/* PLAYER */
-
-let playerName = localStorage.getItem("playerName") || "Player";
-
-let playerId = localStorage.getItem("playerId");
+let playerName=localStorage.getItem('playerName')||'Player';
+let playerId=localStorage.getItem('playerId');
 
 if(!playerId){
-  playerId = Date.now().toString();
-  localStorage.setItem("playerId",playerId);
+ playerId=Date.now().toString();
+ localStorage.setItem('playerId',playerId);
 }
-
-/* 90 BALL TICKET */
 
 function generateTicket(){
+ let ticket=[['','','','','','','','',''],['','','','','','','','',''],['','','','','','','','','']];
 
-  let ticket = [
-    ["","","","","","","","",""],
-    ["","","","","","","","",""],
-    ["","","","","","","","",""]
-  ];
+ for(let row=0;row<3;row++){
+  let cols=[];
+
+  while(cols.length<5){
+   let c=Math.floor(Math.random()*9);
+   if(!cols.includes(c)) cols.push(c);
+  }
+
+  cols.sort((a,b)=>a-b);
+
+  cols.forEach(col=>{
+   let min=col===0?1:col*10;
+   let max=col===8?90:col*10+9;
+
+   ticket[row][col]=Math.floor(Math.random()*(max-min+1))+min;
+  });
+ }
+
+ for(let col=0;col<9;col++){
+  let nums=[];
 
   for(let row=0;row<3;row++){
-
-    let cols=[];
-
-    while(cols.length<5){
-
-      let c=Math.floor(Math.random()*9);
-
-      if(!cols.includes(c)) cols.push(c);
-    }
-
-    cols.sort((a,b)=>a-b);
-
-    cols.forEach(col=>{
-
-      let min = col===0 ? 1 : col*10;
-      let max = col===8 ? 90 : col*10+9;
-
-      let num;
-
-      do{
-        num=Math.floor(Math.random()*(max-min+1))+min;
-      }while(ticket.flat().includes(num));
-
-      ticket[row][col] = num;
-
-    });
-
+   if(ticket[row][col]!=="") nums.push(ticket[row][col]);
   }
 
-  for(let col=0;col<9;col++){
+  nums.sort((a,b)=>a-b);
 
-    let nums=[];
+  let i=0;
 
-    for(let row=0;row<3;row++){
-
-      if(ticket[row][col] !== ""){
-        nums.push(ticket[row][col]);
-      }
-
-    }
-
-    nums.sort((a,b)=>a-b);
-
-    let i=0;
-
-    for(let row=0;row<3;row++){
-
-      if(ticket[row][col] !== ""){
-        ticket[row][col]=nums[i];
-        i++;
-      }
-
-    }
-
+  for(let row=0;row<3;row++){
+   if(ticket[row][col]!==""){
+    ticket[row][col]=nums[i];
+    i++;
+   }
   }
+ }
 
-  return ticket;
+ return ticket;
 }
 
-/* LOAD CARDS */
+let savedCards=localStorage.getItem('cards');
 
-let savedCards = localStorage.getItem("cards");
+let cards=savedCards
+?JSON.parse(savedCards)
+:[generateTicket(),generateTicket(),generateTicket()];
 
-let cards = savedCards
-? JSON.parse(savedCards)
-: [
-    generateTicket(),
-    generateTicket(),
-    generateTicket()
-  ];
+function renderBoards(){
+ const wrap=document.getElementById('tickets');
+ wrap.innerHTML='';
+
+ cards.forEach(ticket=>{
+  let board=document.createElement('div');
+  board.className='ticket';
+
+  ticket.flat().forEach(n=>{
+   let div=document.createElement('div');
+
+   if(n===''){
+    div.className='cell blank';
+   }else{
+    div.className='cell';
+    div.innerText=n;
+    div.dataset.num=n;
+   }
+
+   board.appendChild(div);
+  });
+
+  wrap.appendChild(board);
+ });
+}
 
 renderBoards();
 
-/* GAME SYNC */
+cards.forEach(t=>{
+ t.forEach(r=>{});
+});
 
 let currentGameId;
 
-db.ref("gameId").on("value",snap=>{
-
-  let gameId = snap.val();
-
+ db.ref('gameId').on('value',snap=>{
+  let gameId=snap.val();
   if(!gameId) return;
 
-  if(currentGameId !== gameId){
+  if(currentGameId!==gameId){
+   currentGameId=gameId;
 
-    currentGameId = gameId;
+   localStorage.setItem('cards',JSON.stringify(cards));
 
-    let savedGame = localStorage.getItem("gameId");
-
-    if(savedGame !== String(gameId)){
-
-      cards = [
-        generateTicket(),
-        generateTicket(),
-        generateTicket()
-      ];
-
-      localStorage.setItem("cards",JSON.stringify(cards));
-
-      localStorage.setItem("gameId",gameId);
-
-      location.reload();
-    }
-
-    /* THIS IS THE FIX */
-    db.ref("players/"+playerId).set({
-      name:playerName,
-      cards:cards
-    });
-
-  }
-
-});
-
-/* RENDER */
-
-function renderBoards(){
-
-  const wrap = document.getElementById("tickets");
-
-  wrap.innerHTML = "";
-
-  cards.forEach((ticket,index)=>{
-
-    let board = document.createElement("div");
-
-    board.className = "ticket";
-
-    ticket.flat().forEach(n=>{
-
-      let div = document.createElement("div");
-
-      if(n===""){
-
-        div.className = "cell empty";
-
-      } else {
-
-        div.className = "cell";
-        div.innerText = n;
-
-        div.setAttribute("data-num",n);
-
-        div.onclick = ()=>div.classList.toggle("marked");
-      }
-
-      board.appendChild(div);
-
-    });
-
-    wrap.appendChild(board);
-
-  });
-
-}
-
-/* CALLED BOARD */
-
-const calledBoard = document.getElementById("calledBoard");
-
-for(let i=1;i<=90;i++){
-
-  let div = document.createElement("div");
-
-  div.className = "calledNum";
-
-  div.id = "called-"+i;
-
-  div.innerText = i;
-
-  calledBoard.appendChild(div);
-
-}
-
-/* NUMBER */
-
-let lastCalledNumber = null;
-
-db.ref("currentNumber").on("value",snap=>{
-
-  let num = snap.val();
-
-  if(!num) return;
-
-  document.getElementById("currentNumber").innerText = num;
-
-  document.querySelectorAll(".cell").forEach(c=>{
-
-    if(c.dataset.num == num){
-      c.classList.add("marked");
-    }
-
-  });
-
-  let called = document.getElementById("called-"+num);
-
-  if(called){
-    called.classList.add("calledActive");
-  }
-
-  if(lastCalledNumber !== num){
-
-    lastCalledNumber = num;
-
-    let speech = new SpeechSynthesisUtterance(num);
-
-    speech.rate = 0.9;
-
-    speech.pitch = 1;
-
-    speechSynthesis.cancel();
-
-    speechSynthesis.speak(speech);
-
-  }
-
-});
-
-/* MODE */
-
-db.ref("mode").on("value",snap=>{
-
-  let mode = snap.val() || "1line";
-
-  document.getElementById("mode").innerText =
-  "Mode: " +
-  (mode==="1line" ? "1 LINE" :
-   mode==="2lines" ? "2 LINES" :
-   "FULL HOUSE");
-
-});
-
-/* BINGO CHECK */
-
-function checkBingo(){
-
-  db.ref("bingoClaims").push({
-    name:playerName,
-    time:Date.now()
-  });
-db.ref("bingoSound").set(Date.now());
-  alert("🎉 Bingo claimed!");
-
-}
-
-/* CHAT */
-
-function sendMsg(){
-
-  let name = document.getElementById("name").value || "Player";
-
-  let msg = document.getElementById("msg").value;
-
-  if(!msg) return;
-
-  localStorage.setItem("playerName",name);
-
-  db.ref("chat").push({
-    name:name,
-    message:msg
-  });
-
-  document.getElementById("msg").value = "";
-
-}
-
-db.ref("chat").limitToLast(50).on("child_added",snap=>{
-
-  let d = snap.val();
-
-  let div = document.createElement("div");
-
-  div.className = "msg";
-
-  div.innerHTML = "<b>"+d.name+":</b> "+d.message;
-
-  let box = document.getElementById("messages");
-
-  box.appendChild(div);
-
-  box.scrollTop = box.scrollHeight;
-
-});
-
-/* NAME MODAL */
-
-const modal = document.getElementById("nameModal");
-
-let saved = localStorage.getItem("playerName");
-
-if(saved){
-
-  document.getElementById("name").value = saved;
-
-  modal.style.display = "none";
-
-}
-
-function saveName(){
-
-  let name = document.getElementById("modalName").value.trim();
-
-  if(!name){
-
-    alert("Enter name");
-
-    return;
-  }
-
-  localStorage.setItem("playerName",name);
-
-  playerName = name;
-
-  document.getElementById("name").value = name;
-const bingoAudio = new Audio(
-  "https://www.soundjay.com/human/cheering-01.mp3"
-);
-
-bingoAudio.volume = 1;
-
-document.body.addEventListener("click", () => {
-
-  bingoAudio.play().then(() => {
-
-    bingoAudio.pause();
-
-    bingoAudio.currentTime = 0;
-
-  }).catch(()=>{});
-
-}, { once:true });
-
-db.ref("bingoSound").on("value",snap=>{
-
-  if(!snap.val()) return;
-
-  bingoAudio.currentTime = 0;
-
-  bingoAudio.play().catch(()=>{});
-
-});
-  modal.style.display = "none";
-
-  /* THIS IS THE FIX */
-  db.ref("players/"+playerId).set({
+   db.ref('players/'+playerId).set({
     name:playerName,
     cards:cards
-  });
+   });
+  }
+ });
 
+for(let i=1;i<=90;i++){
+ let div=document.createElement('div');
+ div.className='calledNum';
+ div.id='called-'+i;
+ div.innerText=i;
+ document.getElementById('calledBoard').appendChild(div);
 }
 
+let lastCalled=0;
 
-});
+ db.ref('currentNumber').on('value',snap=>{
+  let num=snap.val();
+  if(!num) return;
+
+  document.getElementById('currentNumber').innerText=num;
+
+  document.querySelectorAll('.cell').forEach(c=>{
+   if(c.dataset.num==num){
+    c.classList.add('marked');
+   }
+  });
+
+  document.querySelectorAll('.calledNum').forEach(c=>c.classList.remove('latest'));
+
+  let ball=document.getElementById('called-'+num);
+
+  if(ball){
+   ball.classList.add('calledActive');
+   ball.classList.add('latest');
+  }
+
+  if(lastCalled!==num){
+   lastCalled=num;
+
+   let speech=new SpeechSynthesisUtterance(num);
+   speech.rate=.9;
+   speechSynthesis.cancel();
+   speechSynthesis.speak(speech);
+  }
+ });
+
+ db.ref('mode').on('value',snap=>{
+  let mode=snap.val()||'1line';
+
+  document.getElementById('mode').innerText=
+  'Mode: '+(
+   mode==='1line'?'1 LINE':
+   mode==='2lines'?'2 LINES':'FULL HOUSE'
+  );
+ });
+
+function checkBingo(){
+ db.ref('bingoClaims').push({
+  name:playerName,
+  time:Date.now()
+ });
+
+ db.ref('bingoSound').set(Date.now());
+
+ alert('Bingo claimed!');
+}
+
+function sendMsg(){
+ let name=document.getElementById('name').value||'Player';
+ let msg=document.getElementById('msg').value;
+
+ if(!msg) return;
+
+ localStorage.setItem('playerName',name);
+
+ db.ref('chat').push({name,message:msg});
+
+ document.getElementById('msg').value='';
+}
+
+ db.ref('chat').limitToLast(50).on('child_added',snap=>{
+  let d=snap.val();
+
+  let div=document.createElement('div');
+  div.className='msg';
+  div.innerHTML='<b>'+d.name+':</b> '+d.message;
+
+  let box=document.getElementById('messages');
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;
+ });
+
+const bingoAudio=new Audio('https://www.soundjay.com/human/cheering-01.mp3');
+
+bingoAudio.volume=1;
+
+document.body.addEventListener('click',()=>{
+ bingoAudio.play().then(()=>{
+  bingoAudio.pause();
+  bingoAudio.currentTime=0;
+ }).catch(()=>{});
+},{once:true});
+
+ db.ref('bingoSound').on('value',snap=>{
+  if(!snap.val()) return;
+
+  bingoAudio.currentTime=0;
+  bingoAudio.play().catch(()=>{});
+ });
 </script>
-
 </body>
 </html>
