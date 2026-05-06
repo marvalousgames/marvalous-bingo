@@ -272,6 +272,34 @@ function renderBoards(){
     div.className='cell';
     div.innerText=n;
     div.dataset.num=n;
+
+    const savedMarks=JSON.parse(localStorage.getItem('markedNumbers')||'[]');
+
+    if(savedMarks.includes(Number(n))){
+      div.classList.add('marked');
+    }
+
+    div.onclick=()=>{
+
+      div.classList.toggle('marked');
+
+      let marks=JSON.parse(localStorage.getItem('markedNumbers')||'[]');
+
+      if(div.classList.contains('marked')){
+
+        if(!marks.includes(Number(n))){
+          marks.push(Number(n));
+        }
+
+      }else{
+
+        marks=marks.filter(x=>x!=Number(n));
+
+      }
+
+      localStorage.setItem('markedNumbers',JSON.stringify(marks));
+
+    };
    }
 
    board.appendChild(div);
