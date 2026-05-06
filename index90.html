@@ -338,7 +338,7 @@ let savedCards=localStorage.getItem('cards');
 
 let cards=savedCards
 ?JSON.parse(savedCards)
-:[generateTicket(),generateTicket(),generateTicket()];
+:[generateTicket(),generateTicket(),generateTicket(),generateTicket()];
 
 /* SAVE CARDS */
 
@@ -407,10 +407,11 @@ db.ref('gameId').on('value',snap=>{
   if(savedGame!==String(gameId)){
 
    cards=[
-    generateTicket(),
-    generateTicket(),
-    generateTicket()
-   ];
+ generateTicket(),
+ generateTicket(),
+ generateTicket(),
+ generateTicket()
+];
 
    localStorage.setItem('cards',JSON.stringify(cards));
 
