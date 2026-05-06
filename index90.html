@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Marvalous Bingo</title>
 
@@ -33,33 +33,32 @@ content:'';
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at top,#8c2dff55,transparent 45%),
+radial-gradient(circle at top,#8c2dff55,transparent 40%),
 radial-gradient(circle at bottom,#ff4df222,transparent 40%);
 z-index:-1;
 }
 
 .app{
-width:100%;
 max-width:430px;
 height:100vh;
 margin:auto;
-padding:8px;
+padding:10px;
 display:flex;
 flex-direction:column;
-gap:8px;
+gap:10px;
 overflow:hidden;
 }
 
 /* TOP */
 
-.top{
+.topBar{
 display:grid;
-grid-template-columns:50px 1fr 70px;
+grid-template-columns:60px 1fr 70px;
 align-items:center;
 }
 
 .menu{
-font-size:38px;
+font-size:40px;
 font-weight:700;
 text-align:center;
 }
@@ -70,27 +69,27 @@ line-height:0.9;
 }
 
 .logo h1{
-font-size:20px;
+font-size:24px;
 font-weight:800;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 20px #ff4df2;
+0 0 25px #ff4df2;
 }
 
 .sideInfo{
-font-size:11px;
-font-weight:700;
 text-align:right;
+font-size:12px;
+font-weight:700;
 }
 
-/* BALL AREA */
+/* MAIN AREA */
 
-.ballWrap{
+.mainArea{
 display:flex;
 align-items:center;
 justify-content:center;
 position:relative;
-height:190px;
+height:180px;
 }
 
 .stream{
@@ -98,13 +97,13 @@ position:absolute;
 left:0;
 top:50%;
 transform:translateY(-50%);
-width:78px;
-height:78px;
+width:82px;
+height:82px;
 border-radius:18px;
 overflow:hidden;
 border:3px solid #d94dff;
-box-shadow:0 0 15px #d94dff;
 background:#120d28;
+box-shadow:0 0 18px #d94dff;
 }
 
 .stream iframe{
@@ -114,14 +113,14 @@ border:none;
 }
 
 .ball{
-width:165px;
-height:165px;
+width:170px;
+height:170px;
 border-radius:50%;
 border:5px solid #ff4df2;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:74px;
+font-size:72px;
 font-weight:800;
 background:radial-gradient(circle,#220833,#090512);
 box-shadow:
@@ -129,18 +128,17 @@ box-shadow:
 0 0 50px #ff4df2;
 }
 
-/* LAST NUMBERS */
+/* RECENT NUMBERS */
 
-.called{
+.recent{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-border:2px solid #b84dff;
 border-radius:18px;
 overflow:hidden;
-flex-shrink:0;
+border:2px solid #b84dff;
 }
 
-.called div{
+.recent div{
 background:#120d28;
 padding:10px 0;
 text-align:center;
@@ -149,63 +147,64 @@ font-weight:700;
 border-right:2px solid #b84dff;
 }
 
-.called div:last-child{
+.recent div:last-child{
 border-right:none;
 }
 
-/* TICKETS */
+/* TICKET */
 
 .ticketPanel{
 background:#1b1034;
 border:3px solid #b84dff;
-border-radius:24px;
-padding:8px;
+border-radius:28px;
+padding:12px;
 flex:1;
 display:flex;
 flex-direction:column;
-min-height:0;
+justify-content:center;
+}
+
+.ticketHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+}
+
+.arrow{
+font-size:34px;
+font-weight:700;
+cursor:pointer;
+user-select:none;
 }
 
 .ticketTitle{
-text-align:center;
-font-size:20px;
+font-size:24px;
 font-weight:700;
-margin-bottom:6px;
-}
-
-.ticketGrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-flex:1;
 }
 
 .ticket{
 background:#120d28;
 border:2px solid #7d4dff;
-border-radius:18px;
-padding:6px;
-display:flex;
-align-items:center;
-justify-content:center;
+border-radius:22px;
+padding:10px;
 }
 
 .board{
-width:100%;
 display:grid;
 grid-template-columns:repeat(9,1fr);
-gap:2px;
+gap:4px;
 }
 
 .cell{
-height:26px;
+height:34px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:12px;
+font-size:16px;
 font-weight:700;
 background:#090512;
-border-radius:6px;
+border-radius:8px;
 }
 
 .blank{
@@ -222,10 +221,9 @@ box-shadow:0 0 12px #48e7ff;
 
 .bottom{
 display:grid;
-grid-template-columns:1.2fr .8fr;
-gap:8px;
-height:210px;
-flex-shrink:0;
+grid-template-columns:1fr 140px;
+gap:10px;
+height:170px;
 }
 
 .chat{
@@ -238,7 +236,7 @@ flex-direction:column;
 }
 
 .chat h2{
-font-size:18px;
+font-size:20px;
 margin-bottom:6px;
 }
 
@@ -246,7 +244,6 @@ margin-bottom:6px;
 flex:1;
 overflow-y:auto;
 font-size:14px;
-padding-right:4px;
 }
 
 .messages div{
@@ -259,13 +256,13 @@ color:#48e7ff;
 
 .chat input{
 width:100%;
-padding:9px;
+padding:8px;
 margin-top:6px;
 background:#120d28;
-border:2px solid #3a2761;
-border-radius:12px;
+border:2px solid #38255e;
+border-radius:10px;
 color:white;
-font-size:14px;
+font-size:13px;
 outline:none;
 }
 
@@ -274,22 +271,42 @@ width:100%;
 padding:10px;
 margin-top:6px;
 border:none;
-border-radius:14px;
+border-radius:12px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
 color:white;
-font-size:18px;
 font-weight:700;
+font-size:16px;
 }
 
 .bingoBtn{
-background:linear-gradient(45deg,#4af1ff,#27d8ff);
 border:none;
 border-radius:26px;
+background:linear-gradient(45deg,#48f3ff,#29d9ff);
 font-size:34px;
 font-weight:800;
 color:white;
 box-shadow:0 0 20px #48e7ff;
-height:100%;
+}
+
+/* MOBILE */
+
+@media(max-width:400px){
+
+.ball{
+width:150px;
+height:150px;
+font-size:62px;
+}
+
+.cell{
+height:30px;
+font-size:14px;
+}
+
+.ticketTitle{
+font-size:20px;
+}
+
 }
 
 </style>
@@ -299,7 +316,7 @@ height:100%;
 
 <div class="app">
 
-<div class="top">
+<div class="topBar">
 
 <div class="menu">☰</div>
 
@@ -314,7 +331,7 @@ GAME 90
 
 </div>
 
-<div class="ballWrap">
+<div class="mainArea">
 
 <div class="stream">
 <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app&muted=true"></iframe>
@@ -324,7 +341,7 @@ GAME 90
 
 </div>
 
-<div class="called">
+<div class="recent" id="recentNumbers">
 <div>24</div>
 <div>74</div>
 <div>19</div>
@@ -334,11 +351,23 @@ GAME 90
 
 <div class="ticketPanel">
 
+<div class="ticketHeader">
+
+<div class="arrow" onclick="prevTicket()">‹</div>
+
 <div class="ticketTitle">
-Your Tickets: 4
+Ticket <span id="ticketNum">1</span> / 4
 </div>
 
-<div class="ticketGrid" id="tickets"></div>
+<div class="arrow" onclick="nextTicket()">›</div>
+
+</div>
+
+<div class="ticket">
+
+<div class="board" id="ticketBoard"></div>
+
+</div>
 
 </div>
 
@@ -384,10 +413,12 @@ playerId=Date.now().toString();
 localStorage.setItem('playerId',playerId);
 }
 
-if(localStorage.getItem('fixedCardsV6')!=="yes"){
+if(localStorage.getItem('fixedCardsV7')!=="yes"){
 localStorage.removeItem('cards');
-localStorage.setItem('fixedCardsV6',"yes");
+localStorage.setItem('fixedCardsV7',"yes");
 }
+
+/* TICKET GENERATOR */
 
 function generateTicket(){
 
@@ -442,7 +473,11 @@ for(let col=0;col<9;col++){
 let nums=[];
 
 for(let row=0;row<3;row++){
-if(ticket[row][col]!=="") nums.push(ticket[row][col]);
+
+if(ticket[row][col]!==""){
+nums.push(ticket[row][col]);
+}
+
 }
 
 nums.sort((a,b)=>a-b);
@@ -466,6 +501,8 @@ return ticket;
 
 }
 
+/* LOAD */
+
 let savedCards=localStorage.getItem('cards');
 
 let cards=savedCards
@@ -479,47 +516,67 @@ generateTicket()
 
 localStorage.setItem('cards',JSON.stringify(cards));
 
-function renderBoards(){
+let currentTicket=0;
 
-const wrap=document.getElementById('tickets');
+function renderTicket(){
 
-wrap.innerHTML='';
+document.getElementById('ticketNum').innerText=currentTicket+1;
 
-cards.forEach(ticket=>{
+const board=document.getElementById('ticketBoard');
 
-let board=document.createElement('div');
+board.innerHTML='';
 
-board.className='ticket';
-
-let inner=document.createElement('div');
-
-inner.className='board';
-
-ticket.flat().forEach(n=>{
+cards[currentTicket].flat().forEach(n=>{
 
 let div=document.createElement('div');
 
 if(n===''){
+
 div.className='cell blank';
+
 }else{
+
 div.className='cell';
 div.innerText=n;
 div.dataset.num=n;
+
 }
 
-inner.appendChild(div);
-
-});
-
-board.appendChild(inner);
-
-wrap.appendChild(board);
+board.appendChild(div);
 
 });
 
 }
 
-renderBoards();
+renderTicket();
+
+function nextTicket(){
+
+currentTicket++;
+
+if(currentTicket>=cards.length){
+currentTicket=0;
+}
+
+renderTicket();
+markNumbers();
+
+}
+
+function prevTicket(){
+
+currentTicket--;
+
+if(currentTicket<0){
+currentTicket=cards.length-1;
+}
+
+renderTicket();
+markNumbers();
+
+}
+
+/* RESET SYSTEM */
 
 let currentGameId;
 
@@ -555,27 +612,41 @@ location.reload();
 
 });
 
-db.ref('calledNumbers').on('value',snap=>{
+/* MARKING */
 
-const called=Object.values(snap.val()||{});
+let calledNums=[];
+
+function markNumbers(){
 
 document.querySelectorAll('.cell').forEach(c=>{
 c.classList.remove('marked');
 });
 
-called.forEach(num=>{
+calledNums.forEach(num=>{
 
 document.querySelectorAll('.cell').forEach(c=>{
 
 if(c.dataset.num==num){
+
 c.classList.add('marked');
+
 }
 
 });
 
 });
 
+}
+
+db.ref('calledNumbers').on('value',snap=>{
+
+calledNums=Object.values(snap.val()||{});
+
+markNumbers();
+
 });
+
+/* CURRENT NUMBER */
 
 db.ref('currentNumber').on('value',snap=>{
 
@@ -587,16 +658,7 @@ document.getElementById('currentNumber').innerText=num;
 
 });
 
-function checkBingo(){
-
-db.ref('bingoClaims').push({
-name:playerName,
-time:Date.now()
-});
-
-alert('Bingo Claimed!');
-
-}
+/* CHAT */
 
 function sendMsg(){
 
@@ -609,15 +671,17 @@ if(!msg) return;
 localStorage.setItem('playerName',name);
 
 db.ref('chat').push({
+
 name:name,
 message:msg
+
 });
 
 document.getElementById('msg').value='';
 
 }
 
-db.ref('chat').limitToLast(30).on('child_added',snap=>{
+db.ref('chat').limitToLast(25).on('child_added',snap=>{
 
 let d=snap.val();
 
@@ -632,6 +696,21 @@ box.appendChild(div);
 box.scrollTop=box.scrollHeight;
 
 });
+
+/* BINGO */
+
+function checkBingo(){
+
+db.ref('bingoClaims').push({
+
+name:playerName,
+time:Date.now()
+
+});
+
+alert('🎉 Bingo Claimed!');
+
+}
 
 </script>
 
