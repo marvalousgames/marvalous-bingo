@@ -241,21 +241,25 @@
     }
 
     #calledBoard{
-      margin-top:18px;
-      display:grid;
-      grid-template-columns:repeat(10,1fr);
-      gap:5px;
-    }
+  width:95%;
+  max-width:900px;
+  margin:14px auto;
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:3px;
+}
 
-    .calledNum{
-      background:#120d28;
-      border:1px solid #31245f;
-      border-radius:10px;
-      padding:10px 0;
-      font-size:14px;
-      font-weight:600;
-      transition:.2s;
-    }
+.calledNum{
+  background:#1c1735;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:600;
+  color:#aaa;
+}
 
     .calledActive{
       background:linear-gradient(45deg,#b84dff,#ff4df2);
