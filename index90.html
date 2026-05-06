@@ -30,46 +30,49 @@ content:'';
 position:fixed;
 inset:0;
 background:
-radial-gradient(circle at top,#8c2dff44,transparent 40%),
+radial-gradient(circle at top,#8c2dff33,transparent 45%),
 radial-gradient(circle at bottom,#ff4df222,transparent 35%);
 z-index:-1;
 }
 
 .container{
-width:95%;
-max-width:900px;
+width:100%;
+max-width:850px;
 margin:auto;
-padding:18px 0 50px;
+padding:14px;
 }
 
 /* TITLE */
 
-h1{
+.logo{
 text-align:center;
-font-size:42px;
-margin:10px 0 5px;
-font-weight:800;
+margin-bottom:18px;
+}
+
+.logo h1{
+margin:0;
+font-size:48px;
+font-weight:900;
 color:white;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 30px #ff4df2,
-0 0 50px #8c2dff;
+0 0 25px #ff4df2,
+0 0 45px #8c2dff;
 }
 
-.subTitle{
-text-align:center;
-color:#00ffcc;
+.logo p{
+margin-top:8px;
 font-size:12px;
-letter-spacing:3px;
-margin-bottom:20px;
+letter-spacing:4px;
+color:#00ffcc;
 }
 
 /* PANELS */
 
 .panel{
-background:#1c1735;
+background:#1b1435;
 border:2px solid #b84dff;
-border-radius:22px;
+border-radius:24px;
 padding:16px;
 margin-bottom:20px;
 box-shadow:
@@ -77,19 +80,12 @@ box-shadow:
 inset 0 0 15px rgba(255,255,255,.03);
 }
 
-.panelTitle{
-text-align:center;
-font-size:20px;
-font-weight:700;
-margin-bottom:14px;
-}
-
 /* STREAM */
 
 #video-container{
 width:100%;
 height:240px;
-border-radius:16px;
+border-radius:18px;
 overflow:hidden;
 border:2px solid #d94dff;
 background:#120d28;
@@ -107,8 +103,8 @@ border:none;
 margin-top:18px;
 background:#120d28;
 border:2px solid #d94dff;
-border-radius:20px;
-padding:20px;
+border-radius:22px;
+padding:25px 10px;
 text-align:center;
 position:relative;
 overflow:hidden;
@@ -117,8 +113,8 @@ overflow:hidden;
 .numberWrap::before{
 content:'';
 position:absolute;
-width:400px;
-height:400px;
+width:350px;
+height:350px;
 background:radial-gradient(circle,#ff4df233,transparent 70%);
 top:50%;
 left:50%;
@@ -128,7 +124,7 @@ transform:translate(-50%,-50%);
 #currentNumber{
 position:relative;
 z-index:2;
-font-size:110px;
+font-size:100px;
 font-weight:900;
 line-height:1;
 color:white;
@@ -141,10 +137,10 @@ text-shadow:
 #mode{
 position:relative;
 z-index:2;
-color:#00ffcc;
+margin-top:10px;
 font-size:18px;
 font-weight:700;
-margin-top:10px;
+color:#00ffcc;
 }
 
 /* BUTTON */
@@ -154,10 +150,10 @@ width:100%;
 margin-top:18px;
 padding:18px;
 border:none;
-border-radius:16px;
+border-radius:18px;
 background:linear-gradient(45deg,#00ffcc,#00d9ff);
-font-size:22px;
-font-weight:800;
+font-size:24px;
+font-weight:900;
 color:black;
 cursor:pointer;
 box-shadow:0 0 20px rgba(0,255,204,.5);
@@ -165,19 +161,26 @@ box-shadow:0 0 20px rgba(0,255,204,.5);
 
 /* CHAT */
 
+.chatTitle{
+text-align:center;
+font-size:28px;
+font-weight:800;
+margin:25px 0 15px;
+}
+
 #messages{
-height:170px;
+height:180px;
 overflow-y:auto;
 background:#120d28;
-border:1px solid #31245f;
-border-radius:12px;
+border:1px solid #44336f;
+border-radius:14px;
 padding:12px;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .msg{
-margin-bottom:8px;
-font-size:14px;
+margin-bottom:10px;
+font-size:15px;
 }
 
 .msg b{
@@ -186,29 +189,40 @@ color:#00ffcc;
 
 #chat-input{
 display:flex;
-gap:6px;
+gap:8px;
+width:100%;
 }
 
 #chat-input input{
 flex:1;
-padding:12px;
+min-width:0;
+padding:14px;
 background:#120d28;
 border:1px solid #44336f;
-border-radius:10px;
+border-radius:12px;
 color:white;
 outline:none;
+font-size:15px;
 }
 
 #chat-input button{
-padding:0 18px;
+width:90px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
 color:white;
-font-weight:700;
+font-weight:800;
+font-size:15px;
 }
 
 /* TICKETS */
+
+.panelTitle{
+text-align:center;
+font-size:32px;
+font-weight:900;
+margin-bottom:18px;
+}
 
 #tickets{
 display:flex;
@@ -222,18 +236,18 @@ grid-template-columns:repeat(9,1fr);
 gap:2px;
 background:#d94dff;
 padding:3px;
-border-radius:14px;
+border-radius:16px;
 overflow:hidden;
 }
 
 .cell{
-min-height:50px;
+aspect-ratio:1/1;
 display:flex;
 align-items:center;
 justify-content:center;
 background:#120d28;
 font-size:18px;
-font-weight:600;
+font-weight:700;
 }
 
 .blank{
@@ -242,11 +256,10 @@ background:#0b0818;
 
 .marked{
 background:linear-gradient(45deg,#b84dff,#ff4df2);
-font-weight:800;
-box-shadow:0 0 12px rgba(255,77,242,.7);
+box-shadow:0 0 12px rgba(255,77,242,.8);
 }
 
-/* INFO */
+/* INFO BOXES */
 
 .infoGrid{
 display:grid;
@@ -255,31 +268,31 @@ gap:12px;
 }
 
 .infoCard{
-background:#1c1735;
+background:#1b1435;
 border:2px solid #b84dff;
-border-radius:16px;
-padding:14px;
+border-radius:18px;
+padding:18px;
 text-align:center;
 }
 
 .infoCard h3{
 margin:0;
-font-size:12px;
+font-size:13px;
+letter-spacing:2px;
 color:#00ffcc;
-letter-spacing:1px;
 }
 
 .infoCard p{
-margin:8px 0 0;
-font-size:24px;
-font-weight:800;
+margin:10px 0 0;
+font-size:30px;
+font-weight:900;
 }
 
 /* MOBILE */
 
 @media(max-width:700px){
 
-h1{
+.logo h1{
 font-size:34px;
 }
 
@@ -288,8 +301,24 @@ font-size:82px;
 }
 
 .cell{
-min-height:38px;
-font-size:15px;
+font-size:14px;
+}
+
+#chat-input{
+flex-wrap:wrap;
+}
+
+#chat-input input{
+width:100%;
+}
+
+#chat-input button{
+width:100%;
+height:52px;
+}
+
+.panelTitle{
+font-size:26px;
 }
 
 }
@@ -301,18 +330,24 @@ font-size:15px;
 
 <div class="container">
 
+<!-- LOGO -->
+
+<div class="logo">
+
 <h1>MARVALOUS BINGO</h1>
 
-<div class="subTitle">
-REAL PEOPLE • REAL WINNERS
+<p>REAL PEOPLE • REAL WINNERS</p>
+
 </div>
 
-<!-- STREAM FIRST -->
+<!-- STREAM PANEL -->
 
 <div class="panel">
 
 <div id="video-container">
+
 <iframe src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"></iframe>
+
 </div>
 
 <div class="numberWrap">
@@ -327,9 +362,7 @@ REAL PEOPLE • REAL WINNERS
 🎉 BINGO 🎉
 </button>
 
-<!-- CHAT UNDER STREAM -->
-
-<div class="panelTitle" style="margin-top:25px;">
+<div class="chatTitle">
 LIVE CHAT
 </div>
 
@@ -347,7 +380,7 @@ LIVE CHAT
 
 </div>
 
-<!-- TICKETS SECOND -->
+<!-- TICKETS -->
 
 <div class="panel">
 
@@ -359,7 +392,7 @@ YOUR TICKETS
 
 </div>
 
-<!-- INFO LAST -->
+<!-- INFO -->
 
 <div class="infoGrid">
 
@@ -409,8 +442,6 @@ playerId=Date.now().toString();
 localStorage.setItem('playerId',playerId);
 
 }
-
-/* FIX OLD CARDS */
 
 if(localStorage.getItem('fixedCardsV3')!=="yes"){
 
