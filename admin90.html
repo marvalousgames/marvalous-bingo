@@ -443,15 +443,21 @@ function validateClaim(name){
 
     if(!player)return;
 
-    let tickets=player.cards;
-
     let totalMarked=0;
 
-    tickets.flat().forEach(n=>{
+    player.cards.forEach(ticket=>{
 
-      if(n && called.includes(Number(n))){
-        totalMarked++;
-      }
+      ticket.forEach(row=>{
+
+        row.forEach(n=>{
+
+          if(n && called.includes(Number(n))){
+            totalMarked++;
+          }
+
+        });
+
+      });
 
     });
 
@@ -483,19 +489,23 @@ function viewPlayer(name){
 
       html += `<div class="ticket">`;
 
-      ticket.forEach(n=>{
+      ticket.forEach(row=>{
 
-        let marked=false;
+        row.forEach(n=>{
 
-        if(n && called.includes(Number(n))){
-          marked=true;
-        }
+          let marked=false;
 
-        html += `
-          <div class="cell ${!n ? 'blank' : ''} ${marked ? 'marked' : ''}">
-            ${n || ""}
-          </div>
-        `;
+          if(n && called.includes(Number(n))){
+            marked=true;
+          }
+
+          html += `
+            <div class="cell ${!n ? 'blank' : ''} ${marked ? 'marked' : ''}">
+              ${n || ""}
+            </div>
+          `;
+
+        });
 
       });
 
