@@ -12,81 +12,75 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:Arial,sans-serif;
 -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
 width:100%;
-height:100%;
-overflow-y:auto;
-font-family:Arial,sans-serif;
 background:
-radial-gradient(circle at center,#3a005f 0%,#12001f 45%,#050008 100%);
+radial-gradient(circle at center,#3d0066 0%,#170024 45%,#040008 100%);
 color:white;
+overflow-x:hidden;
 }
 
 body{
-padding:10px;
+padding:12px;
 }
 
-/* HEADER */
-
-.topBar{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-margin-bottom:10px;
-}
+/* LOGO */
 
 .logo{
 text-align:center;
-flex:1;
+margin-bottom:10px;
 }
 
 .logo h1{
-font-size:44px;
-line-height:0.9;
+font-size:46px;
 font-weight:900;
-color:white;
+line-height:0.9;
 text-shadow:
-0 0 8px #ff4dff,
-0 0 25px #ff4dff;
+0 0 10px #ff4df2,
+0 0 30px #ff4df2;
 }
 
 .logo p{
 margin-top:8px;
-font-size:12px;
+font-size:11px;
 letter-spacing:5px;
-color:#42ffe8;
+color:#46ffe9;
 }
 
-.gameInfo{
-text-align:right;
+/* TOP INFO */
+
+.topInfo{
+display:flex;
+justify-content:flex-end;
+gap:30px;
 font-weight:900;
 font-size:18px;
-line-height:1.2;
-padding-top:10px;
-min-width:70px;
-}
-
-/* MAIN */
-
-.mainTop{
-display:grid;
-grid-template-columns:90px 1fr;
-gap:10px;
-align-items:center;
 margin-bottom:10px;
 }
 
+/* MAIN TOP */
+
+.mainTop{
+display:grid;
+grid-template-columns:140px 1fr;
+gap:12px;
+align-items:center;
+margin-bottom:14px;
+}
+
+/* STREAM */
+
 .streamBox{
-width:90px;
-height:90px;
+height:120px;
 border-radius:24px;
 overflow:hidden;
-border:3px solid #c54dff;
-box-shadow:0 0 18px #ff4df2;
-background:#111;
+border:4px solid #cf4fff;
+box-shadow:0 0 22px #ff4df2;
+background:black;
 }
 
 .streamBox iframe{
@@ -95,19 +89,21 @@ height:100%;
 border:none;
 }
 
+/* NUMBER */
+
 .numberCaller{
-height:280px;
+height:200px;
 border-radius:50%;
-border:8px solid #ff4df2;
+border:7px solid #ff4df2;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:120px;
+font-size:90px;
 font-weight:900;
 background:rgba(0,0,0,0.45);
 box-shadow:
-0 0 25px #ff4df2,
-inset 0 0 50px rgba(255,0,255,0.25);
+0 0 30px #ff4df2,
+inset 0 0 40px rgba(255,0,255,0.3);
 }
 
 /* LAST NUMBERS */
@@ -115,21 +111,20 @@ inset 0 0 50px rgba(255,0,255,0.25);
 .lastNumbers{
 display:grid;
 grid-template-columns:repeat(5,1fr);
-gap:0;
-margin-bottom:14px;
-border-radius:30px;
 overflow:hidden;
-border:4px solid #c54dff;
+border-radius:30px;
+border:4px solid #c84dff;
+margin-bottom:16px;
 }
 
 .lastNum{
-height:74px;
+height:70px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:24px;
+font-size:26px;
 font-weight:900;
-border-right:2px solid #c54dff;
+border-right:2px solid #c84dff;
 background:rgba(0,0,0,0.45);
 }
 
@@ -139,126 +134,120 @@ border-right:none;
 
 /* TICKETS */
 
-.ticketPanel{
+.ticketWrap{
 background:#1a1033;
 border:4px solid #b84dff;
 border-radius:34px;
 padding:14px;
 margin-bottom:14px;
-overflow:hidden;
 }
 
 .ticketTitle{
-text-align:center;
-font-size:28px;
+font-size:34px;
 font-weight:900;
-margin-bottom:14px;
+text-align:center;
+margin-bottom:16px;
 }
 
 .ticketGrid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:12px;
-width:100%;
+gap:14px;
 }
 
 .ticket{
-background:#0a0017;
-border:3px solid #8d42ff;
+background:#090012;
+border:3px solid #9147ff;
 border-radius:26px;
-padding:8px;
+padding:10px;
 display:grid;
 grid-template-columns:repeat(9,1fr);
 grid-template-rows:repeat(3,1fr);
-gap:4px;
-overflow:hidden;
-width:100%;
+gap:5px;
 }
 
 .cell{
 aspect-ratio:1/1;
-border-radius:10px;
+border-radius:8px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:10px;
+font-size:12px;
 font-weight:900;
-background:#050008;
+background:#040008;
 }
 
 .marked{
-background:#53efff;
-color:white;
-box-shadow:0 0 12px #53efff;
+background:#56efff;
+box-shadow:0 0 14px #56efff;
 }
 
 /* BOTTOM */
 
-.bottomSection{
+.bottomWrap{
 display:grid;
-grid-template-columns:1fr 120px;
-gap:10px;
+grid-template-columns:1fr 140px;
+gap:12px;
 align-items:stretch;
-margin-bottom:20px;
+margin-bottom:30px;
 }
 
 /* CHAT */
 
 .chatBox{
 background:#1a1033;
-border:3px solid #7f47ff;
+border:4px solid #8b4dff;
 border-radius:30px;
 padding:14px;
 display:flex;
 flex-direction:column;
-height:250px;
-overflow:hidden;
+height:290px;
 }
 
 .chatTitle{
-font-size:24px;
+font-size:28px;
 font-weight:900;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
-#messages{
+.messages{
 flex:1;
 overflow-y:auto;
 padding-right:4px;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .msg{
-font-size:14px;
 margin-bottom:10px;
+font-size:16px;
 line-height:1.2;
 }
 
 .msg b{
-color:#4fe9ff;
+color:#52ecff;
 }
 
 .chatInputs{
 display:flex;
 flex-direction:column;
-gap:8px;
+gap:10px;
 }
 
 .chatInputs input{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
 outline:none;
 border-radius:16px;
-background:#12071f;
+background:#0d0217;
 color:white;
-font-size:15px;
+font-size:16px;
 }
 
 .messageRow{
 display:grid;
-grid-template-columns:1fr 90px;
-gap:8px;
+grid-template-columns:1fr 100px;
+gap:10px;
 }
 
 .sendBtn{
@@ -266,21 +255,20 @@ border:none;
 border-radius:16px;
 background:linear-gradient(45deg,#b84dff,#ff4df2);
 color:white;
-font-size:16px;
-font-weight:700;
+font-size:18px;
+font-weight:900;
 }
 
-/* BINGO */
+/* BINGO BUTTON */
 
 .bingoBtn{
 border:none;
-border-radius:30px;
-background:linear-gradient(45deg,#48f3ff,#29d9ff);
+border-radius:34px;
+background:linear-gradient(45deg,#4af2ff,#2de0ff);
 color:white;
-font-size:26px;
+font-size:32px;
 font-weight:900;
-box-shadow:0 0 18px #48e7ff;
-height:250px;
+box-shadow:0 0 18px #4af2ff;
 }
 
 /* MOBILE */
@@ -288,7 +276,7 @@ height:250px;
 @media(max-width:430px){
 
 .logo h1{
-font-size:32px;
+font-size:34px;
 }
 
 .logo p{
@@ -296,66 +284,81 @@ font-size:10px;
 letter-spacing:3px;
 }
 
+.topInfo{
+font-size:15px;
+gap:18px;
+}
+
 .mainTop{
-grid-template-columns:80px 1fr;
+grid-template-columns:110px 1fr;
+gap:10px;
 }
 
 .streamBox{
-width:80px;
-height:80px;
+height:100px;
 }
 
 .numberCaller{
-height:220px;
-font-size:90px;
+height:170px;
+font-size:72px;
 border-width:6px;
 }
 
 .lastNum{
-height:64px;
-font-size:20px;
-}
-
-.ticketTitle{
+height:58px;
 font-size:22px;
 }
 
+.ticketTitle{
+font-size:24px;
+}
+
 .ticketGrid{
-gap:8px;
+gap:10px;
 }
 
 .ticket{
-padding:6px;
-gap:3px;
+padding:8px;
+gap:4px;
 }
 
 .cell{
-font-size:9px;
-border-radius:8px;
+font-size:10px;
 }
 
-.bottomSection{
-grid-template-columns:1fr 105px;
-gap:8px;
+.bottomWrap{
+grid-template-columns:1fr 120px;
+gap:10px;
 }
 
 .chatBox{
-height:240px;
+height:260px;
 padding:12px;
 }
 
-.bingoBtn{
-height:240px;
-font-size:20px;
+.chatTitle{
+font-size:22px;
 }
 
-.messageRow{
-grid-template-columns:1fr 75px;
+.msg{
+font-size:14px;
 }
 
 .chatInputs input{
-padding:10px;
+padding:12px;
 font-size:14px;
+}
+
+.messageRow{
+grid-template-columns:1fr 80px;
+}
+
+.sendBtn{
+font-size:16px;
+}
+
+.bingoBtn{
+font-size:24px;
 }
 
 }
@@ -365,35 +368,29 @@ font-size:14px;
 
 <body>
 
-<!-- HEADER -->
-
-<div class="topBar">
-
-<div></div>
+<!-- LOGO -->
 
 <div class="logo">
 <h1>MARVALOUS<br>BINGO</h1>
 <p>REAL PEOPLE • REAL WINNERS</p>
 </div>
 
-<div class="gameInfo">
-2 LINES<br><br>
-GAME 90
+<!-- INFO -->
+
+<div class="topInfo">
+<div>2 LINES</div>
+<div>GAME 90</div>
 </div>
 
-</div>
-
-<!-- TOP -->
+<!-- STREAM + NUMBER -->
 
 <div class="mainTop">
 
 <div class="streamBox">
-
 <iframe
 src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
 allowfullscreen>
 </iframe>
-
 </div>
 
 <div class="numberCaller" id="currentNumber">
@@ -405,18 +402,16 @@ allowfullscreen>
 <!-- LAST CALLED -->
 
 <div class="lastNumbers">
-
 <div class="lastNum">57</div>
 <div class="lastNum">71</div>
-<div class="lastNum">-</div>
-<div class="lastNum">-</div>
-<div class="lastNum">-</div>
-
+<div class="lastNum">66</div>
+<div class="lastNum">40</div>
+<div class="lastNum">12</div>
 </div>
 
 <!-- TICKETS -->
 
-<div class="ticketPanel">
+<div class="ticketWrap">
 
 <div class="ticketTitle">
 Your Tickets: 4
@@ -424,7 +419,7 @@ Your Tickets: 4
 
 <div class="ticketGrid">
 
-<!-- TICKET -->
+<!-- TICKET 1 -->
 
 <div class="ticket">
 
@@ -453,14 +448,14 @@ Your Tickets: 4
 <div class="cell">26</div>
 <div class="cell"></div>
 <div class="cell"></div>
-<div class="cell">55</div>
+<div class="cell marked">55</div>
 <div class="cell">63</div>
 <div class="cell">79</div>
 <div class="cell">88</div>
 
 </div>
 
-<!-- TICKET -->
+<!-- TICKET 2 -->
 
 <div class="ticket">
 
@@ -496,7 +491,7 @@ Your Tickets: 4
 
 </div>
 
-<!-- TICKET -->
+<!-- TICKET 3 -->
 
 <div class="ticket">
 
@@ -532,7 +527,7 @@ Your Tickets: 4
 
 </div>
 
-<!-- TICKET -->
+<!-- TICKET 4 -->
 
 <div class="ticket">
 
@@ -541,7 +536,7 @@ Your Tickets: 4
 <div class="cell"></div>
 <div class="cell"></div>
 <div class="cell">40</div>
-<div class="cell">58</div>
+<div class="cell marked">58</div>
 <div class="cell"></div>
 <div class="cell">77</div>
 <div class="cell">85</div>
@@ -574,7 +569,7 @@ Your Tickets: 4
 
 <!-- BOTTOM -->
 
-<div class="bottomSection">
+<div class="bottomWrap">
 
 <!-- CHAT -->
 
@@ -584,12 +579,11 @@ Your Tickets: 4
 Live Chat
 </div>
 
-<div id="messages">
+<div class="messages" id="messages">
 
 <div class="msg"><b>Kee:</b> hi</div>
 <div class="msg"><b>Kee:</b> hi again</div>
-<div class="msg"><b>Kee:</b> hey</div>
-<div class="msg"><b>Kee:</b> hi</div>
+<div class="msg"><b>Player2:</b> GG</div>
 
 </div>
 
@@ -599,9 +593,9 @@ Live Chat
 
 <div class="messageRow">
 
-<input id="msg" placeholder="Message...">
+<input id="message" placeholder="Type message...">
 
-<button class="sendBtn" onclick="sendMsg()">
+<button class="sendBtn" onclick="sendMessage()">
 Send
 </button>
 
@@ -613,7 +607,7 @@ Send
 
 <!-- BINGO -->
 
-<button class="bingoBtn" onclick="checkBingo()">
+<button class="bingoBtn">
 BINGO!
 </button>
 
@@ -621,30 +615,26 @@ BINGO!
 
 <script>
 
-function sendMsg(){
+function sendMessage(){
 
 let name=document.getElementById("name").value || "Player";
-let msg=document.getElementById("msg").value;
+let message=document.getElementById("message").value;
 
-if(msg.trim()=="") return;
+if(message.trim()=="") return;
 
 let div=document.createElement("div");
 
 div.className="msg";
 
-div.innerHTML="<b>"+name+":</b> "+msg;
+div.innerHTML="<b>"+name+":</b> "+message;
 
 document.getElementById("messages").appendChild(div);
 
-document.getElementById("msg").value="";
+document.getElementById("message").value="";
 
 document.getElementById("messages").scrollTop=
 document.getElementById("messages").scrollHeight;
 
-}
-
-function checkBingo(){
-alert("BINGO CLAIMED!");
 }
 
 </script>
