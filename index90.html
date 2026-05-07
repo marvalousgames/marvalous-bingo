@@ -625,7 +625,9 @@ Send
 </div>
 
 <div class="ticketsGrid" id="tickets"></div>
-
+<audio id="bingoSound" preload="auto">
+<source src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 
@@ -935,11 +937,45 @@ box.scrollTop=box.scrollHeight;
 
 });
 
+ 
+/* BINGO SOUND */
+
+db.ref('bingoClaim').on('value',snap=>{
+
+const data = snap.val();
+
+if(!data) return;
+
+window.speechSynthesis.cancel();
+
+const speech = new SpeechSynthesisUtterance(
+data.name + " has called bingo!"
+);
+
+speech.volume = 1;
+speech.rate = 0.9;
+speech.pitch = 1.1;
+
+window.speechSynthesis.speak(speech);
+
+const cheer = new Audio(
+'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
+);
+
+cheer.volume = 1;
+
+setTimeout(()=>{
+
+cheer.play();
+
+},2200);
+
+});
 /* BINGO */
 
 function checkBingo(){
 
-db.ref('bingoClaims').push({
+db.ref('bingoClaims').set({
 
 name:playerName,
 time:Date.now()
