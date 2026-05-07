@@ -7,315 +7,483 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <style>
+
 body{
- background:#0e0b1f;
- color:white;
- font-family:Arial;
- text-align:center;
- margin:0;
+background:#0e0b1f;
+color:white;
+font-family:Arial;
+text-align:center;
+margin:0;
 }
 
 .box{
- background:#1c1735;
- margin:15px;
- padding:20px;
- border-radius:14px;
+background:#1c1735;
+margin:15px;
+padding:20px;
+border-radius:14px;
 }
 
 #current{
- font-size:60px;
- color:#ff4df2;
+font-size:60px;
+color:#ff4df2;
 }
 
 .numberGrid{
- display:grid;
- grid-template-columns:repeat(10,1fr);
- gap:5px;
- margin-top:20px;
+display:grid;
+grid-template-columns:repeat(10,1fr);
+gap:5px;
+margin-top:20px;
 }
 
 .ball{
- background:#120d28;
- padding:10px;
- border-radius:8px;
+background:#120d28;
+padding:10px;
+border-radius:8px;
 }
 
 .called{
- background:#ff4df2;
+background:#ff4df2;
 }
 
 .latest{
- background:#00ffcc !important;
- color:black;
+background:#00ffcc !important;
+color:black;
 }
 
 .ticket{
- display:grid;
- grid-template-columns:repeat(9,1fr);
- gap:2px;
- margin:15px auto;
- max-width:900px;
- background:#b84dff;
- padding:3px;
- border-radius:10px;
+display:grid;
+grid-template-columns:repeat(9,1fr);
+gap:2px;
+margin:15px auto;
+max-width:900px;
+background:#b84dff;
+padding:3px;
+border-radius:10px;
 }
 
 .cell{
- background:#120d28;
- min-height:55px;
- display:flex;
- align-items:center;
- justify-content:center;
+background:#120d28;
+min-height:55px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .blank{
- background:#0b0818;
+background:#0b0818;
 }
 
 .marked{
- background:#ff4df2;
+background:#ff4df2;
 }
 
 button{
- background:#00ffcc;
- border:none;
- padding:10px 15px;
- margin:5px;
- border-radius:8px;
- font-weight:bold;
+background:#00ffcc;
+border:none;
+padding:10px 15px;
+margin:5px;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
 }
+
 </style>
 </head>
+
 <body>
 
 <h1>🎯 MARVALOUS BINGO ADMIN</h1>
 
 <div class="box">
+
 <div id="current">-</div>
-<button onclick="callNumber()">CALL NEXT</button>
-<button onclick="undoLast()">UNDO LAST</button>
-<button onclick="resetGame()">RESET GAME</button>
+
+<button onclick="callNumber()">
+CALL NEXT
+</button>
+
+<button onclick="undoLast()">
+UNDO LAST
+</button>
+
+<button onclick="resetGame()">
+RESET GAME
+</button>
+
 <div id="numberGrid" class="numberGrid"></div>
+
 </div>
 
 <div class="box">
+
 <h2>Game Mode</h2>
-<button onclick="setMode('1line')">1 LINE</button>
-<button onclick="setMode('2lines')">2 LINES</button>
-<button onclick="setMode('fullhouse')">FULL HOUSE</button>
+
+<button onclick="setMode('1line')">
+1 LINE
+</button>
+
+<button onclick="setMode('2lines')">
+2 LINES
+</button>
+
+<button onclick="setMode('fullhouse')">
+FULL HOUSE
+</button>
+
 </div>
 
 <div class="box">
+
 <h2>Bingo Claims</h2>
+
 <div id="claims"></div>
+
 </div>
 
 <div class="box">
+
 <h2>Selected Tickets</h2>
+
 <div id="cardView"></div>
+
 </div>
 
 <script>
-const firebaseConfig={
- apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
- databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
+
+const firebaseConfig = {
+apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
 
-let called=[];
+const db = firebase.database();
+
+let called = [];
+
+/* LOAD NUMBER GRID */
 
 for(let i=1;i<=90;i++){
- let div=document.createElement('div');
- div.className='ball';
- div.id='ball-'+i;
- div.innerText=i;
- document.getElementById('numberGrid').appendChild(div);
+
+let div=document.createElement('div');
+
+div.className='ball';
+
+div.id='ball-'+i;
+
+div.innerText=i;
+
+document.getElementById('numberGrid').appendChild(div);
+
 }
+
+/* CALL NUMBER */
 
 function callNumber(){
- let num;
 
- do{
-  num=Math.floor(Math.random()*90)+1;
- }while(called.includes(num));
+let num;
 
- called.push(num);
+do{
 
- db.ref('currentNumber').set(num);
- db.ref('calledNumbers').set(called);
+num=Math.floor(Math.random()*90)+1;
+
+}while(called.includes(num));
+
+called.push(num);
+
+db.ref('currentNumber').set(num);
+
+db.ref('calledNumbers').set(called);
+
 }
+
+/* UNDO */
 
 function undoLast(){
- called.pop();
- db.ref('calledNumbers').set(called);
- db.ref('currentNumber').set(called[called.length-1]||0);
-}
 
-function setMode(mode){
- db.ref('mode').set(mode);
-}
+called.pop();
 
- db.ref('calledNumbers').on('value',snap=>{
-  called=Object.values(snap.val()||{});
+db.ref('calledNumbers').set(called);
 
-  document.querySelectorAll('.ball').forEach(b=>{
-   b.classList.remove('called');
-   b.classList.remove('latest');
-  });
-
-  called.forEach(n=>{
-   let ball=document.getElementById('ball-'+n);
-   if(ball) ball.classList.add('called');
-  });
-
-  let latest=called[called.length-1];
-
-  if(latest){
-   document.getElementById('ball-'+latest).classList.add('latest');
-  }
- });
-
- db.ref('currentNumber').on('value',snap=>{
-  document.getElementById('current').innerText=snap.val()||'-';
- });
-
- db.ref('bingoClaims').on('value',snap=>{
-  let data=snap.val()||{};
-  let html='';
-
-  Object.entries(data).reverse().forEach(([id,claim])=>{
-   html+=`
-   <div style="margin-bottom:15px;">
-    <b>${claim.name}</b><br><br>
-    <button onclick="viewPlayer('${claim.name}')">VIEW TICKETS</button>
-    <button onclick="validateClaim('${claim.name}')">VALIDATE</button>
-    <button onclick="approve('${id}')">APPROVE</button>
-    <button class="danger" onclick="denyClaim('${id}')">DENY</button>
-   </div>`;
-  });
-
-  document.getElementById('claims').innerHTML=html;
- });
-
-function viewPlayer(name){
- db.ref('players').once('value').then(snap=>{
-  let players=snap.val()||{};
-
-  let player=Object.values(players).find(p=>p.name===name);
-
-  if(!player){
-   alert('No tickets found');
-   return;
-  }
-
-  let html='';
-
-  player.cards.forEach(ticket=>{
-   html+='<div class="ticket">';
-
-   ticket.flat().forEach(n=>{
-    let marked=n && called.includes(Number(n));
-
-    html+=`<div class="cell ${!n?'blank':''} ${marked?'marked':''}">${n||''}</div>`;
-   });
-
-   html+='</div>';
-  });
-
-  document.getElementById('cardView').innerHTML=html;
- });
-}
-
-function validateClaim(name){
- db.ref('players').once('value').then(snap=>{
-  let players=snap.val()||{};
-
-  let player=Object.values(players).find(p=>p.name===name);
-
-  if(!player){
-   alert('No player found');
-   return;
-  }
-
-  let total=0;
-
-  player.cards.forEach(ticket=>{
-   ticket.flat().forEach(n=>{
-    if(n && called.includes(Number(n))) total++;
-   });
-  });
-
-  alert(name+' has '+total+' called numbers marked.');
- });
-}
-
-function approve(id){
- db.ref('winner').set(true);
- db.ref('bingoClaims/'+id).remove();
- alert('Winner approved');
-}
-function denyClaim(id){
-
- db.ref('bingoClaims/'+id).remove();
-
- alert('❌ Bingo claim denied');
-
-}
-function resetGame(){
- called=[];
- db.ref('calledNumbers').remove();
- db.ref('bingoClaims').remove();
- db.ref('currentNumber').set(0);
- db.ref('winner').set(false);
- db.ref('gameId').set(Date.now());
- document.getElementById('cardView').innerHTML='';
-}
-
-const bingoAudio=new Audio('https://www.soundjay.com/human/cheering-01.mp3');
-
-bingoAudio.volume=1;
-
-document.body.addEventListener('click',()=>{
- bingoAudio.play().then(()=>{
-  bingoAudio.pause();
-  bingoAudio.currentTime=0;
- }).catch(()=>{});
-},{once:true});
-
- db.ref('bingoSound').on('value',snap=>{
-  if(!snap.val()) return;
-
-  bingoAudio.currentTime=0;
-  bingoAudio.play().catch(()=>{});
- });
- <!-- BINGO ALERT SYSTEM -->
-
-const claimAudio = new Audio(
-  "https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"
+db.ref('currentNumber').set(
+called[called.length-1] || 0
 );
 
-claimAudio.volume = 1;
+}
+
+/* GAME MODE */
+
+function setMode(mode){
+
+db.ref('mode').set(mode);
+
+}
+
+/* CALLED NUMBERS */
+
+db.ref('calledNumbers').on('value',snap=>{
+
+called = Object.values(snap.val() || {});
+
+document.querySelectorAll('.ball').forEach(b=>{
+
+b.classList.remove('called');
+
+b.classList.remove('latest');
+
+});
+
+called.forEach(n=>{
+
+let ball=document.getElementById('ball-'+n);
+
+if(ball){
+
+ball.classList.add('called');
+
+}
+
+});
+
+let latest=called[called.length-1];
+
+if(latest){
+
+document.getElementById('ball-'+latest)
+.classList.add('latest');
+
+}
+
+});
+
+/* CURRENT NUMBER */
+
+db.ref('currentNumber').on('value',snap=>{
+
+document.getElementById('current').innerText =
+snap.val() || '-';
+
+});
+
+/* CLAIMS */
+
+db.ref('bingoClaims').on('value',snap=>{
+
+let data=snap.val() || {};
+
+let html='';
+
+Object.entries(data).reverse().forEach(([id,claim])=>{
+
+html += `
+
+<div style="margin-bottom:15px;">
+
+<b>${claim.name}</b>
+
+<br><br>
+
+<button onclick="viewPlayer('${claim.name}')">
+VIEW TICKETS
+</button>
+
+<button onclick="validateClaim('${claim.name}')">
+VALIDATE
+</button>
+
+<button onclick="approve('${id}')">
+APPROVE
+</button>
+
+<button onclick="denyClaim('${id}')">
+DENY
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById('claims').innerHTML = html;
+
+});
+
+/* VIEW PLAYER */
+
+function viewPlayer(name){
+
+db.ref('players').once('value').then(snap=>{
+
+let players=snap.val() || {};
+
+let player=Object.values(players)
+.find(p=>p.name===name);
+
+if(!player){
+
+alert('No tickets found');
+
+return;
+
+}
+
+let html='';
+
+player.cards.forEach(ticket=>{
+
+html += '<div class="ticket">';
+
+ticket.flat().forEach(n=>{
+
+let marked = n &&
+called.includes(Number(n));
+
+html += `
+
+<div class="cell ${!n?'blank':''} ${marked?'marked':''}">
+${n || ''}
+</div>
+
+`;
+
+});
+
+html += '</div>';
+
+});
+
+document.getElementById('cardView').innerHTML = html;
+
+});
+
+}
+
+/* VALIDATE */
+
+function validateClaim(name){
+
+db.ref('players').once('value').then(snap=>{
+
+let players=snap.val() || {};
+
+let player=Object.values(players)
+.find(p=>p.name===name);
+
+if(!player){
+
+alert('No player found');
+
+return;
+
+}
+
+let total=0;
+
+player.cards.forEach(ticket=>{
+
+ticket.flat().forEach(n=>{
+
+if(n && called.includes(Number(n))){
+
+total++;
+
+}
+
+});
+
+});
+
+alert(name + ' has ' + total + ' called numbers marked.');
+
+});
+
+}
+
+/* APPROVE */
+
+function approve(id){
+
+db.ref('winner').set(true);
+
+db.ref('bingoClaims/'+id).remove();
+
+alert('Winner approved');
+
+}
+
+/* DENY */
+
+function denyClaim(id){
+
+db.ref('bingoClaims/'+id).remove();
+
+alert('❌ Bingo claim denied');
+
+}
+
+/* RESET */
+
+function resetGame(){
+
+called=[];
+
+db.ref('calledNumbers').remove();
+
+db.ref('bingoClaims').remove();
+
+db.ref('currentNumber').set(0);
+
+db.ref('winner').set(false);
+
+db.ref('gameId').set(Date.now());
+
+document.getElementById('cardView').innerHTML='';
+
+}
+
+/* ENABLE AUDIO */
+
+document.body.addEventListener('click',()=>{
+
+const unlock = new Audio();
+
+unlock.play().catch(()=>{});
+
+window.speechSynthesis.resume();
+
+},{once:true});
+
+/* BINGO SOUND + POPUP */
 
 let lastClaimId = null;
 
-db.ref("bingoClaim").on(
+db.ref('bingoClaims').limitToLast(1).on('child_added',snap=>{
 
-  const claim = snap.val();
+const claim = snap.val();
 
-  const data = snap.val();
+const claimId = snap.key;
 
-  claimAudio.currentTime = 0;
+if(lastClaimId === claimId) return;
 
-  claimAudio.play().catch(()=>{});
+lastClaimId = claimId;
 
-  showBingoPopup(data.name);
+/* BELL */
 
-  viewPlayer(window.speechSynthesis.cancel();
+const bell = new Audio(
+'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3'
+);
+
+bell.volume = 1;
+
+bell.play().catch(()=>{});
+
+/* VOICE */
+
+window.speechSynthesis.cancel();
 
 const speech = new SpeechSynthesisUtterance(
-data.name + " has called bingo!"
+claim.name + ' has called bingo!'
 );
 
 speech.volume = 1;
@@ -324,88 +492,114 @@ speech.pitch = 1.1;
 
 window.speechSynthesis.speak(speech);
 
+/* CHEERING */
+
 const cheer = new Audio(
 'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
 );
 
+cheer.volume = 1;
+
 setTimeout(()=>{
 
-cheer.play();
+cheer.play().catch(()=>{});
 
-},2200);.name);
-
-});
+},2200);
 
 /* POPUP */
 
+showBingoPopup(claim.name);
+
+/* AUTO VIEW */
+
+viewPlayer(claim.name);
+
+});
+
+/* POPUP FUNCTION */
+
 function showBingoPopup(name){
 
-  let old = document.getElementById("bingoPopup");
+let old=document.getElementById('bingoPopup');
 
-  if(old) old.remove();
+if(old){
 
-  const popup = document.createElement("div");
-
-  popup.id = "bingoPopup";
-
-  popup.style.position = "fixed";
-  popup.style.top = "0";
-  popup.style.left = "0";
-  popup.style.width = "100%";
-  popup.style.height = "100%";
-  popup.style.background = "rgba(0,0,0,0.9)";
-  popup.style.zIndex = "99999";
-  popup.style.display = "flex";
-  popup.style.alignItems = "center";
-  popup.style.justifyContent = "center";
-
-  popup.innerHTML = `
-    <div style="
-      background:#1c1735;
-      padding:40px;
-      border-radius:20px;
-      text-align:center;
-      border:4px solid #00ffcc;
-      box-shadow:0 0 40px #00ffcc;
-      max-width:90%;
-    ">
-
-      <h1 style="
-        color:#00ffcc;
-        font-size:48px;
-        margin-bottom:20px;
-      ">
-        🎉 BINGO CLAIM 🎉
-      </h1>
-
-      <h2 style="
-        color:white;
-        font-size:36px;
-      ">
-        ${name}
-      </h2>
-
-      <button onclick="
-        document.getElementById('bingoPopup').remove()
-      " style="
-        margin-top:25px;
-        background:#ff4df2;
-        color:white;
-        border:none;
-        padding:15px 30px;
-        border-radius:12px;
-        font-size:20px;
-        font-weight:bold;
-      ">
-        CLOSE
-      </button>
-
-    </div>
-  `;
-
-  document.body.appendChild(popup);
+old.remove();
 
 }
+
+const popup=document.createElement('div');
+
+popup.id='bingoPopup';
+
+popup.style.position='fixed';
+popup.style.top='0';
+popup.style.left='0';
+popup.style.width='100%';
+popup.style.height='100%';
+popup.style.background='rgba(0,0,0,0.9)';
+popup.style.zIndex='99999';
+popup.style.display='flex';
+popup.style.alignItems='center';
+popup.style.justifyContent='center';
+
+popup.innerHTML=`
+
+<div style="
+background:#1c1735;
+padding:40px;
+border-radius:20px;
+text-align:center;
+border:4px solid #00ffcc;
+box-shadow:0 0 40px #00ffcc;
+max-width:90%;
+">
+
+<h1 style="
+color:#00ffcc;
+font-size:48px;
+margin-bottom:20px;
+">
+
+🎉 BINGO CLAIM 🎉
+
+</h1>
+
+<h2 style="
+color:white;
+font-size:36px;
+">
+
+${name}
+
+</h2>
+
+<button onclick="
+document.getElementById('bingoPopup').remove()
+" style="
+margin-top:25px;
+background:#ff4df2;
+color:white;
+border:none;
+padding:15px 30px;
+border-radius:12px;
+font-size:20px;
+font-weight:bold;
+">
+
+CLOSE
+
+</button>
+
+</div>
+
+`;
+
+document.body.appendChild(popup);
+
+}
+
 </script>
+
 </body>
 </html>
