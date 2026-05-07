@@ -706,7 +706,17 @@ window.speechSynthesis.resume();
 
 },{once:true});
 
-let playerName = localStorage.getItem('playerName') || '';
+let playerName = localStorage.getItem('playerName');
+
+if(!playerName){
+
+document.getElementById('namePopup').style.display='flex';
+
+}else{
+
+document.getElementById('namePopup').style.display='none';
+
+}
 
 /* NAME POPUP */
 
