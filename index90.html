@@ -557,6 +557,27 @@ justify-content:center;
 .chatWrap{
 margin-top:20px;
 }
+ 
+.modeBanner{
+margin:20px auto;
+padding:14px;
+max-width:500px;
+border:3px solid #ff4df2;
+border-radius:16px;
+background:#1c1735;
+color:white;
+font-size:28px;
+font-weight:bold;
+text-align:center;
+box-shadow:0 0 20px #ff4df2;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.03);}
+100%{transform:scale(1);}
+} 
 </style>
 </style>
 </head>
@@ -665,7 +686,9 @@ BINGO
 </div>
 
 </div>
-
+<div id="modeBanner" class="modeBanner">
+ONE LINE NOW PLAYING!
+</div>
 <div class="chatWrap">
 
 <div class="messages" id="messages"></div>
@@ -1159,7 +1182,32 @@ db.ref('bingoSound').set(Date.now());
 alert('🎉 Bingo claimed!');
 
 }
+/* MODE BANNER */
 
+db.ref('mode').on('value',snap=>{
+
+const mode = snap.val() || '1line';
+
+let text = '';
+
+if(mode === '1line'){
+text = ' ONE LINE NOW PLAYING';
+}
+
+if(mode === '2lines'){
+text = '🔥 TWO LINES NOW PLAYING';
+}
+
+if(mode === 'fullhouse'){
+text = '🏆 FULL HOUSE NOW PLAYING';
+}
+
+document.getElementById('modeBanner')
+.innerText = text;
+
+});
+
+/* THEN YOUR </script> IS UNDER IT */
 </script>
 
 </body>
