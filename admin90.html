@@ -300,23 +300,39 @@ claimAudio.volume = 1;
 
 let lastClaimId = null;
 
-db.ref("bingoClaims").limitToLast(1).on("child_added",snap=>{
+db.ref("bingoClaim").on(
 
   const claim = snap.val();
 
-  const claimId = snap.key;
-
-  if(lastClaimId === claimId) return;
-
-  lastClaimId = claimId;
+  const data = snap.val();
 
   claimAudio.currentTime = 0;
 
   claimAudio.play().catch(()=>{});
 
-  showBingoPopup(claim.name);
+  showBingoPopup(data.name);
 
-  viewPlayer(claim.name);
+  viewPlayer(window.speechSynthesis.cancel();
+
+const speech = new SpeechSynthesisUtterance(
+data.name + " has called bingo!"
+);
+
+speech.volume = 1;
+speech.rate = 0.9;
+speech.pitch = 1.1;
+
+window.speechSynthesis.speak(speech);
+
+const cheer = new Audio(
+'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
+);
+
+setTimeout(()=>{
+
+cheer.play();
+
+},2200);.name);
 
 });
 
