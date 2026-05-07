@@ -728,26 +728,63 @@ return ticket;
 
 }
 
-if(localStorage.getItem('layoutFinalV1')!=="yes"){
 
-localStorage.removeItem('cards');
-
-localStorage.setItem('layoutFinalV1',"yes");
-
-}
 
 let savedCards=localStorage.getItem('cards');
 
-let cards=savedCards
-?JSON.parse(savedCards)
-:[
+let currentGameId = localStorage.getItem('gameId');
+
+db.ref('gameId').on('value',snap=>{
+
+const newGameId = snap.val();
+
+if(!newGameId) return;
+
+/* NEW GAME */
+
+if(currentGameId != newGameId){
+
+currentGameId = newGameId;
+
+localStorage.setItem('gameId',newGameId);
+
+/* GENERATE NEW CARDS */
+
+cards = [
 generateTicket(),
 generateTicket(),
 generateTicket(),
 generateTicket()
 ];
 
-localStorage.setItem('cards',JSON.stringify(cards));
+localStorage.setItem(
+'cards',
+JSON.stringify(cards)
+);
+
+renderBoards();
+
+}
+
+});
+
+/* LOAD SAVED CARDS */
+
+let savedCards = localStorage.getItem('cards');
+
+let cards = savedCards
+? JSON.parse(savedCards)
+: [
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem(
+'cards',
+JSON.stringify(cards)
+);
 
 function renderBoards(){
 
