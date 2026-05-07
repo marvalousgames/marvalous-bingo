@@ -625,7 +625,9 @@ Send
 </div>
 
 <div class="ticketsGrid" id="tickets"></div>
-
+<button onclick="testVoice()">
+TEST VOICE
+</button>
 
 <script>
 
@@ -637,6 +639,17 @@ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 firebase.initializeApp(firebaseConfig);
 
 const db=firebase.database();
+function testVoice(){
+
+const speech = new SpeechSynthesisUtterance('Testing');
+
+speech.volume = 1;
+speech.rate = 1;
+speech.pitch = 1;
+
+window.speechSynthesis.speak(speech);
+
+}
 document.body.addEventListener('click',()=>{
 
 window.speechSynthesis.resume();
