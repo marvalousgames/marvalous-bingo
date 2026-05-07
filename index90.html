@@ -795,22 +795,47 @@ renderBoards();
 
 /* FIREBASE */
 
+let voicesLoaded = false;
+
+speechSynthesis.onvoiceschanged = ()=>{
+
+voicesLoaded = true;
+
+};
+
 db.ref('currentNumber').on('value',snap=>{
 
 let number = snap.val() || 0;
 
 document.getElementById('currentNumber').innerText = number;
 
-if(number){
+if(number && voicesLoaded){
+
+window.speechSynthesis.cancel();
+
+setTimeout(()=>{
 
 const speech = new SpeechSynthesisUtterance(number);
 
 speech.volume = 1;
-speech.rate = 0.9;
+speech.rate = 0.85;
 speech.pitch = 1;
 
-window.speechSynthesis.cancel();
+const voices = speechSynthesis.getVoices();
+
+const englishVoice = voices.find(v =>
+v.lang.includes('en')
+);
+
+if(englishVoice){
+
+speech.voice = englishVoice;
+
+}
+
 window.speechSynthesis.speak(speech);
+
+},150);
 
 }
 
