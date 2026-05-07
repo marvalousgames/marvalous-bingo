@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Marvalous Bingo 90</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Marvalous Bingo</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -24,17 +22,16 @@ font-family:'Poppins',sans-serif;
 
 body{
 background:
-radial-gradient(circle at top,#42006f 0%,#150022 45%,#040007 100%);
+radial-gradient(circle at top,#3b0066 0%,#140021 45%,#050008 100%);
 color:white;
 overflow-x:hidden;
-padding:10px;
-display:flex;
-justify-content:center;
+padding:12px;
 }
 
-.container{
+.page{
 width:100%;
 max-width:860px;
+margin:auto;
 }
 
 /* LOGO */
@@ -45,16 +42,511 @@ margin-bottom:14px;
 }
 
 .logo h1{
-font-size:34px;
-font-weight:900;
+font-size:58px;
+font-weight:800;
 line-height:1;
+color:white;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 35px #ff4df2;
+0 0 25px #ff4df2;
 }
 
 .logo p{
+margin-top:8px;
+font-size:13px;
+letter-spacing:6px;
+color:#49ffee;
+}
+
+/* STREAM */
+
+#video-container{
+width:100%;
+background:#1c1735;
+border:3px solid #b84dff;
+border-radius:24px;
+overflow:hidden;
+box-shadow:0 0 25px rgba(255,0,255,.35);
+margin-bottom:14px;
+}
+
+#video-container iframe{
+width:100%;
+aspect-ratio:16/9;
+border:none;
+display:block;
+}
+
+/* CHAT */
+
+#chat-box{
+width:100%;
+background:#1c1735;
+border:3px solid #b84dff;
+border-radius:24px;
+padding:14px;
+box-shadow:0 0 25px rgba(255,0,255,.25);
+margin-bottom:18px;
+}
+
+#messages{
+height:120px;
+overflow-y:auto;
+background:#0b0516;
+border-radius:16px;
+padding:12px;
+margin-bottom:12px;
+text-align:left;
+}
+
+.msg{
+margin-bottom:8px;
+font-size:18px;
+}
+
+.msg b{
+color:#42f5ff;
+}
+
+#chat-input{
+display:flex;
+gap:10px;
+}
+
+#chat-input input{
+flex:1;
+height:54px;
+background:#070111;
+border:none;
+border-radius:14px;
+padding:0 14px;
+color:white;
+font-size:18px;
+outline:none;
+}
+
+#chat-input button{
+width:95px;
+background:linear-gradient(45deg,#b84dff,#ff4df2);
+border:none;
+border-radius:14px;
+color:white;
+font-size:20px;
+font-weight:700;
+}
+
+/* CURRENT NUMBER */
+
+#currentWrap{
+text-align:center;
+margin-bottom:20px;
+}
+
+#currentNumber{
+font-size:110px;
+font-weight:800;
+line-height:1;
+color:white;
+text-shadow:
+0 0 15px #ff4df2,
+0 0 35px #ff4df2;
+}
+
+#mode{
+font-size:28px;
+color:#49ffee;
+font-weight:600;
 margin-top:6px;
-font-size:9px;
+}
+
+/* TICKETS */
+
+#tickets{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+margin-bottom:22px;
+}
+
+.ticket{
+background:#0b0516;
+border:3px solid #d94dff;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 0 15px rgba(255,0,255,.2);
+}
+
+.ticketGrid{
+display:grid;
+grid-template-columns:repeat(9,1fr);
+}
+
+.cell{
+height:62px;
+border-right:1px solid #c84dff;
+border-bottom:1px solid #c84dff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+font-weight:600;
+}
+
+.ticketGrid .cell:nth-child(9n){
+border-right:none;
+}
+
+.ticketGrid .cell:nth-last-child(-n+9){
+border-bottom:none;
+}
+
+.blank{
+background:#12071f;
+}
+
+.marked{
+background:#3ff7ff;
+color:black;
+font-weight:800;
+box-shadow:0 0 18px #3ff7ff;
+}
+
+/* CALLED BOARD */
+
+#calledBoard{
+display:grid;
+grid-template-columns:repeat(10,1fr);
+gap:8px;
+margin-bottom:24px;
+}
+
+.calledNum{
+background:#1c1735;
+height:52px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:#d7d7d7;
+}
+
+.calledActive{
+background:#c44dff;
+color:white;
+}
+
+.latest{
+background:#3ff7ff !important;
+color:black !important;
+font-weight:800;
+box-shadow:0 0 16px #3ff7ff;
+}
+
+/* BUTTON */
+
+.main{
+display:block;
+margin:0 auto 30px auto;
+width:240px;
+height:78px;
+border:none;
+border-radius:24px;
+background:#3ff7ff;
+color:black;
+font-size:40px;
+font-weight:800;
+box-shadow:0 0 25px #3ff7ff;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.logo h1{
+font-size:34px;
+}
+
+.logo p{
+font-size:10px;
 letter-spacing:4px;
-color
+}
+
+#messages{
+height:90px;
+}
+
+.msg{
+font-size:14px;
+}
+
+#chat-input{
+gap:6px;
+}
+
+#chat-input input{
+height:42px;
+font-size:14px;
+padding:0 10px;
+}
+
+#chat-input button{
+width:70px;
+font-size:14px;
+}
+
+#currentNumber{
+font-size:78px;
+}
+
+#mode{
+font-size:18px;
+}
+
+#tickets{
+grid-template-columns:1fr;
+gap:12px;
+}
+
+.cell{
+height:42px;
+font-size:18px;
+}
+
+#calledBoard{
+gap:5px;
+}
+
+.calledNum{
+height:36px;
+font-size:12px;
+border-radius:7px;
+}
+
+.main{
+width:160px;
+height:58px;
+font-size:22px;
+border-radius:18px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="logo">
+<h1>MARVALOUS BINGO</h1>
+<p>REAL PEOPLE • REAL WINNERS</p>
+</div>
+
+<div id="video-container">
+<iframe
+src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
+allowfullscreen>
+</iframe>
+</div>
+
+<div id="chat-box">
+
+<div id="messages">
+<div class="msg"><b>Kee:</b> hi again</div>
+<div class="msg"><b>Kee:</b> hey</div>
+<div class="msg"><b>Kee:</b> hi</div>
+</div>
+
+<div id="chat-input">
+<input id="name" placeholder="Name">
+<input id="msg" placeholder="Type message...">
+<button onclick="sendMsg()">Send</button>
+</div>
+
+</div>
+
+<div id="currentWrap">
+<div id="currentNumber">46</div>
+<div id="mode">Mode: 2 LINES</div>
+</div>
+
+<div id="tickets"></div>
+
+<div id="calledBoard"></div>
+
+<button class="main" onclick="checkBingo()">
+BINGO
+</button>
+
+</div>
+
+<script>
+
+const firebaseConfig={
+apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
+databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.database();
+
+/* 4 TICKETS */
+
+const cards=[
+
+[
+[1,'','',31,'','',62,70,81],
+[3,'',21,'','','',63,72,88],
+[9,'',27,'',47,'',64,74,'']
+],
+
+[
+['','',21,31,'','',61,71,85],
+['',13,'','',40,50,63,72,''],
+[9,'',22,'',46,'',64,73,'']
+],
+
+[
+[8,'',22,'',41,'','',70,83],
+['','','',36,'',55,62,75,87],
+['',12,'',38,47,'',64,76,'']
+],
+
+[
+[7,10,'','','','',61,79,85],
+[8,18,'',32,'','',68,'',87],
+[9,'',28,'','',58,69,'',90]
+]
+
+];
+
+/* RENDER TICKETS */
+
+function renderBoards(){
+
+const wrap=document.getElementById('tickets');
+
+wrap.innerHTML='';
+
+cards.forEach(ticket=>{
+
+let board=document.createElement('div');
+
+board.className='ticket';
+
+let grid=document.createElement('div');
+
+grid.className='ticketGrid';
+
+ticket.flat().forEach(n=>{
+
+let div=document.createElement('div');
+
+if(n===''){
+
+div.className='cell blank';
+
+}else{
+
+div.className='cell';
+div.innerText=n;
+div.dataset.num=n;
+
+if(n==46){
+div.classList.add('marked');
+}
+
+}
+
+grid.appendChild(div);
+
+});
+
+board.appendChild(grid);
+
+wrap.appendChild(board);
+
+});
+
+}
+
+renderBoards();
+
+/* CALLED BOARD */
+
+for(let i=1;i<=90;i++){
+
+let div=document.createElement('div');
+
+div.className='calledNum';
+
+if([
+21,31,40,46,50,
+61,62,63,64,70,
+71,72,73
+].includes(i)){
+
+div.classList.add(
+i===46 ? 'latest' : 'calledActive'
+);
+
+}
+
+div.innerText=i;
+
+document.getElementById('calledBoard').appendChild(div);
+
+}
+
+/* CHAT */
+
+function sendMsg(){
+
+let name=document.getElementById('name').value||'Player';
+
+let msg=document.getElementById('msg').value;
+
+if(!msg) return;
+
+db.ref('chat').push({
+name:name,
+message:msg
+});
+
+document.getElementById('msg').value='';
+
+}
+
+db.ref('chat').limitToLast(50).on('child_added',snap=>{
+
+let d=snap.val();
+
+let div=document.createElement('div');
+
+div.className='msg';
+
+div.innerHTML='<b>'+d.name+':</b> '+d.message;
+
+let box=document.getElementById('messages');
+
+box.appendChild(div);
+
+box.scrollTop=box.scrollHeight;
+
+});
+
+/* BINGO */
+
+function checkBingo(){
+
+alert('🎉 BINGO CLAIMED!');
+
+}
+
+</script>
+
+</body>
+</html>
