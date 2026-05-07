@@ -493,9 +493,12 @@ speech.pitch = 1.1;
 window.speechSynthesis.speak(speech);
 
 /* CHEERING */
+const cheer = new Audio(
+'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
+);
 
-
-
+cheer.volume = 1;  
+  
 setTimeout(()=>{
 
 cheer.play().catch(()=>{});
