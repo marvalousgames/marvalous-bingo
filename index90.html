@@ -646,7 +646,64 @@ window.speechSynthesis.resume();
 
 },{once:true});
 
-let playerName=localStorage.getItem('playerName')||'Player';
+let playerName = localStorage.getItem('playerName') || '';
+
+/* NAME POPUP */
+
+function savePlayerName(){
+
+const input = document.getElementById('playerNameInput');
+
+const name = input.value.trim();
+
+if(!name){
+
+alert('Enter your name');
+
+return;
+
+}
+
+playerName = name;
+
+localStorage.setItem(
+'playerName',
+name
+);
+
+document.getElementById('namePopup').style.display='none';
+
+/* AUTO FILL CHAT NAME */
+
+document.getElementById('name').value = name;
+
+/* SAVE PLAYER */
+
+savePlayerData();
+
+}
+
+/* RETURNING PLAYER */
+
+window.addEventListener('load',()=>{
+
+if(playerName){
+
+document.getElementById('namePopup').style.display='none';
+
+const nameInput=document.getElementById('name');
+
+if(nameInput){
+
+nameInput.value = playerName;
+
+}
+
+savePlayerData();
+
+}
+
+});
 
 function generateTicket(){
 
