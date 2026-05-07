@@ -433,7 +433,45 @@ color:#000;
 box-shadow:0 0 20px rgba(25,227,255,.7);
 cursor:pointer;
 }
+.mainLayout{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
 
+.sideTop{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+margin-bottom:20px;
+}
+
+.sideNumber{
+width:90px;
+height:90px;
+border-radius:50%;
+background:#fff;
+color:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:52px;
+font-weight:900;
+box-shadow:0 0 20px rgba(255,255,255,.8);
+flex-shrink:0;
+}
+
+#lastBallsWrap{
+display:flex;
+gap:4px;
+flex:1;
+justify-content:center;
+}
+
+.chatWrap{
+margin-top:20px;
+}
 </style>
 </style>
 </head>
@@ -450,6 +488,18 @@ cursor:pointer;
 <div class="mainLayout">
 
 <div class="leftColumn">
+  <div class="videoWrap">
+
+<div class="videoBox">
+
+<iframe
+src="https://player.twitch.tv/?channel=marvalousbingo&parent=bingo.netlify.app"
+allowfullscreen>
+</iframe>
+
+</div>
+
+  </div>
 
 <div class="sideTop">
 
