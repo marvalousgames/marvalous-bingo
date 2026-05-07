@@ -808,47 +808,21 @@ renderBoards();
 
 /* FIREBASE */
 
-let voicesLoaded = false;
-
-speechSynthesis.onvoiceschanged = ()=>{
-
-voicesLoaded = true;
-
-};
-
 db.ref('currentNumber').on('value',snap=>{
 
 let number = snap.val() || 0;
 
 document.getElementById('currentNumber').innerText = number;
 
-if(number){
+if(number > 0){
 
-window.speechSynthesis.cancel();
-
-setTimeout(()=>{
-
-const speech = new SpeechSynthesisUtterance(number);
+const speech = new SpeechSynthesisUtterance(number.toString());
 
 speech.volume = 1;
-speech.rate = 0.85;
+speech.rate = 1;
 speech.pitch = 1;
 
-const voices = speechSynthesis.getVoices();
-
-const englishVoice = voices.find(v =>
-v.lang.includes('en')
-);
-
-if(englishVoice){
-
-speech.voice = englishVoice;
-
-}
-
 window.speechSynthesis.speak(speech);
-
-},150);
 
 }
 
