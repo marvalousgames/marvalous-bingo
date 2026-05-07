@@ -480,17 +480,13 @@ bell.play().catch(()=>{});
 
 /* VOICE */
 
-window.speechSynthesis.cancel();
-
-const speech = new SpeechSynthesisUtterance(
-claim.name + ' has called bingo!'
+const voice = new Audio(
+'bingo.mp3'
 );
 
-speech.volume = 1;
-speech.rate = 0.9;
-speech.pitch = 1.1;
+voice.volume = 1;
 
-window.speechSynthesis.speak(speech);
+voice.play().catch(()=>{});
 
 /* CHEERING */
 const cheer = new Audio(
