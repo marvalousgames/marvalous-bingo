@@ -217,6 +217,14 @@ function setMode(mode){
 
 db.ref('mode').set(mode);
 
+const modeSound = new Audio(
+'https://raw.githubusercontent.com/marvalousgames/marvalous-bingo/main/' + mode + '.mp3'
+);
+
+modeSound.volume = 1;
+
+modeSound.play().catch(()=>{});
+
 }
 
 /* CALLED NUMBERS */
