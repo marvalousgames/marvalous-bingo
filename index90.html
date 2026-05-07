@@ -447,45 +447,13 @@ cursor:pointer;
 <p>REAL PEOPLE • REAL WINNERS</p>
 </div>
 
-<div class="videoWrap">
+<div class="mainLayout">
 
-<div class="videoBox">
+<div class="leftColumn">
 
-<iframe
-src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
-allowfullscreen>
-</iframe>
+<div class="sideTop">
 
-</div>
-
-</div>
-
-<div class="chatWrap">
-
-<div class="messages" id="messages"></div>
-
-<div class="chatInputs">
-
-<input id="name" placeholder="Name">
-
-<input id="msg" placeholder="Type message...">
-
-<button class="sendBtn" onclick="sendMsg()">
-Send
-</button>
-
-</div>
-
-</div>
-
-<div class="topCallArea">
-
-<div class="numberWrap">
-<h1 id="currentNumber">0</h1>
-<div id="mode">Mode: 2 LINES</div>
-</div>
-
-<div id="topBar">
+<div class="sideNumber" id="currentNumber">0</div>
 
 <div id="lastBallsWrap">
 <div class="lastBall">-</div>
@@ -495,19 +463,46 @@ Send
 <div class="lastBall">-</div>
 </div>
 
-<button class="miniBingoBtn" onclick="checkBingo()">
-BINGO
+</div>
+
+<div id="mode">Mode: 2 LINES</div>
+
+<div id="tickets"></div>
+
+</div>
+
+<div class="rightColumn">
+
+<div class="sideVideo">
+<iframe
+src="https://player.twitch.tv/?channel=marvalousbingo&parent=bingo.netlify.app"
+allowfullscreen>
+</iframe>
+</div>
+
+<div class="sideChat">
+
+<div class="messages" id="messages"></div>
+
+<div class="chatInputs">
+
+<input id="name" placeholder="Name">
+
+<input id="msg" placeholder="Type message...">
+
+<button class="sendBtn" onclick="sendMessage()">
+Send
 </button>
 
 </div>
 
 </div>
 
-<div id="tickets"></div>
+<button class="miniBingoBtn" onclick="checkBingo()">
+BINGO
+</button>
 
-<div id="tickets"></div>
-
-
+</div>
 
 </div>
 
