@@ -792,7 +792,22 @@ renderBoards();
 
 db.ref('currentNumber').on('value',snap=>{
 
-document.getElementById('currentNumber').innerText=snap.val()||0;
+let number = snap.val() || 0;
+
+document.getElementById('currentNumber').innerText = number;
+
+if(number){
+
+const speech = new SpeechSynthesisUtterance(number);
+
+speech.volume = 1;
+speech.rate = 0.9;
+speech.pitch = 1;
+
+window.speechSynthesis.cancel();
+window.speechSynthesis.speak(speech);
+
+}
 
 });
 
