@@ -420,7 +420,83 @@ width:100%;
 padding-left:12px;
 padding-right:2px;
 }
+.topSection{
+display:flex;
+gap:14px;
+align-items:flex-start;
+margin-top:20px;
+}
 
+.videoWrap{
+flex:1;
+}
+
+.videoBox{
+width:100%;
+aspect-ratio:1/1;
+border:4px solid #ff4dff;
+border-radius:18px;
+overflow:hidden;
+background:#111;
+box-shadow:0 0 25px #ff4dff;
+}
+
+.videoBox iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+.rightPanel{
+width:140px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:16px;
+}
+
+.sideNumber{
+width:120px;
+height:120px;
+border-radius:50%;
+background:white;
+color:#ff4dff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:72px;
+font-weight:900;
+box-shadow:0 0 30px white;
+}
+
+#lastBallsWrap{
+display:flex;
+gap:4px;
+}
+
+.lastBall{
+width:24px;
+height:70px;
+border:2px solid #ff4dff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+font-weight:700;
+border-radius:4px;
+background:#12001f;
+}
+
+.chatWrap{
+margin-top:20px;
+margin-bottom:20px;
+}
+
+.ticketsGrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
 .miniBingoBtn{
 height:46px;
 padding:0 10px;
@@ -485,10 +561,11 @@ margin-top:20px;
 <p>REAL PEOPLE • REAL WINNERS</p>
 </div>
 
-<div class="mainLayout">
 
-<div class="leftColumn">
-  <div class="videoWrap">
+
+<div class="topSection">
+
+<div class="videoWrap">
 
 <div class="videoBox">
 
@@ -499,9 +576,9 @@ allowfullscreen>
 
 </div>
 
-  </div>
+</div>
 
-<div class="sideTop">
+<div class="rightPanel">
 
 <div class="sideNumber" id="currentNumber">0</div>
 
@@ -515,22 +592,9 @@ allowfullscreen>
 
 </div>
 
-<div id="mode">Mode: 2 LINES</div>
-
-<div id="tickets"></div>
-
 </div>
 
-<div class="rightColumn">
-
-<div class="sideVideo">
-<iframe
-src="https://player.twitch.tv/?channel=marvalousbingo&parent=bingo.netlify.app"
-allowfullscreen>
-</iframe>
-</div>
-
-<div class="sideChat">
+<div class="chatWrap">
 
 <div class="messages" id="messages"></div>
 
@@ -540,7 +604,7 @@ allowfullscreen>
 
 <input id="msg" placeholder="Type message...">
 
-<button class="sendBtn" onclick="sendMessage()">
+<button class="sendBtn" onclick="sendMsg()">
 Send
 </button>
 
@@ -548,14 +612,11 @@ Send
 
 </div>
 
+<div class="ticketsGrid" id="tickets"></div>
+
 <button class="miniBingoBtn" onclick="checkBingo()">
 BINGO
 </button>
-
-</div>
-
-</div>
-
 <script>
 
 const firebaseConfig={
