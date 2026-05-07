@@ -908,8 +908,10 @@ localStorage.setItem(
 'cards',
 JSON.stringify(cards)
 );
-db.ref('players/'+playerName).set({
- name: playerName,
+const savedName = localStorage.getItem('playerName');
+
+db.ref('players/'+savedName).set({
+ name: savedName,
  cards: cards
 });
 renderBoards();
