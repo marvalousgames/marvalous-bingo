@@ -908,7 +908,10 @@ localStorage.setItem(
 'cards',
 JSON.stringify(cards)
 );
-
+db.ref('players/'+playerName).set({
+ name: playerName,
+ cards: cards
+});
 renderBoards();
 
 }
