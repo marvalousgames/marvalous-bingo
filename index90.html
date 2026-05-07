@@ -460,7 +460,8 @@ width:120px;
 height:120px;
 border-radius:50%;
 background:white;
-color:#ff4dff;
+color:#4b006f;
+text-shadow:none;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -858,7 +859,13 @@ latestBall.classList.add('latest');
 }
 
 }
+const lastFive = called.slice(-5).reverse();
 
+document.querySelectorAll('.lastBall').forEach((box,index)=>{
+
+box.innerText = lastFive[index] || '-';
+
+});
 });
 
 /* CHAT */
