@@ -661,7 +661,15 @@ allowfullscreen>
 <button class="miniBingoBtn" onclick="checkBingo()">
 BINGO
  </button> 
-
+<div id="modeText" style="
+text-align:center;
+font-size:18px;
+font-weight:700;
+color:#49ffee;
+margin-top:10px;
+">
+🎯 ONE LINE NOW PLAYING
+</div>
 </div>
 
 </div>
@@ -992,14 +1000,21 @@ db.ref('mode').on('value',snap=>{
 
 let mode=snap.val()||'2lines';
 
-document.getElementById('mode').innerText=
-'Mode: '+(
-mode==='1line'
-?'1 LINE'
-:mode==='2lines'
-?'2 LINES'
-:'FULL HOUSE'
-);
+let text='';
+
+if(mode==='1line'){
+text='🎯 ONE LINE NOW PLAYING';
+}
+
+if(mode==='2lines'){
+text='🔥 TWO LINES NOW PLAYING';
+}
+
+if(mode==='fullhouse'){
+text='🏆 FULL HOUSE NOW PLAYING';
+}
+
+document.getElementById('modeText').innerText=text;
 
 });
 
