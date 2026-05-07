@@ -420,13 +420,6 @@ alert('Winner approved');
 
 }
 
-db.ref('winner').set(true);
-
-db.ref('bingoClaims/'+id).remove();
-
-alert('Winner approved');
-
-}
 
 /* DENY */
 
@@ -446,11 +439,6 @@ alert('❌ Bingo claim denied');
 
 }
 
-db.ref('bingoClaims/'+id).remove();
-
-alert('❌ Bingo claim denied');
-
-}
 
 /* RESET */
 
