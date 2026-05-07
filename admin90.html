@@ -404,6 +404,22 @@ alert(name + ' has ' + total + ' called numbers marked.');
 
 function approve(id){
 
+const winSound = new Audio(
+'https://raw.githubusercontent.com/marvalousgames/marvalous-bingo/main/winner.mp3'
+);
+
+winSound.volume = 1;
+
+winSound.play().catch(()=>{});
+
+db.ref('winner').set(true);
+
+db.ref('bingoClaims/'+id).remove();
+
+alert('Winner approved');
+
+}
+
 db.ref('winner').set(true);
 
 db.ref('bingoClaims/'+id).remove();
@@ -415,6 +431,20 @@ alert('Winner approved');
 /* DENY */
 
 function denyClaim(id){
+
+const denySound = new Audio(
+'https://raw.githubusercontent.com/marvalousgames/marvalous-bingo/main/deny.mp3'
+);
+
+denySound.volume = 1;
+
+denySound.play().catch(()=>{});
+
+db.ref('bingoClaims/'+id).remove();
+
+alert('❌ Bingo claim denied');
+
+}
 
 db.ref('bingoClaims/'+id).remove();
 
