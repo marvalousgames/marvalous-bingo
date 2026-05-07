@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
 <meta charset="UTF-8">
@@ -22,33 +22,278 @@ font-family:'Poppins',sans-serif;
 -webkit-tap-highlight-color:transparent;
 }
 
+body{
+background:
+radial-gradient(circle at top,#4b006f 0%,#210032 45%,#050008 100%);
+color:white;
+overflow-x:hidden;
+padding:10px;
+}
+
+.wrapper{
+max-width:920px;
+margin:auto;
+}
+
+/* LOGO */
+
+.logo{
+text-align:center;
+margin-bottom:10px;
+}
+
+.logo h1{
+font-size:72px;
+font-weight:900;
+line-height:.88;
+color:white;
+text-shadow:
+0 0 10px #ff4df2,
+0 0 35px #ff4df2;
+}
+
+.logo p{
+margin-top:8px;
+font-size:14px;
+letter-spacing:8px;
+color:#49ffee;
+}
+
+/* VIDEO */
+
+.videoWrap{
+background:#12001d;
+border:4px solid #cf42ff;
+border-radius:28px;
+padding:12px;
+box-shadow:0 0 25px rgba(255,0,255,.4);
+margin-bottom:14px;
+}
+
+.videoBox{
+overflow:hidden;
+border-radius:22px;
+background:black;
+aspect-ratio:16/9;
+}
+
+.videoBox iframe{
+width:100%;
+height:100%;
+border:none;
+}
+
+/* CHAT */
+
+.chatWrap{
+background:#12001d;
+border:4px solid #cf42ff;
+border-radius:28px;
+padding:14px;
+box-shadow:0 0 25px rgba(255,0,255,.4);
+margin-bottom:14px;
+}
+
+.messages{
+height:130px;
+overflow-y:auto;
+background:#05000b;
+border-radius:22px;
+padding:16px;
+margin-bottom:12px;
+}
+
+.msg{
+font-size:16px;
+margin-bottom:10px;
+}
+
+.msg b{
+color:#4ffcff;
+}
+
+.chatInputs{
+display:grid;
+grid-template-columns:1fr 1fr 120px;
+gap:10px;
+}
+
+.chatInputs input{
+height:56px;
+border:none;
+border-radius:18px;
+padding:0 18px;
+background:black;
+color:white;
+font-size:18px;
+outline:none;
+min-width:0;
+}
+
+.sendBtn{
+border:none;
+border-radius:18px;
+background:linear-gradient(45deg,#b84dff,#ff4df2);
+color:white;
+font-size:18px;
+font-weight:700;
+cursor:pointer;
+}
+
+/* NUMBER */
+
+.numberWrap{
+text-align:center;
+margin:8px 0 16px;
+}
+
+#currentNumber{
+font-size:120px;
+font-weight:900;
+line-height:1;
+color:white;
+text-shadow:
+0 0 10px white,
+0 0 30px #ff4df2,
+0 0 60px #ff4df2;
+}
+
+#mode{
+font-size:24px;
+font-weight:700;
+color:#49ffee;
+}
+
+/* TICKETS */
+
+#tickets{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin-bottom:16px;
+}
+
+.ticket{
+background:#090011;
+border:3px solid #cf42ff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 0 14px rgba(255,0,255,.25);
+}
+
+.ticketGrid{
+display:grid;
+grid-template-columns:repeat(9,1fr);
+}
+
+.cell{
+height:64px;
+border-right:1px solid #cf42ff;
+border-bottom:1px solid #cf42ff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+font-weight:700;
+background:#0b0014;
+}
+
+.ticketGrid .cell:nth-child(9n){
+border-right:none;
+}
+
+.ticketGrid .cell:nth-last-child(-n+9){
+border-bottom:none;
+}
+
+.blank{
+background:#090011;
+}
+
+.marked{
+background:#2ef3ff;
+color:black;
+font-weight:900;
+box-shadow:
+0 0 10px #2ef3ff,
+0 0 25px #2ef3ff inset;
+}
+
+/* CALLED BOARD */
+
+#calledBoard{
+display:grid;
+grid-template-columns:repeat(10,1fr);
+gap:8px;
+margin-bottom:18px;
+}
+
+.calledNum{
+height:52px;
+border-radius:10px;
+background:#1a1635;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+font-weight:600;
+color:#d8d8d8;
+}
+
+.calledActive{
+background:#d94dff;
+color:white;
+}
+
+.latest{
+background:#2ef3ff !important;
+color:black !important;
+font-weight:900;
+}
+
+/* BUTTON */
+
+.bingoBtn{
+width:240px;
+height:82px;
+display:block;
+margin:0 auto 20px;
+border:none;
+border-radius:26px;
+background:linear-gradient(45deg,#25f1ff,#5ef2ff);
+color:black;
+font-size:48px;
+font-weight:900;
+cursor:pointer;
+box-shadow:0 0 25px #25f1ff;
+}
+
+/* MOBILE */
+
 @media(max-width:768px){
 
 body{
 padding:6px;
-overflow:hidden;
+overflow-x:hidden;
 }
 
 .wrapper{
-transform:scale(.78);
-transform-origin:top center;
-width:128%;
-margin-left:-14%;
+max-width:100%;
 }
 
 .logo{
-margin-bottom:4px;
+margin-bottom:6px;
 }
 
 .logo h1{
-font-size:34px;
+font-size:38px;
 line-height:.9;
 }
 
 .logo p{
 font-size:8px;
 letter-spacing:4px;
-margin-top:2px;
+margin-top:3px;
 }
 
 .videoWrap{
@@ -64,7 +309,7 @@ margin-bottom:8px;
 }
 
 .messages{
-height:72px;
+height:70px;
 padding:8px;
 margin-bottom:6px;
 }
@@ -84,6 +329,7 @@ height:34px;
 font-size:12px;
 padding:0 10px;
 border-radius:10px;
+min-width:0;
 }
 
 .sendBtn{
@@ -97,7 +343,7 @@ margin:4px 0 8px;
 }
 
 #currentNumber{
-font-size:62px;
+font-size:60px;
 }
 
 #mode{
@@ -105,6 +351,7 @@ font-size:12px;
 }
 
 #tickets{
+grid-template-columns:1fr 1fr;
 gap:8px;
 margin-bottom:10px;
 }
@@ -127,94 +374,10 @@ border-radius:6px;
 
 .bingoBtn{
 width:120px;
-height:44px;
+height:46px;
 font-size:20px;
 border-radius:16px;
-margin-bottom:0;
-}
-
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.logo h1{
-font-size:42px;
-}
-
-.logo p{
-font-size:10px;
-letter-spacing:5px;
-}
-
-.videoWrap,
-.chatWrap{
-border-radius:22px;
-padding:10px;
-}
-
-.messages{
-height:92px;
-padding:12px;
-}
-
-.msg{
-font-size:14px;
-}
-
-.chatInputs{
-grid-template-columns:1fr 1fr 82px;
-gap:8px;
-}
-
-.chatInputs input{
-height:44px;
-font-size:15px;
-border-radius:14px;
-padding:0 12px;
-min-width:0;
-}
-
-.sendBtn{
-height:44px;
-font-size:14px;
-border-radius:14px;
-}
-
-#currentNumber{
-font-size:86px;
-}
-
-#mode{
-font-size:16px;
-}
-
-#tickets{
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.cell{
-height:42px;
-font-size:14px;
-}
-
-#calledBoard{
-gap:5px;
-}
-
-.calledNum{
-height:34px;
-font-size:12px;
-border-radius:8px;
-}
-
-.bingoBtn{
-width:170px;
-height:64px;
-font-size:26px;
-border-radius:22px;
+margin-bottom:10px;
 }
 
 }
@@ -293,26 +456,6 @@ const db=firebase.database();
 
 let playerName=localStorage.getItem('playerName')||'Player';
 
-let playerId=localStorage.getItem('playerId');
-
-if(!playerId){
-
-playerId=Date.now().toString();
-
-localStorage.setItem('playerId',playerId);
-
-}
-
-/* FIXED 4 CARDS */
-
-if(localStorage.getItem('layoutV4')!=="yes"){
-
-localStorage.removeItem('cards');
-
-localStorage.setItem('layoutV4',"yes");
-
-}
-
 function generateTicket(){
 
 const ranges=[
@@ -350,10 +493,9 @@ let max=ranges[col][1];
 let num;
 
 do{
-
 num=Math.floor(Math.random()*(max-min+1))+min;
-
-}while(used.has(num));
+}
+while(used.has(num));
 
 used.add(num);
 
@@ -369,11 +511,7 @@ let nums=[];
 
 for(let row=0;row<3;row++){
 
-if(ticket[row][col]!==""){
-
-nums.push(ticket[row][col]);
-
-}
+if(ticket[row][col]!=="") nums.push(ticket[row][col]);
 
 }
 
@@ -398,7 +536,13 @@ return ticket;
 
 }
 
-/* 4 TICKETS */
+if(localStorage.getItem('layoutFinalV1')!=="yes"){
+
+localStorage.removeItem('cards');
+
+localStorage.setItem('layoutFinalV1',"yes");
+
+}
 
 let savedCards=localStorage.getItem('cards');
 
@@ -475,13 +619,11 @@ document.getElementById('calledBoard').appendChild(div);
 
 }
 
-/* GAME */
+/* FIREBASE */
 
 db.ref('currentNumber').on('value',snap=>{
 
-let num=snap.val()||0;
-
-document.getElementById('currentNumber').innerText=num;
+document.getElementById('currentNumber').innerText=snap.val()||0;
 
 });
 
@@ -568,8 +710,6 @@ let name=document.getElementById('name').value||'Player';
 let msg=document.getElementById('msg').value;
 
 if(!msg) return;
-
-localStorage.setItem('playerName',name);
 
 db.ref('chat').push({
 
