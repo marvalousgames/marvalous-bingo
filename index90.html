@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Marvalous Bingo 90</title>
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+<title>Marvalous Bingo</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -16,22 +17,22 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Poppins',sans-serif;
 -webkit-tap-highlight-color:transparent;
 }
 
 body{
 background:
-radial-gradient(circle at top,#3b0066 0%,#140021 45%,#050008 100%);
+radial-gradient(circle at top,#45006d 0%,#170022 45%,#050008 100%);
+font-family:'Poppins',sans-serif;
 color:white;
 overflow-x:hidden;
-padding:12px;
 }
 
-.page{
+.container{
 width:100%;
-max-width:860px;
+max-width:900px;
 margin:auto;
+padding:12px;
 }
 
 /* LOGO */
@@ -42,120 +43,124 @@ margin-bottom:14px;
 }
 
 .logo h1{
-font-size:58px;
-font-weight:800;
-line-height:1;
+font-size:68px;
+line-height:.9;
+font-weight:900;
 color:white;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 25px #ff4df2;
+0 0 30px #ff4df2;
 }
 
 .logo p{
-margin-top:8px;
-font-size:13px;
+margin-top:10px;
+font-size:12px;
 letter-spacing:6px;
 color:#49ffee;
 }
 
 /* STREAM */
 
-#video-container{
-width:100%;
-background:#1c1735;
-border:3px solid #b84dff;
-border-radius:24px;
-overflow:hidden;
-box-shadow:0 0 25px rgba(255,0,255,.35);
-margin-bottom:14px;
+.streamWrap{
+background:#12051d;
+border:3px solid #c04dff;
+border-radius:26px;
+padding:6px;
+box-shadow:0 0 25px rgba(255,0,255,.4);
+margin-bottom:16px;
 }
 
-#video-container iframe{
+.streamBox{
 width:100%;
 aspect-ratio:16/9;
+border-radius:20px;
+overflow:hidden;
+background:black;
+}
+
+.streamBox iframe{
+width:100%;
+height:100%;
 border:none;
-display:block;
 }
 
 /* CHAT */
 
-#chat-box{
-width:100%;
-background:#1c1735;
-border:3px solid #b84dff;
-border-radius:24px;
+.chatWrap{
+background:#12051d;
+border:3px solid #c04dff;
+border-radius:26px;
 padding:14px;
-box-shadow:0 0 25px rgba(255,0,255,.25);
-margin-bottom:18px;
+box-shadow:0 0 20px rgba(255,0,255,.25);
+margin-bottom:24px;
 }
 
-#messages{
-height:120px;
+.messages{
+height:150px;
 overflow-y:auto;
-background:#0b0516;
-border-radius:16px;
-padding:12px;
+background:#050008;
+border-radius:18px;
+padding:14px;
 margin-bottom:12px;
-text-align:left;
 }
 
 .msg{
-margin-bottom:8px;
-font-size:18px;
+margin-bottom:10px;
+font-size:22px;
 }
 
 .msg b{
-color:#42f5ff;
+color:#49ffee;
 }
 
-#chat-input{
-display:flex;
+.chatInputs{
+display:grid;
+grid-template-columns:1fr 1fr 120px;
 gap:10px;
 }
 
-#chat-input input{
-flex:1;
-height:54px;
-background:#070111;
+.chatInputs input{
+height:56px;
 border:none;
 border-radius:14px;
-padding:0 14px;
+background:black;
+padding:0 18px;
+font-size:20px;
 color:white;
-font-size:18px;
 outline:none;
 }
 
-#chat-input button{
-width:95px;
-background:linear-gradient(45deg,#b84dff,#ff4df2);
+.sendBtn{
 border:none;
 border-radius:14px;
-color:white;
-font-size:20px;
+font-size:22px;
 font-weight:700;
+background:linear-gradient(45deg,#b84dff,#ff4df2);
+color:white;
+cursor:pointer;
 }
 
-/* CURRENT NUMBER */
+/* NUMBER */
 
-#currentWrap{
+.numberWrap{
 text-align:center;
 margin-bottom:20px;
 }
 
-#currentNumber{
-font-size:110px;
-font-weight:800;
+.currentNumber{
+font-size:120px;
+font-weight:900;
 line-height:1;
 color:white;
 text-shadow:
 0 0 15px #ff4df2,
-0 0 35px #ff4df2;
+0 0 40px #ff4df2;
 }
 
-#mode{
+.modeText{
 font-size:28px;
+font-weight:700;
 color:#49ffee;
-font-weight:600;
 margin-top:6px;
 }
 
@@ -169,11 +174,11 @@ margin-bottom:22px;
 }
 
 .ticket{
-background:#0b0516;
+background:#090014;
 border:3px solid #d94dff;
-border-radius:18px;
+border-radius:20px;
 overflow:hidden;
-box-shadow:0 0 15px rgba(255,0,255,.2);
+box-shadow:0 0 18px rgba(255,0,255,.25);
 }
 
 .ticketGrid{
@@ -182,14 +187,15 @@ grid-template-columns:repeat(9,1fr);
 }
 
 .cell{
-height:62px;
-border-right:1px solid #c84dff;
-border-bottom:1px solid #c84dff;
+height:72px;
+border-right:1px solid #d94dff;
+border-bottom:1px solid #d94dff;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:30px;
-font-weight:600;
+font-size:34px;
+font-weight:700;
+background:#090014;
 }
 
 .ticketGrid .cell:nth-child(9n){
@@ -201,14 +207,17 @@ border-bottom:none;
 }
 
 .blank{
-background:#12071f;
+background:#0a0012;
+color:transparent;
 }
 
 .marked{
-background:#3ff7ff;
+background:#38f6ff;
 color:black;
-font-weight:800;
-box-shadow:0 0 18px #3ff7ff;
+font-weight:900;
+box-shadow:
+0 0 18px #38f6ff,
+inset 0 0 12px rgba(255,255,255,.5);
 }
 
 /* CALLED BOARD */
@@ -221,42 +230,40 @@ margin-bottom:24px;
 }
 
 .calledNum{
-background:#1c1735;
 height:52px;
+background:#1a1233;
 border-radius:10px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:18px;
-color:#d7d7d7;
+font-size:22px;
 }
 
 .calledActive{
-background:#c44dff;
-color:white;
+background:#d94dff;
 }
 
 .latest{
-background:#3ff7ff !important;
-color:black !important;
-font-weight:800;
-box-shadow:0 0 16px #3ff7ff;
+background:#38f6ff!important;
+color:black;
+font-weight:900;
 }
 
-/* BUTTON */
+/* BINGO BUTTON */
 
-.main{
+.bingoBtn{
 display:block;
-margin:0 auto 30px auto;
-width:240px;
-height:78px;
+width:260px;
+height:84px;
+margin:0 auto 30px;
 border:none;
 border-radius:24px;
-background:#3ff7ff;
+background:linear-gradient(45deg,#38f6ff,#2de0ff);
+font-size:48px;
+font-weight:900;
 color:black;
-font-size:40px;
-font-weight:800;
-box-shadow:0 0 25px #3ff7ff;
+box-shadow:0 0 25px #38f6ff;
+cursor:pointer;
 }
 
 /* MOBILE */
@@ -264,55 +271,53 @@ box-shadow:0 0 25px #3ff7ff;
 @media(max-width:700px){
 
 .logo h1{
-font-size:34px;
+font-size:44px;
 }
 
 .logo p{
-font-size:10px;
+font-size:8px;
 letter-spacing:4px;
 }
 
-#messages{
-height:90px;
+.currentNumber{
+font-size:86px;
+}
+
+.modeText{
+font-size:18px;
+}
+
+.messages{
+height:110px;
 }
 
 .msg{
 font-size:14px;
 }
 
-#chat-input{
+.chatInputs{
+grid-template-columns:1fr 1fr 90px;
 gap:6px;
 }
 
-#chat-input input{
-height:42px;
+.chatInputs input{
+height:44px;
 font-size:14px;
-padding:0 10px;
+padding:0 12px;
 }
 
-#chat-input button{
-width:70px;
-font-size:14px;
-}
-
-#currentNumber{
-font-size:78px;
-}
-
-#mode{
-font-size:18px;
+.sendBtn{
+font-size:16px;
 }
 
 #tickets{
-display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
-margin-bottom:20px;
 }
 
 .cell{
-height:42px;
-font-size:18px;
+height:48px;
+font-size:14px;
 }
 
 #calledBoard{
@@ -320,15 +325,14 @@ gap:5px;
 }
 
 .calledNum{
-height:36px;
+height:38px;
 font-size:12px;
-border-radius:7px;
 }
 
-.main{
-width:160px;
-height:58px;
-font-size:22px;
+.bingoBtn{
+width:170px;
+height:60px;
+font-size:24px;
 border-radius:18px;
 }
 
@@ -339,46 +343,61 @@ border-radius:18px;
 
 <body>
 
-<div class="page">
+<div class="container">
 
 <div class="logo">
 <h1>MARVALOUS BINGO</h1>
 <p>REAL PEOPLE • REAL WINNERS</p>
 </div>
 
-<div id="video-container">
+<div class="streamWrap">
+
+<div class="streamBox">
+
 <iframe
 src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
 allowfullscreen>
 </iframe>
+
 </div>
 
-<div id="chat-box">
-
-<div id="messages">
-<div class="msg"><b>Kee:</b> hi again</div>
-<div class="msg"><b>Kee:</b> hey</div>
-<div class="msg"><b>Kee:</b> hi</div>
 </div>
 
-<div id="chat-input">
+<div class="chatWrap">
+
+<div class="messages" id="messages"></div>
+
+<div class="chatInputs">
+
 <input id="name" placeholder="Name">
+
 <input id="msg" placeholder="Type message...">
-<button onclick="sendMsg()">Send</button>
-</div>
+
+<button class="sendBtn" onclick="sendMsg()">
+Send
+</button>
 
 </div>
 
-<div id="currentWrap">
-<div id="currentNumber">46</div>
-<div id="mode">Mode: 2 LINES</div>
+</div>
+
+<div class="numberWrap">
+
+<div class="currentNumber" id="currentNumber">
+-
+</div>
+
+<div class="modeText" id="mode">
+Mode: 1 LINE
+</div>
+
 </div>
 
 <div id="tickets"></div>
 
 <div id="calledBoard"></div>
 
-<button class="main" onclick="checkBingo()">
+<button class="bingoBtn" onclick="checkBingo()">
 BINGO
 </button>
 
@@ -395,37 +414,122 @@ firebase.initializeApp(firebaseConfig);
 
 const db=firebase.database();
 
-/* 4 TICKETS */
+let playerName=localStorage.getItem('playerName')||'Player';
 
-const cards=[
+let playerId=localStorage.getItem('playerId');
 
-[
-[1,'','',31,'','',62,70,81],
-[3,'',21,'','','',63,72,88],
-[9,'',27,'',47,'',64,74,'']
-],
+if(!playerId){
 
-[
-['','',21,31,'','',61,71,85],
-['',13,'','',40,50,63,72,''],
-[9,'',22,'',46,'',64,73,'']
-],
+playerId=Date.now().toString();
 
-[
-[8,'',22,'',41,'','',70,83],
-['','','',36,'',55,62,75,87],
-['',12,'',38,47,'',64,76,'']
-],
+localStorage.setItem('playerId',playerId);
 
-[
-[7,10,'','','','',61,79,85],
-[8,18,'',32,'','',68,'',87],
-[9,'',28,'','',58,69,'',90]
-]
+}
 
+function generateTicket(){
+
+const ranges=[
+[1,9],
+[10,19],
+[20,29],
+[30,39],
+[40,49],
+[50,59],
+[60,69],
+[70,79],
+[80,90]
 ];
 
-/* RENDER TICKETS */
+let ticket=[
+["","","","","","","","",""],
+["","","","","","","","",""],
+["","","","","","","","",""]
+];
+
+let used=new Set();
+
+for(let row=0;row<3;row++){
+
+let cols=[];
+
+while(cols.length<5){
+
+let col=Math.floor(Math.random()*9);
+
+if(!cols.includes(col)) cols.push(col);
+
+}
+
+cols.sort((a,b)=>a-b);
+
+cols.forEach(col=>{
+
+let min=ranges[col][0];
+let max=ranges[col][1];
+
+let num;
+
+do{
+
+num=Math.floor(Math.random()*(max-min+1))+min;
+
+}while(used.has(num));
+
+used.add(num);
+
+ticket[row][col]=num;
+
+});
+
+}
+
+for(let col=0;col<9;col++){
+
+let nums=[];
+
+for(let row=0;row<3;row++){
+
+if(ticket[row][col]!==""){
+
+nums.push(ticket[row][col]);
+
+}
+
+}
+
+nums.sort((a,b)=>a-b);
+
+let i=0;
+
+for(let row=0;row<3;row++){
+
+if(ticket[row][col]!==""){
+
+ticket[row][col]=nums[i];
+i++;
+
+}
+
+}
+
+}
+
+return ticket;
+
+}
+
+let savedCards=localStorage.getItem('cards');
+
+let cards=savedCards
+?JSON.parse(savedCards)
+:[
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem('cards',JSON.stringify(cards));
 
 function renderBoards(){
 
@@ -450,16 +554,13 @@ let div=document.createElement('div');
 if(n===''){
 
 div.className='cell blank';
+div.innerHTML='';
 
 }else{
 
 div.className='cell';
 div.innerText=n;
 div.dataset.num=n;
-
-if(n==46){
-div.classList.add('marked');
-}
 
 }
 
@@ -477,25 +578,13 @@ wrap.appendChild(board);
 
 renderBoards();
 
-/* CALLED BOARD */
-
 for(let i=1;i<=90;i++){
 
 let div=document.createElement('div');
 
 div.className='calledNum';
 
-if([
-21,31,40,46,50,
-61,62,63,64,70,
-71,72,73
-].includes(i)){
-
-div.classList.add(
-i===46 ? 'latest' : 'calledActive'
-);
-
-}
+div.id='called-'+i;
 
 div.innerText=i;
 
@@ -503,7 +592,86 @@ document.getElementById('calledBoard').appendChild(div);
 
 }
 
-/* CHAT */
+db.ref('calledNumbers').on('value',snap=>{
+
+const called=Object.values(snap.val()||{});
+
+document.querySelectorAll('.cell').forEach(c=>{
+
+c.classList.remove('marked');
+
+});
+
+called.forEach(num=>{
+
+document.querySelectorAll('.cell').forEach(c=>{
+
+if(c.dataset.num==num){
+
+c.classList.add('marked');
+
+}
+
+});
+
+});
+
+document.querySelectorAll('.calledNum').forEach(c=>{
+
+c.classList.remove('calledActive');
+c.classList.remove('latest');
+
+});
+
+called.forEach(num=>{
+
+let ball=document.getElementById('called-'+num);
+
+if(ball){
+
+ball.classList.add('calledActive');
+
+}
+
+});
+
+let latest=called[called.length-1];
+
+if(latest){
+
+let latestBall=document.getElementById('called-'+latest);
+
+if(latestBall){
+
+latestBall.classList.add('latest');
+
+}
+
+}
+
+});
+
+db.ref('currentNumber').on('value',snap=>{
+
+let num=snap.val();
+
+if(!num) return;
+
+document.getElementById('currentNumber').innerText=num;
+
+});
+
+db.ref('mode').on('value',snap=>{
+
+let mode=snap.val()||'1line';
+
+document.getElementById('mode').innerText=
+'Mode: '+(
+mode==='1line'?'1 LINE':
+mode==='2lines'?'2 LINES':'FULL HOUSE'
+);
+
+});
 
 function sendMsg(){
 
@@ -513,9 +681,13 @@ let msg=document.getElementById('msg').value;
 
 if(!msg) return;
 
+localStorage.setItem('playerName',name);
+
 db.ref('chat').push({
+
 name:name,
 message:msg
+
 });
 
 document.getElementById('msg').value='';
@@ -540,11 +712,16 @@ box.scrollTop=box.scrollHeight;
 
 });
 
-/* BINGO */
-
 function checkBingo(){
 
-alert('🎉 BINGO CLAIMED!');
+db.ref('bingoClaims').push({
+
+name:playerName,
+time:Date.now()
+
+});
+
+alert('🎉 Bingo claimed!');
 
 }
 
