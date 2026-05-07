@@ -490,16 +490,18 @@ voice.play().catch(()=>{});
 
 /* CHEERING */
 const cheer = new Audio(
-'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
+'https://www.soundjay.com/human/cheering-01.mp3'
 );
 
-cheer.volume = 1;  
-  
+cheer.volume = 1;
+
 setTimeout(()=>{
 
-cheer.play().catch(()=>{});
+cheer.play().catch(error=>{
+console.log(error);
+});
 
-},2200);
+},1000);
 
 /* POPUP */
 
