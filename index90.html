@@ -381,7 +381,35 @@ margin-bottom:10px;
 }
 
 }
+#lastBallsWrap{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+padding:10px 14px;
+background:#12031f;
+border:2px solid #d94dff;
+border-radius:16px;
+box-shadow:0 0 16px rgba(217,77,255,.45);
+height:60px;
+margin-left:12px;
+}
 
+.lastBall{
+width:42px;
+height:42px;
+border-radius:10px;
+background:#1b0830;
+border:2px solid #d94dff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+font-weight:700;
+color:#fff;
+box-shadow:0 0 10px rgba(217,77,255,.25);
+flex-shrink:0;
+}
 </style>
 </head>
 
@@ -432,12 +460,14 @@ Send
 <div id="mode">Mode: 2 LINES</div>
 </div>
 
-<div id="lastBalls">
+<div id="lastBallsWrap">
+
 <div class="lastBall">-</div>
 <div class="lastBall">-</div>
 <div class="lastBall">-</div>
 <div class="lastBall">-</div>
 <div class="lastBall">-</div>
+
 </div>
 
 </div>
