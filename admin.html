@@ -253,6 +253,47 @@ db.ref("currentNumber").on("value", snap => {
   document.getElementById("current").innerText =
     "Current: " + getLetter(num) + num;
 });
+  /* 🔊 BINGO SOUND */
+
+document.body.addEventListener('click',()=>{
+
+const unlock = new Audio();
+
+unlock.play().catch(()=>{});
+
+},{once:true});
+
+db.ref("bingoClaims").limitToLast(1).on("child_added",snap=>{
+
+const claim = snap.val();
+
+if(!claim) return;
+
+/* ELEVENLABS VOICE */
+
+const voice = new Audio(
+'bingo.mp3'
+);
+
+voice.volume = 1;
+
+voice.play().catch(()=>{});
+
+/* CHEERING */
+
+const cheer = new Audio(
+'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
+);
+
+cheer.volume = 1;
+
+setTimeout(()=>{
+
+cheer.play().catch(()=>{});
+
+},1500);
+
+});
 </script>
 
 </body>
