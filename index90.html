@@ -410,6 +410,28 @@ color:#fff;
 box-shadow:0 0 10px rgba(217,77,255,.25);
 flex-shrink:0;
 }
+#topBar{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+margin:12px 0 14px;
+}
+
+.miniBingoBtn{
+height:60px;
+padding:0 20px;
+border:none;
+border-radius:16px;
+font-size:22px;
+font-weight:700;
+background:linear-gradient(135deg,#19e3ff,#62f3ff);
+color:#000;
+box-shadow:0 0 20px rgba(25,227,255,.7);
+cursor:pointer;
+}
+
+</style>
 </style>
 </head>
 
@@ -460,13 +482,19 @@ Send
 <div id="mode">Mode: 2 LINES</div>
 </div>
 
+<div id="topBar">
+
 <div id="lastBallsWrap">
+<div class="lastBall">-</div>
+<div class="lastBall">-</div>
+<div class="lastBall">-</div>
+<div class="lastBall">-</div>
+<div class="lastBall">-</div>
+</div>
 
-<div class="lastBall">-</div>
-<div class="lastBall">-</div>
-<div class="lastBall">-</div>
-<div class="lastBall">-</div>
-<div class="lastBall">-</div>
+<button class="miniBingoBtn" onclick="checkBingo()">
+BINGO
+</button>
 
 </div>
 
@@ -476,13 +504,7 @@ Send
 
 <div id="tickets"></div>
 
-<button class="bingoBtn" onclick="checkBingo()">
-BINGO
-</button>
 
-<button class="bingoBtn" onclick="checkBingo()">
-BINGO
-</button>
 
 </div>
 
