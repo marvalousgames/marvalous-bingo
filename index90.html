@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Marvalous Bingo 90</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marvalous Bingo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -16,242 +17,262 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
 font-family:'Poppins',sans-serif;
+-webkit-tap-highlight-color:transparent;
 }
 
 body{
 background:
-radial-gradient(circle at top,#3d006e 0%,#140021 45%,#050008 100%);
+radial-gradient(circle at top,#42006f 0%,#150022 45%,#050008 100%);
 color:white;
-padding:10px;
 overflow-x:hidden;
+padding:14px;
+}
+
+.container{
+width:100%;
+max-width:900px;
+margin:auto;
 }
 
 /* LOGO */
 
 .logo{
 text-align:center;
-margin-bottom:10px;
+margin-bottom:18px;
 }
 
 .logo h1{
-font-size:34px;
+font-size:42px;
 font-weight:900;
-line-height:0.9;
+line-height:1;
 color:white;
 text-shadow:
 0 0 10px #ff4df2,
-0 0 25px #ff4df2;
+0 0 30px #ff4df2;
 }
 
 .logo p{
-margin-top:4px;
-font-size:10px;
-letter-spacing:4px;
-color:#48ffee;
+margin-top:8px;
+font-size:12px;
+letter-spacing:6px;
+color:#4ffcff;
 }
 
 /* STREAM */
 
-#video-container{
-width:100%;
-max-width:850px;
-margin:auto;
-margin-bottom:10px;
-background:#1a1033;
-padding:6px;
-border-radius:20px;
-border:2px solid #a93dff;
-box-shadow:0 0 18px rgba(255,0,255,.25);
+.streamWrap{
+border:3px solid #b84dff;
+border-radius:24px;
+padding:8px;
+background:#12071f;
+box-shadow:0 0 25px rgba(255,0,255,.35);
+margin-bottom:18px;
 }
 
-#video-container iframe{
+.streamBox{
 width:100%;
 aspect-ratio:16/9;
+overflow:hidden;
+border-radius:18px;
+background:black;
+}
+
+.streamBox iframe{
+width:100%;
+height:100%;
 border:none;
-border-radius:14px;
 }
 
 /* CHAT */
 
-#chat-box{
-width:100%;
-max-width:850px;
-margin:auto;
-margin-bottom:14px;
-background:#1a1033;
-border-radius:20px;
-padding:10px;
-border:2px solid #8e42ff;
+.chatWrap{
+border:3px solid #b84dff;
+border-radius:24px;
+padding:14px;
+background:#1b1233;
+box-shadow:0 0 20px rgba(255,0,255,.18);
+margin-bottom:25px;
 }
 
-#messages{
-height:95px;
+.messages{
+height:130px;
 overflow-y:auto;
+background:#090014;
+border-radius:16px;
+padding:14px;
+margin-bottom:12px;
 text-align:left;
-padding:8px;
-background:#12071f;
-border-radius:12px;
-margin-bottom:8px;
-font-size:13px;
 }
 
 .msg{
-margin-bottom:5px;
+margin-bottom:10px;
+font-size:18px;
 }
 
 .msg b{
-color:#47f2ff;
+color:#4ffcff;
 }
 
-#chat-input{
+.chatInputs{
 display:flex;
-gap:6px;
+gap:10px;
 }
 
-#chat-input input{
+.chatInputs input{
 flex:1;
-height:38px;
+height:52px;
 border:none;
-border-radius:10px;
-padding:0 10px;
-background:#0d0217;
+border-radius:14px;
+background:#0b0115;
+padding:0 14px;
 color:white;
+font-size:16px;
 outline:none;
-font-size:13px;
 }
 
-#chat-input button{
-width:70px;
+.sendBtn{
+width:95px;
 border:none;
-border-radius:10px;
-background:linear-gradient(45deg,#b84dff,#ff4df2);
+border-radius:14px;
+background:linear-gradient(45deg,#c84dff,#ff4df2);
 color:white;
+font-size:18px;
 font-weight:700;
+cursor:pointer;
 }
 
 /* CURRENT NUMBER */
 
 .numberWrap{
 text-align:center;
-margin-bottom:12px;
+margin-bottom:25px;
 }
 
 #currentNumber{
-font-size:78px;
+font-size:92px;
 font-weight:900;
 line-height:1;
 color:white;
 text-shadow:
 0 0 12px #ff4df2,
-0 0 30px #ff4df2;
+0 0 35px #ff4df2;
 }
 
 #mode{
-margin-top:4px;
-font-size:16px;
-color:#48ffee;
+font-size:20px;
+margin-top:10px;
+color:#4ffcff;
+font-weight:600;
 }
 
 /* TICKETS */
 
 #tickets{
-width:100%;
-max-width:900px;
-margin:auto;
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px;
-margin-bottom:14px;
+gap:16px;
+margin-bottom:25px;
 }
 
 .ticket{
-background:#12071f;
-border:2px solid #b84dff;
-border-radius:16px;
-padding:4px;
+background:#090014;
+border:3px solid #b84dff;
+border-radius:18px;
 overflow:hidden;
+box-shadow:0 0 15px rgba(255,0,255,.18);
 }
 
 .ticketGrid{
 display:grid;
 grid-template-columns:repeat(9,1fr);
-gap:1px;
 }
 
 .cell{
-background:#090012;
-min-height:28px;
+aspect-ratio:1/1;
+border-right:1px solid #7a25b9;
+border-bottom:1px solid #7a25b9;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:12px;
-font-weight:700;
-border-radius:3px;
+font-size:20px;
+font-weight:600;
+background:#090014;
+}
+
+.cell:nth-child(9n){
+border-right:none;
+}
+
+.cell:nth-last-child(-n+9){
+border-bottom:none;
 }
 
 .blank{
-background:#140021;
+background:#12071f;
+color:transparent;
 }
 
 .marked{
-background:linear-gradient(45deg,#00ffee,#4de1ff);
+background:
+linear-gradient(45deg,#00ffe1,#3cf7ff);
 color:black;
-box-shadow:0 0 12px rgba(71,242,255,.9);
+font-weight:900;
+box-shadow:
+0 0 12px #00ffe1,
+inset 0 0 10px rgba(255,255,255,.5);
 }
 
 /* CALLED BOARD */
 
 #calledBoard{
-width:100%;
-max-width:900px;
-margin:auto;
 display:grid;
 grid-template-columns:repeat(10,1fr);
-gap:4px;
-margin-bottom:80px;
+gap:6px;
+margin-bottom:28px;
 }
 
 .calledNum{
 background:#1b1233;
-height:28px;
-border-radius:6px;
+border-radius:10px;
+height:48px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:11px;
-color:#aaa;
+font-size:15px;
+color:#d7d7d7;
 }
 
 .calledActive{
 background:#ff4df2;
 color:white;
+font-weight:700;
 }
 
 .latest{
-background:#00ffee !important;
+background:#28ffe7 !important;
 color:black !important;
 font-weight:900;
+box-shadow:0 0 15px #28ffe7;
 }
 
-/* FLOATING BINGO BUTTON */
+/* BINGO BUTTON */
 
-.main{
-position:fixed;
-bottom:18px;
-left:50%;
-transform:translateX(-50%);
-width:140px;
-height:52px;
+.bingoBtn{
+display:block;
+margin:0 auto 40px auto;
+width:260px;
+height:78px;
 border:none;
-border-radius:16px;
-background:linear-gradient(45deg,#00ffee,#47f2ff);
-color:black;
-font-size:20px;
+border-radius:24px;
+background:
+linear-gradient(45deg,#22f7e7,#4ffcff);
+font-size:28px;
 font-weight:900;
-box-shadow:0 0 18px #47f2ff;
-z-index:999;
+color:black;
+box-shadow:
+0 0 20px #28ffe7;
+cursor:pointer;
 }
 
 /* MOBILE */
@@ -262,27 +283,64 @@ z-index:999;
 font-size:28px;
 }
 
+.logo p{
+font-size:9px;
+letter-spacing:4px;
+}
+
+.messages{
+height:110px;
+}
+
+.msg{
+font-size:15px;
+}
+
+.chatInputs{
+gap:6px;
+}
+
+.chatInputs input{
+height:44px;
+font-size:14px;
+}
+
+.sendBtn{
+width:72px;
+font-size:14px;
+}
+
 #currentNumber{
-font-size:64px;
+font-size:82px;
+}
+
+#mode{
+font-size:16px;
 }
 
 #tickets{
 grid-template-columns:1fr;
-gap:8px;
+gap:14px;
 }
 
 .cell{
-min-height:26px;
-font-size:11px;
+font-size:15px;
+}
+
+#calledBoard{
+gap:4px;
 }
 
 .calledNum{
-height:24px;
-font-size:10px;
+height:34px;
+font-size:11px;
 }
 
-#messages{
-height:85px;
+.bingoBtn{
+width:170px;
+height:58px;
+font-size:20px;
+border-radius:18px;
 }
 
 }
@@ -292,29 +350,39 @@ height:85px;
 
 <body>
 
+<div class="container">
+
 <div class="logo">
 <h1>MARVALOUS BINGO</h1>
 <p>REAL PEOPLE • REAL WINNERS</p>
 </div>
 
-<div id="video-container">
+<div class="streamWrap">
+
+<div class="streamBox">
+
 <iframe
-src="https://player.twitch.tv/?channel=marvalouscomps&parent=marvalous-bingo.netlify.app"
+src="https://player.twitch.tv/?channel=marvalouscomps&parent=bingo.netlify.app"
 allowfullscreen>
 </iframe>
+
 </div>
 
-<div id="chat-box">
+</div>
 
-<div id="messages"></div>
+<div class="chatWrap">
 
-<div id="chat-input">
+<div class="messages" id="messages"></div>
+
+<div class="chatInputs">
 
 <input id="name" placeholder="Name">
 
 <input id="msg" placeholder="Type message...">
 
-<button onclick="sendMsg()">Send</button>
+<button class="sendBtn" onclick="sendMsg()">
+Send
+</button>
 
 </div>
 
@@ -332,9 +400,11 @@ allowfullscreen>
 
 <div id="calledBoard"></div>
 
-<button class="main" onclick="checkBingo()">
+<button class="bingoBtn" onclick="checkBingo()">
 BINGO
 </button>
+
+</div>
 
 <script>
 
@@ -358,18 +428,6 @@ if(!playerId){
  localStorage.setItem('playerId',playerId);
 
 }
-
-/* RESET OLD */
-
-if(localStorage.getItem('fixedCardsV3')!=="yes"){
-
- localStorage.removeItem('cards');
-
- localStorage.setItem('fixedCardsV3',"yes");
-
-}
-
-/* TICKET GENERATOR */
 
 function generateTicket(){
 
@@ -408,10 +466,9 @@ let max=ranges[col][1];
 let num;
 
 do{
-
 num=Math.floor(Math.random()*(max-min+1))+min;
-
-}while(used.has(num));
+}
+while(used.has(num));
 
 used.add(num);
 
@@ -452,8 +509,6 @@ return ticket;
 
 }
 
-/* LOAD CARDS */
-
 let savedCards=localStorage.getItem('cards');
 
 let cards=savedCards
@@ -466,8 +521,6 @@ generateTicket()
 ];
 
 localStorage.setItem('cards',JSON.stringify(cards));
-
-/* RENDER */
 
 function renderBoards(){
 
@@ -493,10 +546,13 @@ if(n===''){
 
 div.className='cell blank';
 
-}else{
+}
+else{
 
 div.className='cell';
+
 div.innerText=n;
+
 div.dataset.num=n;
 
 }
@@ -514,8 +570,6 @@ wrap.appendChild(board);
 }
 
 renderBoards();
-
-/* GAME RESET */
 
 let currentGameId;
 
@@ -548,11 +602,16 @@ location.reload();
 
 }
 
-}
+db.ref('players/'+playerId).set({
+
+name:playerName,
+cards:cards
 
 });
 
-/* CALLED BOARD */
+}
+
+});
 
 for(let i=1;i<=90;i++){
 
@@ -567,8 +626,6 @@ div.innerText=i;
 document.getElementById('calledBoard').appendChild(div);
 
 }
-
-/* AUTO MARK */
 
 let lastCalled=0;
 
@@ -631,8 +688,6 @@ latestBall.classList.add('latest');
 
 });
 
-/* CURRENT NUMBER */
-
 db.ref('currentNumber').on('value',snap=>{
 
 let num=snap.val();
@@ -657,8 +712,6 @@ speechSynthesis.speak(speech);
 
 });
 
-/* MODE */
-
 db.ref('mode').on('value',snap=>{
 
 let mode=snap.val()||'1line';
@@ -670,8 +723,6 @@ mode==='2lines'?'2 LINES':'FULL HOUSE'
 );
 
 });
-
-/* BINGO */
 
 function checkBingo(){
 
@@ -687,8 +738,6 @@ db.ref('bingoSound').set(Date.now());
 alert('🎉 Bingo claimed!');
 
 }
-
-/* CHAT */
 
 function sendMsg(){
 
@@ -728,8 +777,6 @@ box.appendChild(div);
 box.scrollTop=box.scrollHeight;
 
 });
-
-/* SOUND */
 
 const bingoAudio=new Audio(
 'https://www.soundjay.com/human/cheering-01.mp3'
