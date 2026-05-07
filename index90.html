@@ -637,6 +637,11 @@ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 firebase.initializeApp(firebaseConfig);
 
 const db=firebase.database();
+document.body.addEventListener('click',()=>{
+
+window.speechSynthesis.resume();
+
+},{once:true});
 
 let playerName=localStorage.getItem('playerName')||'Player';
 
