@@ -730,7 +730,24 @@ return ticket;
 
 
 
-let savedCards=localStorage.getItem('cards');
+
+let savedCards = localStorage.getItem('cards');
+
+let cards = savedCards
+? JSON.parse(savedCards)
+: [
+generateTicket(),
+generateTicket(),
+generateTicket(),
+generateTicket()
+];
+
+localStorage.setItem(
+'cards',
+JSON.stringify(cards)
+);
+
+/* GAME RESET SYSTEM */
 
 let currentGameId = localStorage.getItem('gameId');
 
@@ -746,9 +763,12 @@ if(currentGameId != newGameId){
 
 currentGameId = newGameId;
 
-localStorage.setItem('gameId',newGameId);
+localStorage.setItem(
+'gameId',
+newGameId
+);
 
-/* GENERATE NEW CARDS */
+/* NEW CARDS */
 
 cards = [
 generateTicket(),
@@ -767,25 +787,6 @@ renderBoards();
 }
 
 });
-
-/* LOAD SAVED CARDS */
-
-let savedCards = localStorage.getItem('cards');
-
-let cards = savedCards
-? JSON.parse(savedCards)
-: [
-generateTicket(),
-generateTicket(),
-generateTicket(),
-generateTicket()
-];
-
-localStorage.setItem(
-'cards',
-JSON.stringify(cards)
-);
-
 function renderBoards(){
 
 const wrap=document.getElementById('tickets');
