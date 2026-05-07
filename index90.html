@@ -1140,12 +1140,16 @@ cheer.play();
 
 function checkBingo(){
 
-db.ref('bingoClaims').set({
+const savedName = localStorage.getItem('playerName') || 'Player';
 
-name:playerName,
+db.ref('bingoClaims').push({
+
+name:savedName,
 time:Date.now()
 
 });
+
+db.ref('bingoSound').set(Date.now());
 
 alert('🎉 Bingo claimed!');
 
