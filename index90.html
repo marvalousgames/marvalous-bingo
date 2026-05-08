@@ -1431,14 +1431,16 @@ db.ref('playerAlerts/'+playerNameAlert)
 const data = snap.val();
 
 if(!data) return;
-
+if(data.seen) return;
 if(data.type==='approved'){
 
 showResultPopup(
 '🏆 YOU WON!',
 'Congratulations! Your bingo claim was successful.'
 );
-
+db.ref('playerAlerts/'+playerNameAlert).update({
+seen:true
+});
 }
 
 if(data.type==='denied'){
@@ -1447,7 +1449,9 @@ showResultPopup(
 '❌ CLAIM UNSUCCESSFUL',
 'Sorry, this claim was not approved. Please keep playing!'
 );
-
+db.ref('playerAlerts/'+playerNameAlert).update({
+seen:true
+});
 }
 
 });
