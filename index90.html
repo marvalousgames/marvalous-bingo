@@ -736,6 +736,10 @@ document.body.addEventListener('click',()=>{
 
 window.speechSynthesis.resume();
 
+const unlockAudio = new Audio();
+
+unlockAudio.play().catch(()=>{});
+
 },{once:true});
 
 let playerName = localStorage.getItem('playerName');
