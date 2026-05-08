@@ -1179,7 +1179,7 @@ cheer.play();
 });
 /* GLOBAL WIN ALERT */
 
-db.ref('globalWin').on('value',snap=>{
+db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
 
 const data = snap.val();
 
@@ -1198,7 +1198,12 @@ winSound.play().catch(()=>{});
 
 showResultPopup(
 '🎉 BINGO WON',
-data.name + ' won ' + data.mode + '!'
+data.name + ' won ' + 
+data.mode
+.replace('1line','ONE LINE')
+.replace('2lines','TWO LINES')
+.replace('fullhouse','FULL HOUSE')
++ '!'
 );
  
 });
@@ -1218,7 +1223,6 @@ time:Date.now()
  
 db.ref('liveClaimAlert').set({
 name:savedName,
-mode: currentMode,
 time:Date.now()
 });
 
