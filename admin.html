@@ -198,9 +198,31 @@ function viewCard(name) {
 
 /* ✅ APPROVE */
 function approve(id) {
-  db.ref("winner").set(true);
-  db.ref("bingoClaims/" + id).remove();
+
+db.ref("bingoClaims/" + id).once("value", snap => {
+
+const claim = snap.val();
+
+if(!claim) return;
+
+db.ref('playerAlerts/' + claim.name).set({
+type:'approved'
+});
+
+db.ref('globalWin').set({
+name: claim.name,
+mode: currentMode || 'ONE LINE',
+time: Date.now()
+});
+
+db.ref("winner").set(true);
+
+db.ref("bingoClaims/" + id).remove();
+
+});
+
 }
+  
 
 /* 👥 PLAYERS */
 db.ref("players").on("value", snap => {
