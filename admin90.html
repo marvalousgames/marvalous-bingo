@@ -441,7 +441,7 @@ type:'approved',
 time:Date.now()
 });
 
-db.ref('globalWin').push({
+db.ref('globalWin').set({
 name:data.name,
 mode:currentMode,
 time:Date.now()
