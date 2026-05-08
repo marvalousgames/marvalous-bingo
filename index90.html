@@ -1198,16 +1198,38 @@ cheer.play();
 });
 /* GLOBAL WIN ALERT */
 
-db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
+let lastGlobalWin =
+sessionStorage.getItem('lastGlobalWin') || 0;
+
+db.ref('globalWin').on('value',snap=>{
 
 const data = snap.val();
 
 if(!data) return;
 
+if(!data.name) return;
+
+if(!data.time) return;
+
+/* STOP SAME ALERT REPEATING */
+
+if(data.time == lastGlobalWin) return;
+
+lastGlobalWin = data.time;
+
+sessionStorage.setItem(
+'lastGlobalWin',
+data.time
+);
+
 const myName =
 localStorage.getItem('playerName');
 
+/* DON'T SHOW TO WINNER */
+
 if(data.name === myName) return;
+
+/* PLAY WIN SOUND */
 
 const winSound = new Audio('winner.mp3');
 
@@ -1215,16 +1237,29 @@ winSound.volume = 1;
 
 winSound.play().catch(()=>{});
 
+/* MODE TEXT */
+
+let modeText = data.mode;
+
+if(modeText === '1line'){
+modeText = 'ONE LINE';
+}
+
+if(modeText === '2lines'){
+modeText = 'TWO LINES';
+}
+
+if(modeText === 'fullhouse'){
+modeText = 'FULL HOUSE';
+}
+
+/* SHOW POPUP */
+
 showResultPopup(
 '🎉 BINGO WON',
-data.name + ' won ' + 
-data.mode
-.replace('1line','ONE LINE')
-.replace('2lines','TWO LINES')
-.replace('fullhouse','FULL HOUSE')
-+ '!'
+data.name + ' won ' + modeText + '!'
 );
- 
+
 });
 
 /* BINGO */
