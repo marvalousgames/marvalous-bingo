@@ -421,7 +421,13 @@ winSound.volume = 1;
 winSound.play().catch(()=>{});
 
 db.ref('winner').set(true);
+const winnerName =
+document.getElementById('claimName-'+id).innerText;
 
+db.ref('playerAlerts/'+winnerName).set({
+type:'approved',
+time:Date.now()
+});
 db.ref('bingoClaims/'+id).remove();
 
 alert('Winner approved');
@@ -440,7 +446,13 @@ const denySound = new Audio(
 denySound.volume = 1;
 
 denySound.play().catch(()=>{});
+const winnerName =
+document.getElementById('claimName-'+id).innerText;
 
+db.ref('playerAlerts/'+winnerName).set({
+type:'denied',
+time:Date.now()
+});
 db.ref('bingoClaims/'+id).remove();
 
 alert('❌ Bingo claim denied');
