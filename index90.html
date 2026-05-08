@@ -1246,7 +1246,95 @@ CLOSE
 document.body.appendChild(popup);
 
 }
+const playerAlertName =
+localStorage.getItem('playerName');
 
+db.ref('playerAlerts/'+playerAlertName)
+.on('value',snap=>{
+
+const data = snap.val();
+
+if(!data) return;
+
+let title='';
+let emoji='';
+let glow='';
+
+if(data.type==='approved'){
+title='BINGO APPROVED';
+emoji='🎉';
+glow='#49ffee';
+}
+
+if(data.type==='denied'){
+title='BINGO DENIED';
+emoji='❌';
+glow='#ff4d4d';
+}
+
+const popup=document.createElement('div');
+
+popup.innerHTML=`
+<div style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.82);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999999;
+">
+
+<div style="
+background:#1c1735;
+border:3px solid ${glow};
+border-radius:24px;
+padding:30px;
+width:85%;
+max-width:320px;
+text-align:center;
+box-shadow:0 0 35px ${glow};
+">
+
+<div style="
+font-size:42px;
+margin-bottom:10px;
+">
+${emoji}
+</div>
+
+<div style="
+font-size:28px;
+font-weight:900;
+color:${glow};
+margin-bottom:15px;
+">
+${title}
+</div>
+
+<button onclick="this.closest('div').parentElement.remove()" style="
+border:none;
+background:linear-gradient(45deg,#ff4df2,#b84dff);
+color:white;
+font-size:18px;
+font-weight:700;
+padding:12px 30px;
+border-radius:14px;
+cursor:pointer;
+">
+CLOSE
+</button>
+
+</div>
+</div>
+`;
+
+document.body.appendChild(popup);
+
+});
 </script>
 
 </body>
