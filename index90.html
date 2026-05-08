@@ -721,7 +721,17 @@ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 firebase.initializeApp(firebaseConfig);
 
 const db=firebase.database();
+firebase.database().goOnline();
 
+document.addEventListener("visibilitychange", () => {
+
+if(document.visibilityState === "visible"){
+
+firebase.database().goOnline();
+
+}
+
+});
 document.body.addEventListener('click',()=>{
 
 window.speechSynthesis.resume();
@@ -1002,13 +1012,11 @@ document.getElementById('currentNumber').innerText = number;
 
 if(number > 0){
 
-const speech = new SpeechSynthesisUtterance(number.toString());
+const winnerAudio = new Audio('winner.mp3');
 
-speech.volume = 1;
-speech.rate = 1;
-speech.pitch = 1;
+winnerAudio.volume = 1;
 
-window.speechSynthesis.speak(speech);
+winnerAudio.play().catch(()=>{});
 
 }
 
