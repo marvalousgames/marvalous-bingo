@@ -525,7 +525,10 @@ db.ref('playerAlerts/'+data.name).set({
 type:'denied',
 time:Date.now()
 });
-
+db.ref('globalDeny').set({
+name:data.name,
+time:Date.now()
+});
 });
 db.ref('bingoClaims/'+id).remove();
 
