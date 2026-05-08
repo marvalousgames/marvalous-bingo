@@ -1177,6 +1177,31 @@ cheer.play();
 },2200);
 
 });
+/* GLOBAL WIN ALERT */
+
+db.ref('globalWin').on('value',snap=>{
+
+const data = snap.val();
+
+if(!data) return;
+
+const myName =
+localStorage.getItem('playerName');
+
+if(data.name === myName) return;
+
+const winSound = new Audio('winner.mp3');
+
+winSound.volume = 1;
+
+winSound.play().catch(()=>{});
+
+showResultPopup(
+'🎉 BINGO WON',
+data.name + ' won ' + data.mode + '!'
+);
+
+});
 /* BINGO */
 
 function checkBingo(){
