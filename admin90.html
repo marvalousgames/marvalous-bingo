@@ -455,13 +455,7 @@ const denySound = new Audio(
 denySound.volume = 1;
 
 denySound.play().catch(()=>{});
-const winnerName =
-document.getElementById('claimName-'+id).innerText;
 
-db.ref('playerAlerts/'+winnerName).set({
-type:'denied',
-time:Date.now()
-});
 db.ref('bingoClaims/'+id).once('value').then(snap=>{
 
 const data = snap.val();
