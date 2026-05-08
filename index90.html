@@ -1170,7 +1170,7 @@ db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
 const data = snap.val();
 
 if(!data) return;
-
+if(!data.name) return;
 window.speechSynthesis.cancel();
 
 const speech = new SpeechSynthesisUtterance(
@@ -1423,7 +1423,8 @@ seen:true
 
 });
 let liveClaimLoaded = false;
-let lastClaimTime = 0;
+let lastClaimTime =
+sessionStorage.getItem('lastClaimTime') || 0;
 
 db.ref('liveClaimAlert').on('value',snap=>{
 
@@ -1437,6 +1438,10 @@ if(!liveClaimLoaded){
 
 liveClaimLoaded = true;
 lastClaimTime = data.time;
+sessionStorage.setItem(
+'lastClaimTime',
+data.time
+);
 return;
 
 }
