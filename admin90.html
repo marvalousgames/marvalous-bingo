@@ -453,6 +453,7 @@ db.ref('playerAlerts/'+winnerName).set({
 type:'denied',
 time:Date.now()
 });
+db.ref('denied').set(true);
 db.ref('bingoClaims/'+id).remove();
 
 alert('❌ Bingo claim denied');
