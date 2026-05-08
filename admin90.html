@@ -440,7 +440,11 @@ db.ref('playerAlerts/'+data.name).set({
 type:'approved',
 time:Date.now()
 });
-
+db.ref('globalWin').set({
+name:data.name,
+mode:currentMode || 'ONE LINE',
+time:Date.now()
+});
 });
 const winnerName =
 document.getElementById('claimName-'+id).innerText;
