@@ -420,7 +420,16 @@ winSound.volume = 1;
 
 winSound.play().catch(()=>{});
 
-db.ref('winner').set(true);
+db.ref('bingoClaims/'+id).once('value').then(snap=>{
+
+const data = snap.val();
+
+db.ref('playerAlerts/'+data.name).set({
+type:'approved',
+time:Date.now()
+});
+
+});
 const winnerName =
 document.getElementById('claimName-'+id).innerText;
 
@@ -453,7 +462,16 @@ db.ref('playerAlerts/'+winnerName).set({
 type:'denied',
 time:Date.now()
 });
-db.ref('denied').set(true);
+db.ref('bingoClaims/'+id).once('value').then(snap=>{
+
+const data = snap.val();
+
+db.ref('playerAlerts/'+data.name).set({
+type:'denied',
+time:Date.now()
+});
+
+});
 db.ref('bingoClaims/'+id).remove();
 
 alert('❌ Bingo claim denied');
