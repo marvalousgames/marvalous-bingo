@@ -182,6 +182,8 @@ let html = '';
 
 Object.values(data).reverse().forEach(win=>{
 
+if(!win.name || !win.mode || !win.time) return;
+
 const date = new Date(win.time);
 
 html += `
