@@ -664,7 +664,7 @@ text-shadow:
 0 0 10px #ffe066,
 0 0 22px #ff9900;
 ">
-💰 £100 PRIZE
+£100
  </div>
 </div>
 
@@ -904,7 +904,7 @@ db.ref('prizeText').on('value',snap=>{
 const prize = snap.val() || '£100 PRIZE';
 
 document.getElementById('prizeText').innerText =
-'💰 ' + prize;
+prize;
 
 });
 db.ref('gameId').on('value',snap=>{
