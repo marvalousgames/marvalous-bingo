@@ -1577,6 +1577,53 @@ CLOSE
 document.body.appendChild(popup);
 
 });
+let lastGlobalDeny =
+sessionStorage.getItem('lastGlobalDeny') || 0;
+
+db.ref('globalDeny').on('value',snap=>{
+
+const data = snap.val();
+
+if(!data) return;
+
+if(!data.name) return;
+
+if(!data.time) return;
+
+/* STOP DUPLICATES */
+
+if(data.time == lastGlobalDeny) return;
+
+lastGlobalDeny = data.time;
+
+sessionStorage.setItem(
+'lastGlobalDeny',
+data.time
+);
+
+const myName =
+localStorage.getItem('playerName');
+
+/* DON'T SHOW TO DENIED PLAYER */
+
+if(data.name === myName) return;
+
+/* PLAY DENY SOUND */
+
+const denyAudio = new Audio('deny.mp3');
+
+denyAudio.volume = 1;
+
+denyAudio.play().catch(()=>{});
+
+/* SHOW ALERT */
+
+showResultPopup(
+'❌ CLAIM REJECTED',
+data.name + '\'s bingo claim was unsuccessful.'
+);
+
+});
 </script>
 
 </body>
