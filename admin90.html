@@ -440,6 +440,7 @@ db.ref('playerAlerts/'+data.name).set({
 type:'approved',
 time:Date.now()
 });
+
 db.ref('globalWin').push({
 name:data.name,
 mode:currentMode,
@@ -451,6 +452,7 @@ db.ref('bingoClaims/'+id).remove();
 alert('Winner approved');
 
 });
+
 }
 
 /* DENY */
