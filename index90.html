@@ -736,9 +736,19 @@ document.body.addEventListener('click',()=>{
 
 window.speechSynthesis.resume();
 
-const unlockAudio = new Audio();
+/* UNLOCK AUDIO */
+
+const unlockAudio = new Audio('winner.mp3');
+
+unlockAudio.volume = 0;
 
 unlockAudio.play().catch(()=>{});
+
+const unlockAudio2 = new Audio('deny.mp3');
+
+unlockAudio2.volume = 0;
+
+unlockAudio2.play().catch(()=>{});
 
 },{once:true});
 
