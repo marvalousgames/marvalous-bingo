@@ -1189,6 +1189,11 @@ name:savedName,
 time:Date.now()
 
 });
+ 
+db.ref('liveClaimAlert').set({
+name:savedName,
+time:Date.now()
+});
 
 db.ref('bingoSound').set(Date.now());
 
