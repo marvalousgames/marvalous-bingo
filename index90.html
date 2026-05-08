@@ -1146,7 +1146,7 @@ box.scrollTop=box.scrollHeight;
  
 /* BINGO SOUND */
 
-db.ref('bingoClaim').on('value',snap=>{
+db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
 
 const data = snap.val();
 
