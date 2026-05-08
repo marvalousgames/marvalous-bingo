@@ -1402,29 +1402,34 @@ document.body.appendChild(popup);
 
 }
 
-db.ref('winner').on('value',snap=>{
 
-if(!snap.val()) return;
+const playerNameAlert =
+localStorage.getItem('playerName');
+
+db.ref('playerAlerts/'+playerNameAlert)
+.on('value',snap=>{
+
+const data = snap.val();
+
+if(!data) return;
+
+if(data.type==='approved'){
 
 showResultPopup(
 '🏆 YOU WON!',
 'Congratulations! Your bingo claim was successful.'
 );
 
-db.ref('winner').set(false);
+}
 
-});
-
-db.ref('denied').on('value',snap=>{
-
-if(!snap.val()) return;
+if(data.type==='denied'){
 
 showResultPopup(
 '❌ CLAIM UNSUCCESSFUL',
 'Sorry, this claim was not approved. Please keep playing!'
 );
 
-db.ref('denied').set(false);
+}
 
 });
 </script>
