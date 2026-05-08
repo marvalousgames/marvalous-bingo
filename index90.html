@@ -1012,11 +1012,21 @@ document.getElementById('currentNumber').innerText = number;
 
 if(number > 0){
 
-const winnerAudio = new Audio('winner.mp3');
+const speech = new SpeechSynthesisUtterance(
+number.toString()
+);
 
-winnerAudio.volume = 1;
+speech.volume = 1;
+speech.rate = 1;
+speech.pitch = 1;
 
-winnerAudio.play().catch(()=>{});
+window.speechSynthesis.cancel();
+
+setTimeout(()=>{
+
+window.speechSynthesis.speak(speech);
+
+},200);
 
 }
 
