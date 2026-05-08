@@ -442,7 +442,7 @@ time:Date.now()
 });
 db.ref('globalWin').set({
 name:data.name,
-mode:currentMode || 'ONE LINE',
+mode:document.getElementById('mode').innerText,
 time:Date.now()
 });
 });
