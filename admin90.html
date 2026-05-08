@@ -129,7 +129,9 @@ RESET GAME
 <button onclick="setMode('fullhouse')">
 FULL HOUSE
 </button>
-
+<button onclick="updatePrize()">
+UPDATE PRIZE
+</button>
 </div>
 
 <div class="box">
@@ -158,7 +160,17 @@ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
+function updatePrize(){
 
+const amount = prompt('Enter prize amount');
+
+if(amount === null) return;
+
+db.ref('prizeText').set(amount);
+
+alert('Prize updated');
+
+}
 let called = [];
 
 /* LOAD NUMBER GRID */
