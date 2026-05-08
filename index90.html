@@ -1408,13 +1408,26 @@ seen:true
 }
 
 });
+let liveClaimLoaded = false;
 let lastClaimTime = 0;
 
 db.ref('liveClaimAlert').on('value',snap=>{
 
 const data = snap.val();
 
-if(!data) return;
+if(!data || !data.name || !data.time) return;
+
+/* IGNORE OLD DATA ON PAGE LOAD */
+
+if(!liveClaimLoaded){
+
+liveClaimLoaded = true;
+lastClaimTime = data.time;
+return;
+
+}
+
+/* IGNORE DUPLICATES */
 
 if(data.time === lastClaimTime) return;
 
