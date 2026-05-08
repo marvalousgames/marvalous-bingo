@@ -160,6 +160,13 @@ databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
+
+db.ref('mode').on('value',snap=>{
+
+currentMode = snap.val() || '1line';
+
+});
+
 function updatePrize(){
 
 const amount = prompt('Enter prize amount');
