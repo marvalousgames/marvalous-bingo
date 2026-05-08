@@ -899,7 +899,14 @@ JSON.stringify(cards)
 /* GAME RESET SYSTEM */
 
 let currentGameId = localStorage.getItem('gameId');
+db.ref('prizeText').on('value',snap=>{
 
+const prize = snap.val() || '£100 PRIZE';
+
+document.getElementById('prizeText').innerText =
+'💰 ' + prize;
+
+});
 db.ref('gameId').on('value',snap=>{
 
 const newGameId = snap.val();
