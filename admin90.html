@@ -151,7 +151,7 @@ UPDATE PRIZE
 </div>
 
 <script>
-
+let currentMode = '1line';
 const firebaseConfig = {
 apiKey:"AIzaSyD-4DJXkJUhgxA4RBJoWnvDKtwpzx69eQQ",
 databaseURL:"https://marvalous-bingo-default-rtdb.firebaseio.com"
@@ -226,7 +226,7 @@ called[called.length-1] || 0
 /* GAME MODE */
 
 function setMode(mode){
-
+currentMode = mode;
 db.ref('mode').set(mode);
 
 const modeSound = new Audio(
@@ -442,7 +442,7 @@ time:Date.now()
 });
 db.ref('globalWin').set({
 name:data.name,
-mode:document.getElementById('mode').innerText,
+mode:currentMode,
 time:Date.now()
 });
 });
