@@ -446,13 +446,7 @@ mode:currentMode,
 time:Date.now()
 });
 });
-const winnerName =
-document.getElementById('claimName-'+id).innerText;
 
-db.ref('playerAlerts/'+winnerName).set({
-type:'approved',
-time:Date.now()
-});
 db.ref('bingoClaims/'+id).remove();
 
 alert('Winner approved');
