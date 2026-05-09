@@ -1156,6 +1156,10 @@ div.className='cell blank';
 div.className='cell';
 div.dataset.num=n;
 
+if(calledNumbers.includes(n)){
+div.classList.add('marked');
+}
+
 div.innerHTML = `
 <span class="dab"></span>
 <span class="cellNumber">${n}</span>
@@ -1267,25 +1271,6 @@ const called = Object.values(snap.val()||{});
 
 calledNumbers = called;
 
-document.querySelectorAll('.cell').forEach(c=>{
-
-c.classList.remove('marked');
-
-});
-
-called.forEach(num=>{
-
-document.querySelectorAll('.cell').forEach(c=>{
-
-if(c.dataset.num==num){
-
-c.classList.add('marked');
-
-}
-
-});
-
-});
 
 document.querySelectorAll('.calledNum').forEach(c=>{
 
