@@ -1109,19 +1109,7 @@ let nums=ticket.flat().filter(n=>n!='');
 
 let matched=nums.filter(n=>calledNumbers.includes(n)).length;
 
-let away=3;
-
-if(mode==="1line"){
-away=Math.max(0,5-matched);
-}
-
-if(mode==="2lines"){
-away=Math.max(0,10-matched);
-}
-
-if(mode==="fullhouse"){
-away=Math.max(0,15-matched);
-}
+let away=Math.max(0,5-matched);
 
 if(away<=3 && away>0){
 
