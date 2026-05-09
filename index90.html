@@ -1131,7 +1131,13 @@ away = 15 - (row1+row2+row3);
 
 away=Math.max(0,away);
 
-if(away<=3 && away>0){
+if(away===0){
+
+badge.innerText='BINGO';
+
+badge.className='ticketBadge badge1';
+
+}else if(away<=3){
 
 badge.innerText=away+' AWAY';
 
