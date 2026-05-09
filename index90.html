@@ -1686,7 +1686,11 @@ const data = snap.val();
 if(!data) return;
 if(data.seen) return;
 if(data.type==='approved'){
+const winAudio = new Audio('winner.mp3');
 
+winAudio.volume = 1;
+
+winAudio.play().catch(()=>{});
 showResultPopup(
 '🏆 YOU WON!',
 'Congratulations! Your bingo claim was successful.'
@@ -1697,7 +1701,11 @@ seen:true
 }
 
 if(data.type==='denied'){
+const denyAudio = new Audio('deny.mp3');
 
+denyAudio.volume = 1;
+
+denyAudio.play().catch(()=>{});
 showResultPopup(
 '❌ CLAIM UNSUCCESSFUL',
 'Sorry, this claim was not approved. Please keep playing!'
