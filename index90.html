@@ -1298,26 +1298,29 @@ cheer.play();
 
 });
 /* GLOBAL WIN ALERT */
-/* GLOBAL WIN ALERT */
 
-let loadedGlobalWins = false;
+let lastGlobalWin = 0;
 
-db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
+db.ref('globalWin').on('value',snap=>{
 
-const data = snap.val();
+const wins = snap.val();
+
+if(!wins) return;
+
+const latestKey =
+Object.keys(wins).pop();
+
+const data = wins[latestKey];
 
 if(!data) return;
 if(!data.name) return;
 if(!data.time) return;
 
-/* IGNORE OLD WIN ON PAGE LOAD */
+/* IGNORE DUPLICATES */
 
-if(!loadedGlobalWins){
+if(data.time == lastGlobalWin) return;
 
-loadedGlobalWins = true;
-return;
-
-}
+lastGlobalWin = data.time;
 
 const myName =
 localStorage.getItem('playerName');
