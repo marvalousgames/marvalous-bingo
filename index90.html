@@ -1108,29 +1108,40 @@ grid.className='ticketGrid';
 
 let nums=ticket.flat().filter(n=>n!='');
 
-let matched=nums.filter(n=>calledNumbers.includes(n)).length;
+let row1 = ticket[0].filter(n => n !== '' && calledNumbers.includes(n)).length;
+let row2 = ticket[1].filter(n => n !== '' && calledNumbers.includes(n)).length;
+let row3 = ticket[2].filter(n => n !== '' && calledNumbers.includes(n)).length;
 
-let away=3;
+let away = 3;
 
 if(currentMode==="1line"){
-away=Math.max(0,5-matched);
+away = 5 - Math.max(row1,row2,row3);
 }
 
 if(currentMode==="2lines"){
-away=Math.max(0,10-matched);
+
+let rows=[row1,row2,row3].sort((a,b)=>b-a);
+
+away = 10 - (rows[0] + rows[1]);
 }
 
 if(currentMode==="fullhouse"){
-away=Math.max(0,15-matched);
+away = 15 - (row1+row2+row3);
 }
 
-if(away<=10 && away>0){
+away=Math.max(0,away);
+
+if(away<=3 && away>0){
 
 badge.innerText=away+' AWAY';
 
 badge.className='ticketBadge badge'+away;
 
 }else{
+
+badge.innerText='';
+
+}
 
 badge.innerText='';
 
