@@ -1104,6 +1104,27 @@ let grid=document.createElement('div');
 
 grid.className='ticketGrid';
 
+let nums=ticket.flat().filter(n=>n!='');
+
+let matched=nums.filter(n=>calledNumbers.includes(n)).length;
+
+let away=3;
+
+if(mode==="oneline"){
+away=Math.max(0,5-matched);
+}
+
+if(away<=3 && away>0){
+
+badge.innerText=away+' AWAY';
+
+badge.className='ticketBadge badge'+away;
+
+}else{
+
+badge.innerText='';
+
+} 
 ticket.flat().forEach(n=>{
 
 let div=document.createElement('div');
