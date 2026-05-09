@@ -847,8 +847,7 @@ BINGO
 
 </div>
 <div class="winnerTickerWrap">
-<div class="winnerTicker">
-🏆 KEELEY won FULL HOUSE £50 • DAVE won 1 LINE £10
+<div class="winnerTicker" id="winnerTicker">
 </div>
 </div>
 <div class="chatWrap">
@@ -1478,6 +1477,12 @@ showResultPopup(
 '🎉 BINGO WON',
 data.name + ' won ' + modeText + '!'
 );
+
+const winnerTicker = document.getElementById('winnerTicker');
+
+winnerTicker.innerText =
+'🏆 ' + data.name + ' won ' + modeText + ' • ' +
+winnerTicker.innerText;
 
 });
 
