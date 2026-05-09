@@ -1108,11 +1108,7 @@ let nums=ticket.flat().filter(n=>n!='');
 
 let matched=nums.filter(n=>calledNumbers.includes(n)).length;
 
-let away=3;
-
-if(mode==="oneline"){
-away=Math.max(0,5-matched);
-}
+let away=Math.max(0,5-matched);
 
 if(away<=3 && away>0){
 
