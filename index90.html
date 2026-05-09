@@ -1298,21 +1298,39 @@ cheer.play();
 
 });
 /* GLOBAL WIN ALERT */
+/* GLOBAL WIN ALERT */
+
+let globalWinLoaded = false;
 
 let lastGlobalWin =
 sessionStorage.getItem('lastGlobalWin') || 0;
 
-db.ref('globalWin').on('value',snap=>{
+db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
 
 const data = snap.val();
 
 if(!data) return;
-
 if(!data.name) return;
-
 if(!data.time) return;
 
-/* STOP SAME ALERT REPEATING */
+/* IGNORE OLD DATA ON LOAD */
+
+if(!globalWinLoaded){
+
+globalWinLoaded = true;
+
+lastGlobalWin = data.time;
+
+sessionStorage.setItem(
+'lastGlobalWin',
+data.time
+);
+
+return;
+
+}
+
+/* STOP DUPLICATES */
 
 if(data.time == lastGlobalWin) return;
 
@@ -1330,7 +1348,7 @@ localStorage.getItem('playerName');
 
 if(data.name === myName) return;
 
-/* PLAY WIN SOUND */
+/* PLAY SOUND */
 
 const winSound = new Audio('winner.mp3');
 
@@ -1362,6 +1380,7 @@ data.name + ' won ' + modeText + '!'
 );
 
 });
+
 
 /* BINGO */
 
