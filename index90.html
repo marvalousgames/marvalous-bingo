@@ -1263,45 +1263,11 @@ box.scrollTop=box.scrollHeight;
 
 });
 
- 
-/* BINGO SOUND */
-
-db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
-
-const data = snap.val();
-
-if(!data) return;
-if(!data.name) return;
-window.speechSynthesis.cancel();
-
-const speech = new SpeechSynthesisUtterance(
-data.name + " has called bingo!"
-);
-
-speech.volume = 1;
-speech.rate = 0.9;
-speech.pitch = 1.1;
-
-window.speechSynthesis.speak(speech);
-
-const cheer = new Audio(
-'https://actions.google.com/sounds/v1/crowds/crowd_cheer.ogg'
-);
-
-cheer.volume = 1;
-
-setTimeout(()=>{
-
-cheer.play();
-
-},2200);
-
-});
 /* GLOBAL WIN ALERT */
 let globalWinLoaded = false;
 let lastGlobalWin = 0;
 
-db.ref('globalWin').on('child_added',snap=>{
+db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
 
 const data = snap.val();
 
