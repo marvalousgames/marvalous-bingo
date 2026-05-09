@@ -1052,16 +1052,46 @@ let mode=snap.val()||'2lines';
 
 let text='';
 
+/* ONE LINE */
+
 if(mode==='1line'){
+
 text='🔥 ONE LINE';
+
+const audio = new Audio('1line.mp3');
+
+audio.volume = 1;
+
+audio.play().catch(()=>{});
+
 }
+
+/* TWO LINES */
 
 if(mode==='2lines'){
+
 text='🔥 TWO LINES';
+
+const audio = new Audio('2lines.mp3');
+
+audio.volume = 1;
+
+audio.play().catch(()=>{});
+
 }
 
+/* FULL HOUSE */
+
 if(mode==='fullhouse'){
+
 text='🏆 FULL HOUSE!';
+
+const audio = new Audio('fullhouse.mp3');
+
+audio.volume = 1;
+
+audio.play().catch(()=>{});
+
 }
 
 document.getElementById('modeText').innerText=text;
