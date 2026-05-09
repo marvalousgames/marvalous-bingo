@@ -218,31 +218,30 @@ text-shadow:
 .dab{
 position:absolute;
 
-width:68%;
-height:68%;
+font-size:20px;
+font-weight:900;
 
-border-radius:50%;
+color:#8b5cff;
 
-background:
-radial-gradient(circle at 30% 30%,
-#7d5cff 0%,
-#5a00ff 45%,
-#2d006e 100%);
-
-box-shadow:
-0 0 4px #7d5cff,
-0 0 8px rgba(125,92,255,.45);
+text-shadow:
+0 0 4px #8b5cff,
+0 0 10px rgba(139,92,255,.6);
 
 opacity:0;
-transform:scale(.6);
+
+transform:scale(.5);
 
 transition:.18s;
 
 z-index:1;
 }
 
+.dab::before{
+content:'✕';
+}
+
 .marked .dab{
-opacity:1;
+opacity:.35;
 transform:scale(1);
 }
 .ticketGrid .cell:nth-child(9n){
