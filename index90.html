@@ -1241,7 +1241,10 @@ document.getElementById('modeText').innerText=text;
 
 db.ref('calledNumbers').on('value',snap=>{
 
-calledNumbers=Object.values(snap.val()||{});
+
+const called = Object.values(snap.val()||{});
+
+calledNumbers = called;
 
 document.querySelectorAll('.cell').forEach(c=>{
 
