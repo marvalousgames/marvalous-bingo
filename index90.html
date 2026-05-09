@@ -872,7 +872,21 @@ Send
 <audio id="bingoSound" preload="auto">
 <source src="https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3" type="audio/mpeg">
 </audio>
-
+<button id="soundUnlockBtn" onclick="unlockAllAudio()" style="
+position:fixed;
+bottom:12px;
+right:12px;
+z-index:9999;
+background:#00ffcc;
+color:#000;
+border:none;
+border-radius:14px;
+padding:10px 14px;
+font-weight:900;
+box-shadow:0 0 15px #00ffcc;
+">
+🔊 Enable Sound
+</button>
 <script>
 
 const firebaseConfig={
@@ -979,7 +993,20 @@ nameInput.value = playerName;
 }
 
 });
+function unlockAllAudio(){
 
+const sound = document.getElementById('bingoSound');
+
+sound.play().then(()=>{
+
+sound.pause();
+sound.currentTime = 0;
+
+document.getElementById('soundUnlockBtn').style.display='none';
+
+}).catch(()=>{});
+
+}
 function generateTicket(){
 
 const ranges=[
