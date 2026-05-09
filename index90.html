@@ -1298,13 +1298,12 @@ cheer.play();
 
 });
 /* GLOBAL WIN ALERT */
-/* GLOBAL WIN ALERT */
 
 let lastGlobalWin = 0;
 
-db.ref('globalWin').on('value',snap=>{
+db.ref('globalWin').on('child_added',snap=>{
 
-const data = snap.val();
+const data = snap.val() || {};
 
 if(!data) return;
 if(!data.name) return;
