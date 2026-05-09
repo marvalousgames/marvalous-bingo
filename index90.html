@@ -1033,6 +1033,7 @@ JSON.stringify(cards)
 /* GAME RESET SYSTEM */
 
 let currentGameId = localStorage.getItem('gameId');
+let calledNumbers = [];
 db.ref('prizeText').on('value',snap=>{
 
 const prize = snap.val() || '£100 PRIZE';
@@ -1240,7 +1241,7 @@ document.getElementById('modeText').innerText=text;
 
 db.ref('calledNumbers').on('value',snap=>{
 
-const called=Object.values(snap.val()||{});
+calledNumbers=Object.values(snap.val()||{});
 
 document.querySelectorAll('.cell').forEach(c=>{
 
