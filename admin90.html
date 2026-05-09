@@ -586,7 +586,8 @@ function resetGame(){
 
 called=[];
 
-db.ref('calledNumbers').remove();
+
+
 
 db.ref('bingoClaims').remove();
 
@@ -594,6 +595,7 @@ db.ref('currentNumber').set(0);
 
 db.ref('winner').set(false);
 db.ref('winnerHistory').remove();
+document.getElementById('winnerHistory').innerHTML = '';
 db.ref('gameId').set(Date.now());
 
 document.getElementById('cardView').innerHTML='';
