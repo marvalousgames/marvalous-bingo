@@ -147,6 +147,10 @@ UPDATE PRIZE
 </button>
 </div>
 
+<button onclick="clearHistory()">
+CLEAR HISTORY
+</button>
+
 <div class="box">
 
 <h2>Bingo Claims</h2>
@@ -234,6 +238,17 @@ db.ref('prizeText').set(amount);
 alert('Prize updated');
 
 }
+
+function clearHistory(){
+
+if(confirm('Clear all winner history?')){
+
+db.ref('winnerHistory').remove();
+
+}
+
+}  
+  
 let called = [];
 
 /* LOAD NUMBER GRID */
