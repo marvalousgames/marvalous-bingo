@@ -87,6 +87,18 @@ font-weight:bold;
 cursor:pointer;
 }
 
+.activeMode{
+background:#ff00ff !important;
+color:white !important;
+
+box-shadow:
+0 0 10px #ff00ff,
+0 0 20px #ff00ff,
+0 0 40px #ff00ff;
+
+transform:scale(1.05);
+}
+  
 </style>
 </head>
 
@@ -118,15 +130,15 @@ RESET GAME
 
 <h2>Game Mode</h2>
 
-<button id="btn1line" onclick="setMode('1line')">
+<button id="btn1line" class="modeBtn" onclick="setMode('1line')">
 1 LINE
 </button>
 
-<button id="btn2lines" onclick="setMode('2lines')">
+<button id="btn2lines" class="modeBtn" onclick="setMode('2lines')">
 2 LINES
 </button>
 
-<button onclick="setMode('fullhouse')">
+<button id="btnFullhouse" class="modeBtn" onclick="setMode('fullhouse')">
 FULL HOUSE
 </button>
   
@@ -278,6 +290,21 @@ called[called.length-1] || 0
 
 function setMode(mode){
 currentMode = mode;
+document.querySelectorAll('.modeBtn').forEach(btn=>{
+btn.classList.remove('activeMode');
+});
+
+if(mode === '1line'){
+document.getElementById('btn1line').classList.add('activeMode');
+}
+
+if(mode === '2lines'){
+document.getElementById('btn2lines').classList.add('activeMode');
+}
+
+if(mode === 'fullhouse'){
+document.getElementById('btnFullhouse').classList.add('activeMode');
+}  
 db.ref('mode').set(mode);
 
 const modeSound = new Audio(
