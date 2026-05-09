@@ -1034,6 +1034,7 @@ JSON.stringify(cards)
 
 let currentGameId = localStorage.getItem('gameId');
 let calledNumbers = [];
+let currentMode = '1line'; 
 db.ref('prizeText').on('value',snap=>{
 
 const prize = snap.val() || '£100 PRIZE';
@@ -1109,7 +1110,19 @@ let nums=ticket.flat().filter(n=>n!='');
 
 let matched=nums.filter(n=>calledNumbers.includes(n)).length;
 
-let away=Math.max(0,5-matched);
+let away=3;
+
+if(currentMode==="1line"){
+away=Math.max(0,5-matched);
+}
+
+if(currentMode==="2lines"){
+away=Math.max(0,10-matched);
+}
+
+if(currentMode==="fullhouse"){
+away=Math.max(0,15-matched);
+}
 
 if(away<=3 && away>0){
 
@@ -1190,7 +1203,7 @@ window.speechSynthesis.speak(speech);
 db.ref('mode').on('value',snap=>{
 
 let mode=snap.val()||'2lines';
-
+currentMode = mode;
 let text='';
 
 /* ONE LINE */
