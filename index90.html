@@ -1298,7 +1298,7 @@ cheer.play();
 
 });
 /* GLOBAL WIN ALERT */
-
+let globalWinLoaded = false;
 let lastGlobalWin = 0;
 
 db.ref('globalWin').on('child_added',snap=>{
@@ -1308,7 +1308,17 @@ const data = snap.val() || {};
 if(!data) return;
 if(!data.name) return;
 if(!data.time) return;
+/* IGNORE OLD DATA ON FIRST LOAD */
 
+if(!globalWinLoaded){
+
+globalWinLoaded = true;
+
+lastGlobalWin = data.time;
+
+return;
+
+ }
 /* IGNORE DUPLICATES */
 
 if(data.time == lastGlobalWin) return;
