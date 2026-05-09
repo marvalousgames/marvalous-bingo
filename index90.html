@@ -1300,10 +1300,7 @@ cheer.play();
 /* GLOBAL WIN ALERT */
 /* GLOBAL WIN ALERT */
 
-let globalWinLoaded = false;
-
-let lastGlobalWin =
-sessionStorage.getItem('lastGlobalWin') || 0;
+let loadedGlobalWins = false;
 
 db.ref('globalWin').limitToLast(1).on('child_added',snap=>{
 
@@ -1313,33 +1310,14 @@ if(!data) return;
 if(!data.name) return;
 if(!data.time) return;
 
-/* IGNORE OLD DATA ON LOAD */
+/* IGNORE OLD WIN ON PAGE LOAD */
 
-if(!globalWinLoaded){
+if(!loadedGlobalWins){
 
-globalWinLoaded = true;
-
-lastGlobalWin = data.time;
-
-sessionStorage.setItem(
-'lastGlobalWin',
-data.time
-);
-
+loadedGlobalWins = true;
 return;
 
 }
-
-/* STOP DUPLICATES */
-
-if(data.time == lastGlobalWin) return;
-
-lastGlobalWin = data.time;
-
-sessionStorage.setItem(
-'lastGlobalWin',
-data.time
-);
 
 const myName =
 localStorage.getItem('playerName');
@@ -1348,7 +1326,7 @@ localStorage.getItem('playerName');
 
 if(data.name === myName) return;
 
-/* PLAY SOUND */
+/* PLAY WIN SOUND */
 
 const winSound = new Audio('winner.mp3');
 
