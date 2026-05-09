@@ -1298,19 +1298,13 @@ cheer.play();
 
 });
 /* GLOBAL WIN ALERT */
+/* GLOBAL WIN ALERT */
 
 let lastGlobalWin = 0;
 
 db.ref('globalWin').on('value',snap=>{
 
-const wins = snap.val();
-
-if(!wins) return;
-
-const latestKey =
-Object.keys(wins).pop();
-
-const data = wins[latestKey];
+const data = snap.val();
 
 if(!data) return;
 if(!data.name) return;
@@ -1353,7 +1347,7 @@ if(modeText === 'fullhouse'){
 modeText = 'FULL HOUSE';
 }
 
-/* SHOW POPUP */
+/* SHOW ALERT */
 
 showResultPopup(
 '🎉 BINGO WON',
