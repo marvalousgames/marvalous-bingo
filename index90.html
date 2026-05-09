@@ -190,14 +190,61 @@ grid-template-columns:repeat(9,1fr);
 height:64px;
 border-right:1px solid #cf42ff;
 border-bottom:1px solid #cf42ff;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
+position:relative;
+overflow:hidden;
+
 font-size:28px;
-font-weight:700;
-background:#0b0014;
+font-weight:800;
+
+background:#090011;
 }
 
+.cellNumber{
+position:relative;
+z-index:2;
+
+color:white;
+
+text-shadow:
+0 1px 2px rgba(0,0,0,1),
+0 0 4px rgba(255,255,255,.25);
+}
+
+.dab{
+position:absolute;
+
+width:68%;
+height:68%;
+
+border-radius:50%;
+
+background:
+radial-gradient(circle at 30% 30%,
+#ff8dff 0%,
+#ff4df2 45%,
+#b84dff 100%);
+
+box-shadow:
+0 0 6px #ff4df2,
+0 0 12px rgba(255,77,242,.7);
+
+opacity:0;
+transform:scale(.6);
+
+transition:.18s;
+
+z-index:1;
+}
+
+.marked .dab{
+opacity:1;
+transform:scale(1);
+}
 .ticketGrid .cell:nth-child(9n){
 border-right:none;
 }
@@ -1013,8 +1060,12 @@ div.className='cell blank';
 }else{
 
 div.className='cell';
-div.innerText=n;
 div.dataset.num=n;
+
+div.innerHTML = `
+<span class="dab"></span>
+<span class="cellNumber">${n}</span>
+`;
 
 }
 
