@@ -245,9 +245,13 @@ if(confirm('Clear all winner history?')){
 
 db.ref('winnerHistory').remove();
 
+db.ref('approvedWinners').remove();
+
+document.getElementById('winnerHistory').innerHTML='';
+
 }
 
-}  
+}
   
 let called = [];
 
