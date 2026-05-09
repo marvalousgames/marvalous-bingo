@@ -217,7 +217,9 @@ text-shadow:
 
 .dab{
 position:absolute;
-
+top:50%;
+left:50%;
+translate:-50% -50%;
 font-size:20px;
 font-weight:900;
 
@@ -229,7 +231,7 @@ text-shadow:
 
 opacity:0;
 
-transform:scale(.5);
+transform:translate(-50%,-50%) scale(.5);
 
 transition:.18s;
 
@@ -242,7 +244,7 @@ content:'✕';
 
 .marked .dab{
 opacity:.35;
-transform:scale(1);
+transform:translate(-50%,-50%) scale(1);
 }
 .ticketGrid .cell:nth-child(9n){
 border-right:none;
